@@ -1,17 +1,33 @@
-version: '3'
-
+# Banco Postgres para desenvolvimento local.
+#
+# Não usa .env.local (que contém secrets de produção do Vercel). Crie
+# `.env.docker` apenas com as variáveis necessárias para o banco local.
+#
+# Exemplo de .env.docker:
+#   POSTGRES_USER=postgres
+#   POSTGRES_PASSWORD=postgres
+#   POSTGRES_DB=kayro_local
+#   DATABASE_URL=postgresql://postgres:postgres@localhost:54320/kayro_local
+#   PAYLOAD_SECRET=dev-secret-troque-em-prod
+#   BLOB_READ_WRITE_TOKEN=
+#
+# Suba com: docker compose up -d
 services:
   postgres:
-    image: postgres
+    image: postgres:16-alpine
+    container_name: kayro-postgres
+    restart: unless-stopped
     ports:
       - '54320:5432'
     environment:
       POSTGRES_USER: postgres
-      # O nome do banco precisa bater com o último segmento da POSTGRES_URL do seu .env.local
-      # Ex: postgresql://postgres@localhost:54320/kayro_local -> POSTGRES_DB: kayro_local
-      POSTGRES_DB: your-database-name
-      POSTGRES_HOST_AUTH_METHOD: trust
-    # Usa .env.local (que é o arquivo que o `vercel env pull` gera).
-    # Se preferir um arquivo separado, copie o env_file para `.env` e troque aqui.
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kayro_local
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     env_file:
-      - .env.local
+      - path: .env.docker
+        required: false
+
+volumes:
+  postgres-data:
