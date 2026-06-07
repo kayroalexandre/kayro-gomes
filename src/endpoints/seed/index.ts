@@ -81,7 +81,25 @@ export const seed = async ({
   // Em paralelo, tabelas `_rels` (que têm FKs para várias collections) travam
   // entre si quando múltiplas collections são apagadas ao mesmo tempo.
   for (const collection of collections) {
-    await payload.db.deleteMany({ collection, req, where: {} })
+    if (collection === 'media') {
+      // Deleta cada media individualmente para rodar os hooks do storage (como Vercel Blob)
+      // e apagar os arquivos físicos, evitando orfanar blobs e travar seeds subsequentes.
+      const mediaDocs = await payload.find({
+        collection: 'media',
+        limit: 100,
+        depth: 0,
+        req,
+      })
+      for (const mediaDoc of mediaDocs.docs) {
+        await payload.delete({
+          collection: 'media',
+          id: mediaDoc.id,
+          req,
+        })
+      }
+    } else {
+      await payload.db.deleteMany({ collection, req, where: {} })
+    }
   }
   for (const collection of collections.filter(
     (collection) => Boolean(payload.collections[collection].config.versions),
