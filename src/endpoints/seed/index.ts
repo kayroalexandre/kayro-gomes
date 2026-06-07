@@ -9,6 +9,9 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { project1 } from './project-1'
+import { project2 } from './project-2'
+import { project3 } from './project-3'
 import { sobre as sobrePageData } from './sobre-page'
 
 const collections: CollectionSlug[] = [
@@ -16,6 +19,7 @@ const collections: CollectionSlug[] = [
   'media',
   'pages',
   'posts',
+  'projects',
   'forms',
   'form-submissions',
   'search',
@@ -36,6 +40,13 @@ const categoryMap: Record<string, CategorySlug[]> = {
   'migrando-para-payload-cms-nextjs': ['CMS', 'Frontend'],
   'por-que-neon-postgres': ['DevOps', 'Backend'],
   'server-components-nextjs-15': ['Frontend', 'Reflexões'],
+}
+
+/** Mapeia cada projeto a uma ou mais categorias pelo slug do projeto. */
+const projectCategoryMap: Record<string, CategorySlug[]> = {
+  'ecommerce-payload-nextjs': ['Frontend', 'Backend'],
+  'neon-branch-cli': ['DevOps', 'Backend'],
+  'api-rest-openapi-sdk': ['Backend', 'DevOps'],
 }
 
 // Next.js revalidation errors are normal when seeding the database without a server running
@@ -222,6 +233,46 @@ export const seed = async ({
     req,
   })
 
+  payload.logger.info(`— Seeding projects (PT-BR)...`)
+
+  // Cria os projetos em ordem (sequencial)
+  const project1Doc = await payload.create({
+    collection: 'projects',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: project1({ coverImage: image1Doc, blockImage: image2Doc }),
+    req,
+  })
+  const project2Doc = await payload.create({
+    collection: 'projects',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: project2({ coverImage: image2Doc, blockImage: image3Doc }),
+    req,
+  })
+  const project3Doc = await payload.create({
+    collection: 'projects',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: project3({ coverImage: image3Doc, blockImage: image1Doc }),
+    req,
+  })
+
+  // Associa cada projeto às suas categorias
+  const projectDocs = [project1Doc, project2Doc, project3Doc]
+  for (const project of projectDocs) {
+    const cats = projectCategoryMap[project.slug] || []
+    const catIds = cats.map((c) => categoryIds[c.toLowerCase()]).filter(Boolean)
+    if (catIds.length > 0) {
+      await payload.update({
+        id: project.id,
+        collection: 'projects',
+        data: { categories: catIds },
+        req,
+      })
+    }
+  }
+
   payload.logger.info(`— Seeding contact form...`)
 
   const contactForm = await payload.create({
@@ -263,6 +314,7 @@ export const seed = async ({
         navItems: [
           { link: { type: 'custom', label: 'Início', url: '/' } },
           { link: { type: 'custom', label: 'Blog', url: '/posts' } },
+          { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
           { link: { type: 'reference', label: 'Sobre', reference: { relationTo: 'pages', value: sobrePage.id } } },
           { link: { type: 'reference', label: 'Contato', reference: { relationTo: 'pages', value: contactPage.id } } },
         ],
