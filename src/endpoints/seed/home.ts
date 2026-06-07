@@ -6,6 +6,16 @@ type HomeArgs = {
   metaImage: Media
 }
 
+/**
+ * Página inicial (/) — portfólio pessoal do Kayro Gomes.
+ * Conteúdo em PT-BR, com hero, seções de Sobre, Stack, Como trabalho,
+ * destaque visual (MediaBlock), Arquivo de posts recentes e CTA final.
+ *
+ * Os blocos abaixo demonstram TODOS os tipos de bloco disponíveis na
+ * collection `pages`: content, mediaBlock, archive e cta. Para editar
+ * no admin, basta entrar em /admin/collections/pages e abrir a página
+ * "Home".
+ */
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   heroImage,
   metaImage,
@@ -20,7 +30,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           link: {
             type: 'custom',
             appearance: 'default',
-            label: 'All posts',
+            label: 'Ler o blog',
             url: '/posts',
           },
         },
@@ -28,8 +38,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           link: {
             type: 'custom',
             appearance: 'outline',
-            label: 'Contact',
-            url: '/contact',
+            label: 'Vamos conversar',
+            url: '/contato',
           },
         },
       ],
@@ -47,7 +57,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Payload Website Template',
+                  text: 'Kayro Gomes',
                   version: 1,
                 },
               ],
@@ -61,67 +71,12 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
               type: 'paragraph',
               children: [
                 {
-                  type: 'link',
-                  children: [
-                    {
-                      type: 'text',
-                      detail: 0,
-                      format: 0,
-                      mode: 'normal',
-                      style: '',
-                      text: 'Visit the admin dashboard',
-                      version: 1,
-                    },
-                  ],
-                  direction: 'ltr',
-                  fields: {
-                    linkType: 'custom',
-                    newTab: false,
-                    url: '/admin',
-                  },
-                  format: '',
-                  indent: 0,
-                  version: 3,
-                },
-                {
                   type: 'text',
                   detail: 0,
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: " to begin managing this site's content. The code for this template is completely open-source and can be found ",
-                  version: 1,
-                },
-                {
-                  type: 'link',
-                  children: [
-                    {
-                      type: 'text',
-                      detail: 0,
-                      format: 0,
-                      mode: 'normal',
-                      style: '',
-                      text: 'on our Github',
-                      version: 1,
-                    },
-                  ],
-                  direction: 'ltr',
-                  fields: {
-                    linkType: 'custom',
-                    newTab: true,
-                    url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-                  },
-                  format: '',
-                  indent: 0,
-                  version: 3,
-                },
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: '. ',
+                  text: 'Desenvolvedor full-stack brasileiro, focado em produtos web modernos com Next.js, TypeScript e Postgres. Aqui eu documento o que aprendo construindo — de deploys na Vercel a integrações com CMS headless.',
                   version: 1,
                 },
               ],
@@ -140,8 +95,9 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
     },
     layout: [
+      // ── 1. Sobre ─────────────────────────────────────────────
       {
-        blockName: 'Content Block',
+        blockName: 'Sobre mim',
         blockType: 'content',
         columns: [
           {
@@ -158,7 +114,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                         format: 0,
                         mode: 'normal',
                         style: '',
-                        text: 'Core features',
+                        text: 'Sobre',
                         version: 1,
                       },
                     ],
@@ -166,6 +122,44 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
                     format: '',
                     indent: 0,
                     tag: 'h2',
+                    version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Sou Kayro, desenvolvedor full-stack baseado no Brasil. Trabalho principalmente com o ecossistema JavaScript/TypeScript — Next.js no front, Node.js ou workers no back, Postgres como banco padrão. Gosto de projetos onde posso ir do design à produção sem trocar de chaveiro.',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    textFormat: 0,
+                    version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Este site é meu caderno público. Tudo aqui está conectado a este CMS (Payload) — posts, páginas, header, footer, mídia. Quando você edita uma página em /admin, o front-end re-renderiza automaticamente.',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    textFormat: 0,
                     version: 1,
                   },
                 ],
@@ -177,344 +171,220 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             },
             size: 'full',
           },
+        ],
+      },
+      // ── 2. Stack (grid 3 colunas × 2 linhas) ─────────────────
+      {
+        blockName: 'Stack & ferramentas',
+        blockType: 'content',
+        columns: [
           {
-            enableLink: false,
             richText: {
               root: {
                 type: 'root',
                 children: [
                   {
                     type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Admin Dashboard',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Frontend', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
                   },
                   {
                     type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: "Manage this site's pages and posts from the ",
-                        version: 1,
-                      },
-                      {
-                        type: 'link',
-                        children: [
-                          {
-                            type: 'text',
-                            detail: 0,
-                            format: 0,
-                            mode: 'normal',
-                            style: '',
-                            text: 'admin dashboard',
-                            version: 1,
-                          },
-                        ],
-                        direction: 'ltr',
-                        fields: {
-                          linkType: 'custom',
-                          newTab: false,
-                          url: '/admin',
-                        },
-                        format: '',
-                        indent: 0,
-                        version: 2,
-                      },
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: '.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'React, Next.js (App Router), TypeScript, Tailwind CSS, Radix UI, shadcn/ui.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
                   },
                 ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
+                direction: 'ltr', format: '', indent: 0, version: 1,
               },
             },
             size: 'oneThird',
           },
           {
-            enableLink: false,
             richText: {
               root: {
                 type: 'root',
                 children: [
                   {
                     type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Preview',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Backend', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
                   },
                   {
                     type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Using versions, drafts, and preview, editors can review and share their changes before publishing them.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Node.js, tRPC, REST, GraphQL, serverless functions, filas com Inngest e QStash.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
                   },
                 ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
+                direction: 'ltr', format: '', indent: 0, version: 1,
               },
             },
             size: 'oneThird',
           },
           {
-            enableLink: false,
             richText: {
               root: {
                 type: 'root',
                 children: [
                   {
                     type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Page Builder',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Banco de dados', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
                   },
                   {
                     type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Custom page builder allows you to create unique page, post, and project layouts for any type of content.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'PostgreSQL (Neon, Supabase), Drizzle ORM, Redis para cache e sessões.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
                   },
                 ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
+                direction: 'ltr', format: '', indent: 0, version: 1,
               },
             },
             size: 'oneThird',
           },
           {
-            enableLink: false,
             richText: {
               root: {
                 type: 'root',
                 children: [
                   {
                     type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'SEO',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'DevOps', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
                   },
                   {
                     type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Editors have complete control over SEO data and site content directly from the ',
-                        version: 1,
-                      },
-                      {
-                        type: 'link',
-                        children: [
-                          {
-                            type: 'text',
-                            detail: 0,
-                            format: 0,
-                            mode: 'normal',
-                            style: '',
-                            text: 'admin dashboard',
-                            version: 1,
-                          },
-                        ],
-                        direction: 'ltr',
-                        fields: {
-                          linkType: 'custom',
-                          newTab: false,
-                          url: '/admin',
-                        },
-                        format: '',
-                        indent: 0,
-                        version: 2,
-                      },
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: '.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Vercel, GitHub Actions, Docker, pnpm workspaces, Turbo para monorepos.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
                   },
                 ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
+                direction: 'ltr', format: '', indent: 0, version: 1,
               },
             },
             size: 'oneThird',
           },
           {
-            enableLink: false,
             richText: {
               root: {
                 type: 'root',
                 children: [
                   {
                     type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Dark Mode',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'CMS & conteúdo', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
                   },
                   {
                     type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Users will experience this site in their preferred color scheme and each block can be inverted.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Payload (este site), Sanity, Contentful, MDX para docs técnicas.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
                   },
                 ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
+                direction: 'ltr', format: '', indent: 0, version: 1,
+              },
+            },
+            size: 'oneThird',
+          },
+          {
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Ferramentas', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'VS Code, Linear, Figma, Git, Playwright para testes E2E.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
+                  },
+                ],
+                direction: 'ltr', format: '', indent: 0, version: 1,
               },
             },
             size: 'oneThird',
           },
         ],
       },
+      // ── 3. Como eu trabalho (3 passos) ───────────────────────
       {
-        blockName: 'Media Block',
+        blockName: 'Como eu trabalho',
+        blockType: 'content',
+        columns: [
+          {
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: '1. Descoberta', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Entendo o problema antes de codar. Leio o código existente, converso com o time, mapeio as restrições reais (não as imaginadas).', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
+                  },
+                ],
+                direction: 'ltr', format: '', indent: 0, version: 1,
+              },
+            },
+            size: 'oneThird',
+          },
+          {
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: '2. Construção iterativa', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Começo pelo caminho feliz, subo cedo em ambiente de homologação, ajusto o que precisa. PRs pequenos, descritivos e revisáveis.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
+                  },
+                ],
+                direction: 'ltr', format: '', indent: 0, version: 1,
+              },
+            },
+            size: 'oneThird',
+          },
+          {
+            richText: {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'heading',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: '3. Operação desde o dia 1', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, tag: 'h3', version: 1,
+                  },
+                  {
+                    type: 'paragraph',
+                    children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Logs, métricas, alertas, feature flags. Nada vai pra produção sem um plano pra sair de produção se der errado.', version: 1 }],
+                    direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
+                  },
+                ],
+                direction: 'ltr', format: '', indent: 0, version: 1,
+              },
+            },
+            size: 'oneThird',
+          },
+        ],
+      },
+      // ── 4. MediaBlock (imagem destaque) ─────────────────────
+      {
+        blockName: 'Imagem destaque',
         blockType: 'mediaBlock',
         media: metaImage.id,
       },
+      // ── 5. Arquivo: últimos artigos ──────────────────────────
       {
-        blockName: 'Archive Block',
+        blockName: 'Artigos recentes',
         blockType: 'archive',
         categories: [],
         introContent: {
@@ -523,62 +393,42 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             children: [
               {
                 type: 'heading',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Recent posts',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                tag: 'h3',
-                version: 1,
+                children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Artigos recentes', version: 1 }],
+                direction: 'ltr', format: '', indent: 0, tag: 'h2', version: 1,
               },
               {
                 type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'The posts below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or posts can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                textFormat: 0,
-                version: 1,
+                children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Anotações, tutoriais e o que eu aprendo construindo coisas. Tudo escrito direto no admin, com versionamento, rascunhos e preview ao vivo.', version: 1 }],
+                direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
               },
             ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
+            direction: 'ltr', format: '', indent: 0, version: 1,
           },
         },
         populateBy: 'collection',
         relationTo: 'posts',
+        limit: 6,
       },
+      // ── 6. CTA final ─────────────────────────────────────────
       {
-        blockName: 'CTA',
+        blockName: 'Vamos conversar',
         blockType: 'cta',
         links: [
           {
             link: {
               type: 'custom',
               appearance: 'default',
-              label: 'All posts',
-              url: '/posts',
+              label: 'Entrar em contato',
+              url: '/contato',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              appearance: 'outline',
+              label: 'Ver GitHub',
+              newTab: true,
+              url: 'https://github.com/kayroalexandre',
             },
           },
         ],
@@ -588,88 +438,26 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
             children: [
               {
                 type: 'heading',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'This is a call to action',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                tag: 'h3',
-                version: 1,
+                children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Vamos trabalhar juntos?', version: 1 }],
+                direction: 'ltr', format: '', indent: 0, tag: 'h2', version: 1,
               },
               {
                 type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'This is a custom layout building block ',
-                    version: 1,
-                  },
-                  {
-                    type: 'link',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'configured in the admin dashboard',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    fields: {
-                      linkType: 'custom',
-                      newTab: false,
-                      url: '/admin',
-                    },
-                    format: '',
-                    indent: 0,
-                    version: 2,
-                  },
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: '.',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                textFormat: 0,
-                version: 1,
+                children: [{ type: 'text', detail: 0, format: 0, mode: 'normal', style: '', text: 'Tem um projeto, ideia ou freela em mente? Manda mensagem — respondo rápido. Para oportunidades full-time, prefiro conversar por e-mail depois de uma primeira troca.', version: 1 }],
+                direction: 'ltr', format: '', indent: 0, textFormat: 0, version: 1,
               },
             ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
+            direction: 'ltr', format: '', indent: 0, version: 1,
           },
         },
       },
     ],
     meta: {
-      description: 'An open-source website built with Payload and Next.js.',
+      description:
+        'Portfólio e blog de Kayro Gomes, desenvolvedor full-stack brasileiro. Next.js, TypeScript, Postgres, Payload CMS.',
       image: heroImage.id,
-      title: 'Payload Website Template',
+      title: 'Kayro Gomes — Desenvolvedor Full-Stack',
     },
-    title: 'Home',
+    title: 'Início',
   }
 }

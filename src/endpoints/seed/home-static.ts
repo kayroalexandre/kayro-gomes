@@ -1,6 +1,10 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
-// Used for pre-seeded content so that the homepage is not empty
+/**
+ * Fallback estático da home — usado só enquanto a página "home" não
+ * existe no CMS (antes do primeiro seed). Conteúdo em PT-BR pra
+ * combinar com o resto do site.
+ */
 export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
   slug: 'home',
   _status: 'published',
@@ -19,7 +23,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Payload Website Template',
+                text: 'Kayro Gomes',
                 version: 1,
               },
             ],
@@ -33,6 +37,15 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
             type: 'paragraph',
             children: [
               {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Site em construção. Entre no ',
+                version: 1,
+              },
+              {
                 type: 'link',
                 children: [
                   {
@@ -41,16 +54,12 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: 'Visit the admin dashboard',
+                    text: 'admin',
                     version: 1,
                   },
                 ],
                 direction: 'ltr',
-                fields: {
-                  linkType: 'custom',
-                  newTab: false,
-                  url: '/admin',
-                },
+                fields: { linkType: 'custom', newTab: false, url: '/admin' },
                 format: '',
                 indent: 0,
                 version: 2,
@@ -61,7 +70,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: ' to make your account and seed content for your website.',
+                text: ' e rode o seed para preencher o site com conteúdo de exemplo.',
                 version: 1,
               },
             ],
@@ -80,9 +89,9 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     },
   },
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
-    title: 'Payload Website Template',
+    description: 'Portfólio e blog de Kayro Gomes, desenvolvedor full-stack brasileiro.',
+    title: 'Kayro Gomes — Desenvolvedor Full-Stack',
   },
-  title: 'Home',
+  title: 'Início',
   layout: [],
 }

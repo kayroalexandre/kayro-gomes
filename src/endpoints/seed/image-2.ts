@@ -1,7 +1,8 @@
 import type { Media } from '@/payload-types'
 
+/** Imagem genérica usada em posts e na seção mid da home. */
 export const image2: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
-  alt: 'Curving abstract shapes with an orange and blue gradient',
+  alt: 'Imagem ilustrativa de exemplo usada em posts do blog',
   caption: {
     root: {
       type: 'root',
@@ -15,39 +16,7 @@ export const image2: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Photo by ',
-              version: 1,
-            },
-            {
-              type: 'link',
-              children: [
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: 'Andrew Kliatskyi',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              fields: {
-                linkType: 'custom',
-                newTab: true,
-                url: 'https://unsplash.com/@kirp',
-              },
-              format: '',
-              indent: 0,
-              version: 2,
-            },
-            {
-              type: 'text',
-              detail: 0,
-              format: 0,
-              mode: 'normal',
-              style: '',
-              text: ' on Unsplash.',
+              text: 'Imagem ilustrativa de exemplo. Substitua no admin em Mídia.',
               version: 1,
             },
           ],

@@ -7,23 +7,27 @@ interface Props {
   priority?: 'auto' | 'high' | 'low'
 }
 
+/**
+ * Wordmark do site — "Kayro Gomes" estilizado.
+ * Substitui o logo da Payload (que era hardcoded) por uma marca de texto
+ * adequada a um portfólio pessoal. Sem dependência externa.
+ */
 export const Logo = (props: Props) => {
-  const { loading: loadingFromProps, priority: priorityFromProps, className } = props
-
-  const loading = loadingFromProps || 'lazy'
-  const priority = priorityFromProps || 'low'
+  const { className } = props
 
   return (
-    /* eslint-disable @next/next/no-img-element */
-    <img
-      alt="Payload Logo"
-      width={193}
-      height={34}
-      loading={loading}
-      fetchPriority={priority}
-      decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-logo-light.svg"
-    />
+    <span
+      className={clsx(
+        'inline-flex items-center gap-2 font-semibold text-lg tracking-tight',
+        className,
+      )}
+      aria-label="Kayro Gomes — Início"
+    >
+      <span
+        aria-hidden
+        className="inline-block h-2 w-2 rounded-full bg-primary"
+      />
+      Kayro Gomes
+    </span>
   )
 }
