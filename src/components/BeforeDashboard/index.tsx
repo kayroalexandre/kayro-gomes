@@ -10,20 +10,20 @@ const BeforeDashboard: React.FC = () => {
   return (
     <div className={baseClass}>
       <Banner className={`${baseClass}__banner`} type="success">
-        <h4>Welcome to your dashboard!</h4>
+        <h4>Bem-vindo ao painel!</h4>
       </Banner>
-      Here&apos;s what to do next:
+      Próximos passos:
       <ul className={`${baseClass}__instructions`}>
         <li>
           <SeedButton />
-          {' with a few pages, posts, and projects to jump-start your new site, then '}
+          {' para popular o site com páginas, posts e projetos de demonstração e '}
           <a href="/" target="_blank">
-            visit your website
+            visite o site
           </a>
-          {' to see the results.'}
+          {' para conferir o resultado.'}
         </li>
         <li>
-          {'Modify your '}
+          {'Personalize as '}
           <a
             href="https://payloadcms.com/docs/configuration/collections"
             rel="noopener noreferrer"
@@ -31,7 +31,7 @@ const BeforeDashboard: React.FC = () => {
           >
             collections
           </a>
-          {' and add more '}
+          {' e adicione mais '}
           <a
             href="https://payloadcms.com/docs/fields/overview"
             rel="noopener noreferrer"
@@ -39,7 +39,7 @@ const BeforeDashboard: React.FC = () => {
           >
             fields
           </a>
-          {' as needed. If you are new to Payload, we also recommend you check out the '}
+          {' conforme necessário. Se você é novo no Payload, recomendamos a documentação de '}
           <a
             href="https://payloadcms.com/docs/getting-started/what-is-payload"
             rel="noopener noreferrer"
@@ -47,13 +47,13 @@ const BeforeDashboard: React.FC = () => {
           >
             Getting Started
           </a>
-          {' docs.'}
+          {'.'}
         </li>
         <li>
-          Commit and push your changes to the repository to trigger a redeployment of your project.
+          Faça commit e push das alterações para disparar um novo deploy.
         </li>
       </ul>
-      {'Pro Tip: This block is a '}
+      {'Dica: este bloco é um '}
       <a
         href="https://payloadcms.com/docs/custom-components/overview"
         rel="noopener noreferrer"
@@ -61,7 +61,7 @@ const BeforeDashboard: React.FC = () => {
       >
         custom component
       </a>
-      , you can remove it at any time by updating your <strong>payload.config</strong>.
+      {', você pode removê-lo a qualquer momento editando seu payload.config.'}
     </div>
   )
 }
