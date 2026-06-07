@@ -100,41 +100,47 @@ export const seed = async ({
     ),
   ])
 
-  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
-    payload.create({
-      collection: 'users',
-      data: {
-        name: 'Demo Author',
-        email: 'demo-author@example.com',
-        password: 'password',
-      },
-      req,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image1,
-      file: image1Buffer,
-      req,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image2Buffer,
-      req,
-    }),
-    payload.create({
-      collection: 'media',
-      data: image2,
-      file: image3Buffer,
-      req,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageHero1,
-      file: hero1Buffer,
-      req,
-    }),
-  ])
+  // Create demo author first — Payload's Local API mutates `req.file` on each call,
+  // so mixing user (no file) and media (with file) in Promise.all causes a race condition
+  // where the user creation overwrites req.file = undefined, breaking media uploads.
+  const demoAuthor = await payload.create({
+    collection: 'users',
+    data: {
+      name: 'Demo Author',
+      email: 'demo-author@example.com',
+      password: 'password',
+    },
+    req,
+  })
+
+  // Create media sequentially to avoid req.file race condition
+  const image1Doc = await payload.create({
+    collection: 'media',
+    data: image1,
+    file: image1Buffer,
+    req,
+  })
+
+  const image2Doc = await payload.create({
+    collection: 'media',
+    data: image2,
+    file: image2Buffer,
+    req,
+  })
+
+  const image3Doc = await payload.create({
+    collection: 'media',
+    data: image2,
+    file: image3Buffer,
+    req,
+  })
+
+  const imageHomeDoc = await payload.create({
+    collection: 'media',
+    data: imageHero1,
+    file: hero1Buffer,
+    req,
+  })
 
   await Promise.all(
     categories.map((category) =>
