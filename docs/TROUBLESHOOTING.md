@@ -213,3 +213,105 @@ neonctl branches delete <branch>
 
 Sempre confirme o banco de destino (rode `pnpm db:check` antes) antes
 de qualquer um desses.
+
+---
+
+## 11. Build do Vercel falha com `relation "projects" does not exist`
+
+**Sintoma:** Build do Vercel quebra em "Collecting page data" com:
+```
+Error: Failed query: select "id", "slug" from "projects"...
+error: relation "projects" does not exist
+```
+
+Aparece sempre que você adiciona uma collection nova no `payload.config.ts` mas
+esquece de criar a migration correspondente. O `generateStaticParams` da rota
+dinâmica faz `SELECT` na tabela nova durante o build, e o build não roda migrations
+por padrão.
+
+**Solução imediata (sem precisar mergear nada):**
+```bash
+# Roda a migration direto contra prod (assume que já foi comitada)
+PAYLOAD_SECRET=... DATABASE_URL=... pnpm exec payload migrate
+```
+
+**Solução de longo prazo:** o projeto já tem um `prebuild` hook no
+`package.json` que aplica migrations automaticamente antes do `next build`:
+```json
+"prebuild": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+"build": "next build"
+```
+pnpm/npm executa `prebuild` antes de `build` automaticamente. **Cuidado:** se a
+migration for destrutiva, o `payload migrate` pede confirmação interativa — em
+CI/Vercel isso trava o build. Use `pnpm db:fix-dev-migration` antes (muda
+`batch = -1` para `batch = 1`) para destravar.
+
+> Nota histórica: tentamos usar `buildCommand: "pnpm ci"` no `vercel.json` para
+> forçar `payload migrate && next build`, mas `pnpm ci` é um subcomando
+> reservado do pnpm (`ERR_PNPM_CI_NOT_IMPLEMENTED`). O `prebuild` hook é a
+> forma portable que funciona em Vercel, local e qualquer CI.
+
+---
+
+## 12. Seed trava com deadlock `40P01` ao limpar collections
+
+**Sintoma:** Rodar `pnpm db:seed` trava e falha com:
+```
+Error: Process A waits for ShareLock on transaction X; blocked by process B.
+SQL: DELETE FROM ONLY "public"."posts_rels" WHERE $1 = "parent_id"
+routine: 'DeadLockReport'
+```
+
+**Causa raiz:** O seed original fazia `Promise.all` em
+`payload.db.deleteMany()` para limpar todas as collections em paralelo.
+Tabelas `*_rels` (ex.: `posts_rels`, `projects_rels`) têm FKs para múltiplas
+collections — quando `posts` e `projects` são apagados ao mesmo tempo, ambos
+os processos tentam travar linhas em `posts_rels` e Postgres detecta o ciclo.
+
+**Solução:** No `src/endpoints/seed/index.ts`, substituir o `Promise.all` por
+um loop sequencial. Adiciona 1-2s ao seed, mas elimina o deadlock. Já está
+aplicado.
+
+---
+
+## 13. Sitemaps sem `https://` (`www.kayrogomes.com/...` em vez de `https://www.kayrogomes.com/...`)
+
+**Sintoma:** Os sitemaps dinâmicos (`posts-sitemap.xml`, `projects-sitemap.xml`)
+e o `sitemap.xml` (gerado pelo `next-sitemap`) têm URLs sem o `https://`:
+```xml
+<url><loc>www.kayrogomes.com/posts/foo</loc></url>
+```
+
+Isso quebra o spec do `sitemaps.org` e Google Search Console pode rejeitar o sitemap.
+
+**Causa raiz:** As rotas em `src/app/(frontend)/(sitemaps)/*` montam o `loc` com:
+```ts
+const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL
+              || process.env.VERCEL_PROJECT_PRODUCTION_URL
+              || 'https://example.com'
+```
+
+`VERCEL_PROJECT_PRODUCTION_URL` é setado pela Vercel mas **sem o `https://`**.
+
+**Solução:** Setar `NEXT_PUBLIC_SERVER_URL=https://www.kayrogomes.com` no
+Vercel (`vercel env add NEXT_PUBLIC_SERVER_URL production`) e em `.env.local`
+para paridade local. Já está configurado.
+
+---
+
+## 14. Adicionar env var no Vercel não dispara redeploy
+
+**Sintoma:** Você rodou `vercel env add X production` mas o próximo deploy
+continua usando o valor antigo da env.
+
+**Causa raiz:** Vercel não redeploy automaticamente quando uma env var
+muda — só em push de novo commit. O `env add` só atualiza o banco de envs.
+
+**Workaround:** Commitar algo vazio pra forçar:
+```bash
+git commit --allow-empty -m "chore: trigger redeploy to pick up NEW_ENV"
+git push origin main
+```
+
+Ou trocar um env var de um valor trivial pra outro trivial via dashboard
+(que também força um redeploy).
