@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "noUncheckedSideEffectImports": false,
     "esModuleInterop": true,
     "target": "ES2022",
     "lib": [
