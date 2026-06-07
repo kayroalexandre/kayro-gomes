@@ -55,6 +55,7 @@ export const seed = async ({
         context: {
           disableRevalidate: true,
         },
+        req,
       }),
     ),
   )
@@ -79,6 +80,7 @@ export const seed = async ({
         equals: 'demo-author@example.com',
       },
     },
+    req,
   })
 
   payload.logger.info(`— Seeding media...`)
@@ -106,27 +108,35 @@ export const seed = async ({
         email: 'demo-author@example.com',
         password: 'password',
       },
+      req,
     }),
     payload.create({
       collection: 'media',
       data: image1,
       file: image1Buffer,
+      req,
     }),
     payload.create({
       collection: 'media',
       data: image2,
       file: image2Buffer,
+      req,
     }),
     payload.create({
       collection: 'media',
       data: image2,
       file: image3Buffer,
+      req,
     }),
     payload.create({
       collection: 'media',
       data: imageHero1,
       file: hero1Buffer,
+      req,
     }),
+  ])
+
+  await Promise.all(
     categories.map((category) =>
       payload.create({
         collection: 'categories',
@@ -134,9 +144,10 @@ export const seed = async ({
           title: category,
           slug: category,
         },
+        req,
       }),
     ),
-  ])
+  )
 
   payload.logger.info(`— Seeding posts...`)
 
@@ -149,6 +160,7 @@ export const seed = async ({
       disableRevalidate: true,
     },
     data: post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
+    req,
   })
 
   const post2Doc = await payload.create({
@@ -158,6 +170,7 @@ export const seed = async ({
       disableRevalidate: true,
     },
     data: post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
+    req,
   })
 
   const post3Doc = await payload.create({
@@ -167,6 +180,7 @@ export const seed = async ({
       disableRevalidate: true,
     },
     data: post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
+    req,
   })
 
   // update each post with related posts
@@ -176,6 +190,7 @@ export const seed = async ({
     data: {
       relatedPosts: [post2Doc.id, post3Doc.id],
     },
+    req,
   })
   await payload.update({
     id: post2Doc.id,
@@ -183,6 +198,7 @@ export const seed = async ({
     data: {
       relatedPosts: [post1Doc.id, post3Doc.id],
     },
+    req,
   })
   await payload.update({
     id: post3Doc.id,
@@ -190,6 +206,7 @@ export const seed = async ({
     data: {
       relatedPosts: [post1Doc.id, post2Doc.id],
     },
+    req,
   })
 
   payload.logger.info(`— Seeding contact form...`)
@@ -198,6 +215,7 @@ export const seed = async ({
     collection: 'forms',
     depth: 0,
     data: contactFormData,
+    req,
   })
 
   payload.logger.info(`— Seeding pages...`)
@@ -207,11 +225,13 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+      req,
     }),
     payload.create({
       collection: 'pages',
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
+      req,
     }),
   ])
 
@@ -241,6 +261,7 @@ export const seed = async ({
           },
         ],
       },
+      req,
     }),
     payload.updateGlobal({
       slug: 'footer',
@@ -271,6 +292,7 @@ export const seed = async ({
           },
         ],
       },
+      req,
     }),
   ])
 
