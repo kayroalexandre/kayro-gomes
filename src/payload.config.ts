@@ -89,7 +89,7 @@ export default buildConfig({
   ],
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [
-    ...(process.env.BLOB_READ_WRITE_TOKEN
+    ...(process.env.BLOB_READ_WRITE_TOKEN?.startsWith('vercel_blob_rw_')
       ? [
           vercelBlobStorage({
             collections: {
