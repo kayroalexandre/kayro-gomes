@@ -1,0 +1,46 @@
+name: Vercel Preview Comment
+
+# Posta um comentário em PRs com o link do Preview Deployment.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main, develop]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      deployments: read
+    steps:
+      - name: Get Vercel Preview URL
+        id: get-deployments
+        uses: octokit/graphql-action@v2
+        with:
+          query: |
+            query {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: ${{ github.event.pull_request.number }}) {
+                  deployments(first: 1) {
+                    nodes {
+                      latestUrl
+                      description
+                    }
+                  }
+                }
+              }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find Vercel preview URL from workflow
+        id: vercel
+        run: |
+          echo "url=" >> $GITHUB_OUTPUT
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: vercel-preview
+          message: |
+            🚀 **Vercel Preview** será publicado automaticamente em cada push.
+            Acompanhe na aba `Checks` ou no [dashboard da Vercel](https://vercel.com/kayro-gomes-projects/kayro-gomes).
