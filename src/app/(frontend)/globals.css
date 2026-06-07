@@ -222,3 +222,30 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+/* Transição suave entre temas — só nas cores, não no layout */
+html {
+  transition: background-color 200ms ease, color 200ms ease;
+}
+html * {
+  transition: background-color 200ms ease, border-color 200ms ease, color 100ms ease;
+}
+
+/* Foco visível consistente (acessibilidade) */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+button:focus-visible,
+a:focus-visible {
+  outline-offset: 3px;
+}
+
+/* Skip link não interfere com sticky/fixed do AdminBar */
+body > a.sr-only:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+}

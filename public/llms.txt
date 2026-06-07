@@ -1,0 +1,62 @@
+# Kayro Gomes
+
+> Portfólio e blog de Kayro Gomes, desenvolvedor full-stack brasileiro.
+> Next.js, TypeScript, Postgres, Payload CMS. Site em PT-BR.
+
+## Sobre
+
+Sou Kayro Gomes, desenvolvedor full-stack baseado no Brasil. Construo aplicações
+web com Next.js, TypeScript, Postgres e Payload CMS. Este site é meu portfólio
+pessoal + blog técnico.
+
+## Endpoints principais
+
+- `/` — Página inicial com hero, stack, princípios de trabalho, posts recentes e CTA
+- `/sobre` — Sobre mim: bio, serviços, princípios de trabalho
+- `/projetos` — Lista de projetos com stack, links de demo e repositório
+- `/projetos/[slug]` — Detalhe de cada projeto
+- `/posts` — Blog técnico
+- `/posts/[slug]` — Artigo individual
+- `/contato` — Formulário de contato (com fallback para e-mail e redes sociais)
+- `/busca` — Busca no conteúdo
+- `/admin` — Payload CMS (autenticado)
+
+## Stack do site
+
+- Next.js 15 (App Router) + React 19
+- TypeScript
+- Payload CMS 3.85 (in-app, não servidor externo)
+- Postgres via Neon (branch prod + branch dev)
+- Vercel Blob para mídia
+- Tailwind CSS 4 + design tokens (oklch)
+- pnpm 10
+
+## Stack típica de projetos (exemplos publicados)
+
+- **Next.js 15** (App Router, Server Components, ISR)
+- **TypeScript** estrito
+- **Payload CMS 3** para conteúdo editorial
+- **Postgres** (Neon) com branch-per-environment
+- **Vercel Blob** para upload de mídia
+- **Tailwind CSS 4**
+- **Geist** (Sans + Mono)
+- **Vercel** para deploy e preview
+
+## Contato
+
+- E-mail: ver `/contato`
+- GitHub: https://github.com/kayroalexandre
+- LinkedIn: https://linkedin.com/in/kayroalexandre
+
+## Convenções
+
+- Idioma: PT-BR (com termos técnicos em EN quando é o padrão da indústria)
+- Slugs: PT-BR sem acentos (`/sobre`, `/contato`, `/projetos`)
+- Categorias: Frontend, Backend, DevOps, CMS, Reflexões
+- Posts e projetos com SEO configurado (title, description, OG image)
+- Sitemap XML em `/sitemap.xml` (índice) + `/pages-sitemap.xml`, `/posts-sitemap.xml`, `/projects-sitemap.xml`
+
+## Atualização
+
+Conteúdo editado via `/admin`. Posts e projetos têm preview ao vivo e
+versionamento (drafts, autosave a cada 100ms, schedule publish).

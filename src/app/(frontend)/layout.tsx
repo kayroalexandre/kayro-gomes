@@ -33,9 +33,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               preview: isEnabled,
             }}
           />
+          <a
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
+            href="#main"
+          >
+            Pular para o conteúdo
+          </a>
 
           <Header />
-          {children}
+          <main id="main">{children}</main>
           <Footer />
         </Providers>
       </body>
