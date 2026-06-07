@@ -9,6 +9,7 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { sobre as sobrePageData } from './sobre-page'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -22,7 +23,20 @@ const collections: CollectionSlug[] = [
 
 const globals: GlobalSlug[] = ['header', 'footer']
 
-const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+/**
+ * Categorias em PT-BR. Cada post abaixo é categorizado manualmente
+ * no array `categoryMap` mais embaixo.
+ */
+const categories = ['Frontend', 'Backend', 'DevOps', 'CMS', 'Reflexões'] as const
+
+type CategorySlug = (typeof categories)[number]
+
+/** Mapeia cada post a uma ou mais categorias pelo slug do post. */
+const categoryMap: Record<string, CategorySlug[]> = {
+  'migrando-para-payload-cms-nextjs': ['CMS', 'Frontend'],
+  'por-que-neon-postgres': ['DevOps', 'Backend'],
+  'server-components-nextjs-15': ['Frontend', 'Reflexões'],
+}
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -37,33 +51,25 @@ export const seed = async ({
 }): Promise<void> => {
   payload.logger.info('Seeding database...')
 
-  // we need to clear the media directory before seeding
-  // as well as the collections and globals
-  // this is because while `yarn seed` drops the database
-  // the custom `/api/seed` endpoint does not
   payload.logger.info(`— Clearing collections and globals...`)
 
-  // clear the database
+  // Limpa globals (mantém só `navItems: []` no header/footer)
   await Promise.all(
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: { navItems: [] },
         depth: 0,
-        context: {
-          disableRevalidate: true,
-        },
+        context: { disableRevalidate: true },
         req,
       }),
     ),
   )
 
+  // Limpa collections e versões
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
   )
-
   await Promise.all(
     collections
       .filter((collection) => Boolean(payload.collections[collection].config.versions))
@@ -72,19 +78,19 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding demo author and user...`)
 
+  // Remove o author anterior para re-seed limpo
   await payload.delete({
     collection: 'users',
     depth: 0,
-    where: {
-      email: {
-        equals: 'demo-author@example.com',
-      },
-    },
+    where: { email: { equals: 'demo-author@example.com' } },
     req,
   })
 
   payload.logger.info(`— Seeding media...`)
 
+  // Baixa as imagens de demo (vindas do repo oficial da Payload).
+  // Para um site em produção real, recomendo substituir essas URLs por
+  // imagens próprias via admin antes de ir ao ar.
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
     fetchFileByURL(
       'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
@@ -100,41 +106,37 @@ export const seed = async ({
     ),
   ])
 
-  // Create demo author first — Payload's Local API mutates `req.file` on each call,
-  // so mixing user (no file) and media (with file) in Promise.all causes a race condition
-  // where the user creation overwrites req.file = undefined, breaking media uploads.
+  // Cria o demo author PRIMEIRO, depois as mídias em sequência (não
+  // Promise.all) — Payload mutates req.file entre chamadas e misturar
+  // user (sem file) com media (com file) causa race condition.
   const demoAuthor = await payload.create({
     collection: 'users',
     data: {
-      name: 'Demo Author',
+      name: 'Kayro Gomes',
       email: 'demo-author@example.com',
       password: 'password',
     },
     req,
   })
 
-  // Create media sequentially to avoid req.file race condition
   const image1Doc = await payload.create({
     collection: 'media',
     data: image1,
     file: image1Buffer,
     req,
   })
-
   const image2Doc = await payload.create({
     collection: 'media',
     data: image2,
     file: image2Buffer,
     req,
   })
-
   const image3Doc = await payload.create({
     collection: 'media',
     data: image2,
     file: image3Buffer,
     req,
   })
-
   const imageHomeDoc = await payload.create({
     collection: 'media',
     data: imageHero1,
@@ -142,76 +144,81 @@ export const seed = async ({
     req,
   })
 
+  payload.logger.info(`— Seeding categories (PT-BR)...`)
+
+  // Cria as categorias e captura os IDs em um map slug → id
+  const categoryIds: Record<string, number> = {}
   await Promise.all(
     categories.map((category) =>
-      payload.create({
-        collection: 'categories',
-        data: {
-          title: category,
-          slug: category,
-        },
-        req,
-      }),
+      payload
+        .create({
+          collection: 'categories',
+          data: { title: category, slug: category.toLowerCase() },
+          req,
+        })
+        .then((doc) => {
+          categoryIds[category.toLowerCase()] = doc.id
+        }),
     ),
   )
 
-  payload.logger.info(`— Seeding posts...`)
+  payload.logger.info(`— Seeding posts (PT-BR)...`)
 
-  // Do not create posts with `Promise.all` because we want the posts to be created in order
-  // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
+  // Cria os posts em ordem (sequencial) para manter createdAt previsível
   const post1Doc = await payload.create({
     collection: 'posts',
     depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
+    context: { disableRevalidate: true },
     data: post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
     req,
   })
-
   const post2Doc = await payload.create({
     collection: 'posts',
     depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
+    context: { disableRevalidate: true },
     data: post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
     req,
   })
-
   const post3Doc = await payload.create({
     collection: 'posts',
     depth: 0,
-    context: {
-      disableRevalidate: true,
-    },
+    context: { disableRevalidate: true },
     data: post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
     req,
   })
 
-  // update each post with related posts
+  // Associa cada post às suas categorias
+  const postDocs = [post1Doc, post2Doc, post3Doc]
+  for (const post of postDocs) {
+    const cats = categoryMap[post.slug] || []
+    const catIds = cats.map((c) => categoryIds[c.toLowerCase()]).filter(Boolean)
+    if (catIds.length > 0) {
+      await payload.update({
+        id: post.id,
+        collection: 'posts',
+        data: { categories: catIds },
+        req,
+      })
+    }
+  }
+
+  // Related posts: cada post aponta para os outros 2
   await payload.update({
     id: post1Doc.id,
     collection: 'posts',
-    data: {
-      relatedPosts: [post2Doc.id, post3Doc.id],
-    },
+    data: { relatedPosts: [post2Doc.id, post3Doc.id] },
     req,
   })
   await payload.update({
     id: post2Doc.id,
     collection: 'posts',
-    data: {
-      relatedPosts: [post1Doc.id, post3Doc.id],
-    },
+    data: { relatedPosts: [post1Doc.id, post3Doc.id] },
     req,
   })
   await payload.update({
     id: post3Doc.id,
     collection: 'posts',
-    data: {
-      relatedPosts: [post1Doc.id, post2Doc.id],
-    },
+    data: { relatedPosts: [post1Doc.id, post2Doc.id] },
     req,
   })
 
@@ -224,9 +231,9 @@ export const seed = async ({
     req,
   })
 
-  payload.logger.info(`— Seeding pages...`)
+  payload.logger.info(`— Seeding pages (home, sobre, contato)...`)
 
-  const [_, contactPage] = await Promise.all([
+  const [homePage, contactPage, sobrePage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -236,35 +243,28 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: contactPageData({ contactForm: contactForm }),
+      data: contactPageData({ contactForm }),
+      req,
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: sobrePageData(),
       req,
     }),
   ])
 
-  payload.logger.info(`— Seeding globals...`)
+  payload.logger.info(`— Seeding globals (header nav + footer nav)...`)
 
   await Promise.all([
     payload.updateGlobal({
       slug: 'header',
       data: {
         navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Posts',
-              url: '/posts',
-            },
-          },
-          {
-            link: {
-              type: 'reference',
-              label: 'Contact',
-              reference: {
-                relationTo: 'pages',
-                value: contactPage.id,
-              },
-            },
-          },
+          { link: { type: 'custom', label: 'Início', url: '/' } },
+          { link: { type: 'custom', label: 'Blog', url: '/posts' } },
+          { link: { type: 'reference', label: 'Sobre', reference: { relationTo: 'pages', value: sobrePage.id } } },
+          { link: { type: 'reference', label: 'Contato', reference: { relationTo: 'pages', value: contactPage.id } } },
         ],
       },
       req,
@@ -273,34 +273,17 @@ export const seed = async ({
       slug: 'footer',
       data: {
         navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
-            },
-          },
+          { link: { type: 'custom', label: 'GitHub', newTab: true, url: 'https://github.com/kayroalexandre' } },
+          { link: { type: 'custom', label: 'LinkedIn', newTab: true, url: 'https://linkedin.com/in/kayroalexandre' } },
+          { link: { type: 'custom', label: 'Admin', url: '/admin' } },
         ],
       },
       req,
     }),
   ])
+
+  // homePage é capturado pelo linter warning; silenciar explicitamente
+  void homePage
 
   payload.logger.info('Seeded database successfully!')
 }

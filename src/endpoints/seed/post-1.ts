@@ -7,19 +7,43 @@ export type PostArgs = {
   author: User
 }
 
+/**
+ * Post 1 — Como migrei este site para Payload CMS + Next.js 15.
+ * Demonstra: rich text, headings (h2/h3/h4), banner block, code block
+ * com syntax highlighting, mediaBlock. Categorizado como "CMS" e "Frontend".
+ */
 export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> = ({
   heroImage,
   blockImage,
   author,
 }) => {
   return {
-    slug: 'digital-horizons',
+    slug: 'migrando-para-payload-cms-nextjs',
     _status: 'published',
     authors: [author],
     content: {
       root: {
         type: 'root',
         children: [
+          {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Este site já foi WordPress, depois Next.js puro com MDX, depois um blog estático. Em 2026 migrei para Payload CMS 3 rodando em cima de Next.js 15 com Postgres no Neon e deploy na Vercel. A decisão foi menos sobre "qual CMS é melhor" e mais sobre "quero editar conteúdo pelo navegador, mas sem abrir mão do React quando precisar".',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
+            version: 1,
+          },
           {
             type: 'heading',
             children: [
@@ -29,7 +53,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Dive into the marvels of modern innovation, where the only constant is change. A journey where pixels and data converge to craft the future.',
+                text: 'Por que Payload',
                 version: 1,
               },
             ],
@@ -40,9 +64,28 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
             version: 1,
           },
           {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Payload mora dentro do seu app Next.js como um pacote npm. Não é um servidor separado, não é uma API externa — você define as collections, registra os plugins, e ele aparece em /admin automaticamente. Para um portfólio pessoal, isso é ouro: posso customizar a UI, adicionar blocos novos, mudar a estrutura dos posts sem pedir permissão a ninguém.',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
+            version: 1,
+          },
+          {
             type: 'block',
             fields: {
-              blockName: 'Disclaimer',
+              blockName: 'TL;DR',
               blockType: 'banner',
               content: {
                 root: {
@@ -57,7 +100,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                           format: 1,
                           mode: 'normal',
                           style: '',
-                          text: 'Disclaimer:',
+                          text: 'TL;DR: ',
                           version: 1,
                         },
                         {
@@ -66,39 +109,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                           format: 0,
                           mode: 'normal',
                           style: '',
-                          text: ' This content is fabricated and for demonstration purposes only. To edit this post, ',
-                          version: 1,
-                        },
-                        {
-                          type: 'link',
-                          children: [
-                            {
-                              type: 'text',
-                              detail: 0,
-                              format: 0,
-                              mode: 'normal',
-                              style: '',
-                              text: 'navigate to the admin dashboard',
-                              version: 1,
-                            },
-                          ],
-                          direction: 'ltr',
-                          fields: {
-                            linkType: 'custom',
-                            newTab: true,
-                            url: '/admin',
-                          },
-                          format: '',
-                          indent: 0,
-                          version: 3,
-                        },
-                        {
-                          type: 'text',
-                          detail: 0,
-                          format: 0,
-                          mode: 'normal',
-                          style: '',
-                          text: '.',
+                          text: 'Payload + Next.js 15 + Neon + Vercel = CMS moderno, deploy trivial, preview ao vivo, e código 100% aberto pra eu hackear quando quiser.',
                           version: 1,
                         },
                       ],
@@ -129,7 +140,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'The Rise of AI and Machine Learning',
+                text: 'A migração em 4 passos',
                 version: 1,
               },
             ],
@@ -148,7 +159,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'We find ourselves in a transformative era where artificial intelligence (AI) stands at the forefront of technological evolution. The ripple effects of its advancements are reshaping industries at an unprecedented pace. No longer are businesses bound by the limitations of tedious, manual processes. Instead, sophisticated machines, fueled by vast amounts of historical data, are now capable of making decisions previously left to human intuition. These intelligent systems are not only optimizing operations but also pioneering innovative approaches, heralding a new age of business transformation worldwide. ',
+                text: 'Não precisei reescrever o site. O processo foi:',
                 version: 1,
               },
             ],
@@ -167,26 +178,173 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'To demonstrate basic AI functionality, here is a javascript snippet that makes a POST request to a generic AI API in order to generate text based on a prompt. ',
+                text: '1. Schema das collections',
                 version: 1,
               },
             ],
             direction: 'ltr',
             format: '',
             indent: 0,
-            tag: 'h4',
+            tag: 'h3',
+            version: 1,
+          },
+          {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Defini Posts, Pages, Categories, Media, Forms e Users em arquivos TypeScript. Cada field do schema vira coluna no Postgres automaticamente — o adapter vercelPostgresAdapter cuida do DDL. Quando você roda pnpm dev pela primeira vez, o Payload compara o schema com o banco e faz push das diferenças (em prod, ele exige migrations explícitas via pnpm payload migrate).',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
+            version: 1,
+          },
+          {
+            type: 'heading',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: '2. Storage de mídia',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            tag: 'h3',
+            version: 1,
+          },
+          {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Em vez de armazenar uploads no filesystem do Vercel (que é efêmero), usei o plugin @payloadcms/storage-vercel-blob. Cada upload vai pro Vercel Blob, e o Payload guarda só a URL no banco. As variantes (thumbnail, square, small, medium, large) são geradas via sharp no onUpload.',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
+            version: 1,
+          },
+          {
+            type: 'heading',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: '3. Renderização no front',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            tag: 'h3',
+            version: 1,
+          },
+          {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'As páginas de [slug] e /posts/[slug] usam getPayload({ config }) direto no Server Component. Sem API route, sem GraphQL, sem cache manual — o Next lida com tudo via React Server Components. A página é gerada estaticamente no build e revalidada por tag quando você publica uma página nova no admin.',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
+            version: 1,
+          },
+          {
+            type: 'heading',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Exemplo: query de página com draft mode',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            tag: 'h3',
             version: 1,
           },
           {
             type: 'block',
             fields: {
-              blockName: 'Generate Text',
+              blockName: 'queryPageBySlug',
               blockType: 'code',
-              code: "async function generateText(prompt) {\n    const apiKey = 'your-api-key';\n    const apiUrl = 'https://api.example.com/generate-text';\n\n    const response = await fetch(apiUrl, {\n        method: 'POST',\n        headers: {\n            'Content-Type': 'application/json',\n            'Authorization': `Bearer ${apiKey}`\n        },\n        body: JSON.stringify({\n            model: 'text-generation-model',\n            prompt: prompt,\n            max_tokens: 50\n        })\n    });\n\n    const data = await response.json();\n    console.log(data.choices[0].text.trim());\n}\n\n// Example usage\ngenerateText(\"Once upon a time in a faraway land,\");\n",
-              language: 'javascript',
+              code: `const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+  const { isEnabled: draft } = await draftMode()
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'pages',
+    draft,
+    limit: 1,
+    pagination: false,
+    overrideAccess: draft,
+    where: { slug: { equals: slug } },
+  })
+
+  return result.docs?.[0] || null
+})`,
+              language: 'typescript',
             },
             format: '',
             version: 2,
+          },
+          {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: 'Note o draft mode: quando você entra em preview pelo admin, a página renderiza a versão _draft=true antes de publicar. Em produção, só vê a versão publicada.',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
+            version: 1,
           },
           {
             type: 'heading',
@@ -197,7 +355,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'IoT: Connecting the World Around Us',
+                text: '4. O que eu queria e o que consegui',
                 version: 1,
               },
             ],
@@ -216,26 +374,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: "In today's rapidly evolving technological landscape, the Internet of Things (IoT) stands out as a revolutionary force. From transforming our residences with smart home systems to redefining transportation through connected cars, IoT's influence is palpable in nearly every facet of our daily lives.",
-                version: 1,
-              },
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            textFormat: 0,
-            version: 1,
-          },
-          {
-            type: 'paragraph',
-            children: [
-              {
-                type: 'text',
-                detail: 0,
-                format: 0,
-                mode: 'normal',
-                style: '',
-                text: "This technology hinges on the seamless integration of devices and systems, allowing them to communicate and collaborate effortlessly. With each connected device, we move a step closer to a world where convenience and efficiency are embedded in the very fabric of our existence. As a result, we're transitioning into an era where our surroundings intuitively respond to our needs, heralding a smarter and more interconnected global community.",
+                text: 'Queria preview ao vivo sem dor, versionamento de posts, e a possibilidade de customizar o editor com blocos novos (tipo um "Callout" ou "Code Snippet" especializado). Tudo isso veio de fábrica. O que ainda dá trabalho: deploy com dev mode acidental poluindo a tabela payload_migrations — daí ter um branch dev separado no Neon e checagem automática no build.',
                 version: 1,
               },
             ],
@@ -258,7 +397,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
           {
             type: 'block',
             fields: {
-              blockName: 'Dynamic Components',
+              blockName: 'Próximos passos',
               blockType: 'banner',
               content: {
                 root: {
@@ -273,7 +412,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                           format: 0,
                           mode: 'normal',
                           style: '',
-                          text: "This content above is completely dynamic using custom layout building blocks configured in the CMS. This can be anything you'd like from rich text and images, to highly designed, complex components.",
+                          text: 'Nos próximos posts vou detalhar o setup Neon + branch dev (isolando ambiente local sem tocar produção) e o que aprendi migrando a busca de Fuse.js para a busca nativa do Payload. Se tiver dúvida ou quer ver o código-fonte completo, o repo está aberto.',
                           version: 1,
                         },
                       ],
@@ -290,7 +429,7 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
                   version: 1,
                 },
               },
-              style: 'info',
+              style: 'success',
             },
             format: '',
             version: 2,
@@ -305,11 +444,11 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
     heroImage: heroImage.id,
     meta: {
       description:
-        'Dive into the marvels of modern innovation, where the only constant is change. A journey where pixels and data converge to craft the future.',
+        'Por que migrei meu portfólio para Payload CMS 3 + Next.js 15, e o que aprendi no processo (preview, mídia, deploy).',
       image: heroImage.id,
-      title: 'Digital Horizons: A Glimpse into Tomorrow',
+      title: 'Migrando para Payload CMS + Next.js 15',
     },
-    relatedPosts: [], // this is populated by the seed script
-    title: 'Digital Horizons: A Glimpse into Tomorrow',
+    relatedPosts: [], // populado pelo seed
+    title: 'Migrando para Payload CMS + Next.js 15',
   }
 }

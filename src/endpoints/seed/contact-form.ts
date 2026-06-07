@@ -1,5 +1,9 @@
 import { RequiredDataFromCollectionSlug } from 'payload'
 
+/**
+ * Formulário de contato (PT-BR) — usado no formBlock da página /contato.
+ * Os labels e o confirmationMessage ficam em português.
+ */
 export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
   confirmationMessage: {
     root: {
@@ -14,7 +18,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'The contact form has been submitted successfully.',
+              text: 'Mensagem enviada com sucesso!',
               version: 1,
             },
           ],
@@ -22,6 +26,25 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
           format: '',
           indent: 0,
           tag: 'h2',
+          version: 1,
+        },
+        {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'text',
+              detail: 0,
+              format: 0,
+              mode: 'normal',
+              style: '',
+              text: 'Obrigado pelo contato. Retorno em até 2 dias úteis.',
+              version: 1,
+            },
+          ],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
           version: 1,
         },
       ],
@@ -32,10 +55,10 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
     },
   },
   confirmationType: 'message',
-  createdAt: '2023-01-12T21:47:41.374Z',
+  createdAt: '2026-06-07T03:00:00.000Z',
   emails: [
     {
-      emailFrom: '"Payload" \u003Cdemo@payloadcms.com\u003E',
+      emailFrom: '"Kayro Gomes" <noreply@kayrogomes.com>',
       emailTo: '{{email}}',
       message: {
         root: {
@@ -50,7 +73,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Your contact form submission was successfully received.',
+                  text: 'Recebi sua mensagem pelo site. Retorno em até 2 dias úteis.',
                   version: 1,
                 },
               ],
@@ -67,7 +90,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
           version: 1,
         },
       },
-      subject: "You've received a new message.",
+      subject: 'Recebi sua mensagem',
     },
   ],
   fields: [
@@ -75,7 +98,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
       name: 'full-name',
       blockName: 'full-name',
       blockType: 'text',
-      label: 'Full Name',
+      label: 'Nome',
       required: true,
       width: 100,
     },
@@ -83,7 +106,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
       name: 'email',
       blockName: 'email',
       blockType: 'email',
-      label: 'Email',
+      label: 'E-mail',
       required: true,
       width: 100,
     },
@@ -91,7 +114,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
       name: 'phone',
       blockName: 'phone',
       blockType: 'number',
-      label: 'Phone',
+      label: 'Telefone (opcional)',
       required: false,
       width: 100,
     },
@@ -99,13 +122,13 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
       name: 'message',
       blockName: 'message',
       blockType: 'textarea',
-      label: 'Message',
+      label: 'Mensagem',
       required: true,
       width: 100,
     },
   ],
   redirect: undefined,
-  submitButtonLabel: 'Submit',
-  title: 'Contact Form',
-  updatedAt: '2023-01-12T21:47:41.374Z',
+  submitButtonLabel: 'Enviar mensagem',
+  title: 'Contato',
+  updatedAt: '2026-06-07T03:00:00.000Z',
 }
