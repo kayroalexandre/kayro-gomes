@@ -152,7 +152,22 @@ Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to
 
 **Causa raiz:** Os arquivos de seed (imagens em `src/endpoints/seed/`) já foram enviados para o Vercel Blob num seed anterior, e o Blob não aceita nomes duplicados por padrão.
 
-**Soluções:**
+**Solução mais simples (recomendada):** usar os scripts utilitários novos:
+```bash
+# Ver o que tem no Vercel Blob (sem deletar nada)
+pnpm blob:list
+
+# Apagar TUDO do Blob store (pede confirmação, exige --force)
+pnpm blob:reset --force
+pnpm db:seed
+```
+> Nota: o plugin `@payloadcms/storage-vercel-blob` (versão 3.85.x) não
+> expõe a opção `allowOverwrite` no TypeScript, mesmo que o SDK do
+> Vercel Blob aceite. A solução padrão é limpar o store antes de
+> re-seedar — `blob:reset` faz isso de forma segura (lista tudo
+> primeiro, exige `--force` para realmente deletar).
+
+**Alternativas manuais:**
 - Apagar manualmente os blobs no painel do Vercel Blob Storage e rodar `pnpm db:seed` de novo.
 - Usar o botão **"Seed the database"** no admin UI, que tem lógica de overwrite.
 - Configurar `addRandomSuffix: true` no `vercelBlobStorage` (vai gerar URLs únicas a cada seed, mas polui o storage).
