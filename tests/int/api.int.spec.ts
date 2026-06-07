@@ -13,7 +13,7 @@ let payload: Payload
  *
  * Se a conexão falhar, o teste é skipado em vez de quebrar o build.
  */
-const DATABASE_AVAILABLE = !!process.env.POSTGRES_URL && process.env.POSTGRES_URL !== 'postgresql://test:test@localhost:5432/test'
+const DATABASE_AVAILABLE = !!process.env.POSTGRES_URL
 
 describe('API', () => {
   beforeAll(async () => {
