@@ -1,16 +1,19 @@
 # Guia de Workflow Sincronizado: Local ⇄ GitHub ⇄ Vercel ⇄ Neon
 
-Este guia explica como estruturar de forma ideal o fluxo de desenvolvimento do projeto **kayro-gomes** integrando o desenvolvimento local, deploys de preview (testes) e banco de dados isolados.
+Este guia explica o fluxo de desenvolvimento do projeto **kayro-gomes**,
+integrando desenvolvimento local, deploys de preview, produção e banco
+de dados isolados. **Atualizado após diagnosticar e corrigir os "erros
+bobos" do ciclo de deploy** — vale a pena ler até o fim antes de clonar.
+
+> **Catálogo de erros comuns:** [`docs/TROUBLESHOOTING.md`](TROUBLESHOOTING.md)
 
 ---
 
 ## 1. Visão Geral da Arquitetura de Ambientes
 
-O fluxo de trabalho ideal é dividido em três ambientes complementares e isolados:
-
 | Ambiente | Branch no Git | Vercel Environment | Banco de Dados (Neon) | Armazenamento (Blob) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Desenvolvimento (Local)** | Qualquer branch (`feature/...`) | `development` (via `.env.local`) | Postgres Local (Docker) ou Branch `dev` (Neon) | Vercel Blob (em desenvolvimento) |
+| **Desenvolvimento (Local)** | Qualquer branch (`feature/...`) | `development` (via `.env.local`) | **Branch `dev` do Neon** (essencial!) | Vercel Blob (em desenvolvimento) |
 | **Preview (Testes/PR)** | Branch com PR aberto (`feature/...`) | `preview` (dinâmico) | Branch temporária no Neon (criada p/ o PR) | Vercel Blob (Preview) |
 | **Produção (Live)** | `main` | `production` | Banco de Produção (`main` do Neon) | Vercel Blob (Produção) |
 
@@ -18,7 +21,7 @@ O fluxo de trabalho ideal é dividido em três ambientes complementares e isolad
 graph TD
     subgraph Local["Ambiente Local (Sua Máquina)"]
         LocalCode["Código Local (branch: feature/...)"]
-        LocalDB[("Postgres Local (Docker)")]
+        LocalDB[("Postgres Local (Docker) OU Branch dev (Neon)")]
         VercelDev["vercel dev (ou pnpm dev)"]
     end
 
@@ -32,8 +35,9 @@ graph TD
     end
 
     subgraph Neon["Neon Postgres (Banco)"]
-        ProdDB[("Banco de Produção (main)")]
-        PreviewDB[("Cópia Temporária (br-...)")]
+        ProdDB[("main (produção)")]
+        DevDB[("dev (desenvolvimento)")]
+        PreviewDB[("br-... (preview de PR)")]
     end
 
     LocalCode -->|git push| PR
@@ -41,80 +45,208 @@ graph TD
     PreviewDeploy -->|Conecta| PreviewDB
     PR -->|Merge / Aprovado| ProdDeploy
     ProdDeploy -->|Conecta| ProdDB
+    LocalCode -.->|pnpm dev| DevDB
 ```
 
 ---
 
-## 2. Passo a Passo do Fluxo de Trabalho (Workflow)
+## 2. Pré-requisitos (antes de clonar)
 
-Quando você for trabalhar no projeto, o ciclo de desenvolvimento seguirá estes passos:
+A nuvem (Vercel, GitHub e Neon) já está 100% configurada e sincronizada.
+Para rodar local você precisa apenas de:
 
-### Passo 1: No seu Computador (Desenvolvimento Local)
+1.  **Node.js 24.x** — `node -v` deve mostrar `v24.x.x`
+2.  **pnpm 10+** — `npm i -g pnpm` (ou via corepack)
+3.  **Vercel CLI** — `npm i -g vercel`
+4.  **Docker Desktop** *(opcional)* — só se quiser rodar Postgres local sem usar Neon
+5.  **neonctl** *(opcional, recomendado)* — `npm i -g neonctl` para gerenciar branches do Neon pelo terminal
+
+Clonar e linkar:
+```bash
+git clone https://github.com/kayroalexandre/kayro-gomes.git
+cd kayro-gomes
+vercel link   # conecta o clone ao projeto na Vercel
+```
+
+---
+
+## 3. Branch `dev` do Neon (ESSENCIAL)
+
+> **Por que isso é a parte mais importante do workflow:**
+> Se você rodar `pnpm dev` contra o banco de produção, o Payload faz
+> um "dev push" no schema e cria uma migration com `batch = -1`. Isso
+> quebra o `payload migrate` em CI (prompt interativo no build do Vercel)
+> e polui a tabela de controle. Detalhes em
+> [`docs/TROUBLESHOOTING.md` § 1](TROUBLESHOOTING.md#1-build-do-vercel-trava-num-prompt-do-payload-migrate).
+
+### Setup único (no painel do Neon)
+
+1. Acesse [console.neon.tech](https://console.neon.tech) → projeto `kayro-gomes`
+2. Crie um branch chamado `dev` (a partir da `main`):
+   - Via painel: **Branches** → **Create Branch** → name: `dev`, parent: `main`
+   - Via CLI: `neonctl branches create --name dev --parent main`
+3. Copie a **connection string** do branch `dev` (ambos: pooled e direct, igual à prod)
+4. Atualize seu `.env.local` com a URL do branch `dev`:
+   ```env
+   POSTGRES_URL=postgresql://.../neondb?sslmode=require   # ← URL do branch dev
+   ```
+5. Pronto. Agora `pnpm dev` só mexe no branch `dev`, nunca em prod.
+
+### Quando mexer no schema (criar campo, mudar collection, etc.)
+
+O fluxo correto é:
+
+```bash
+# 1. Trabalhar no branch dev do Neon
+pnpm dev
+#   ↓ ao adicionar/mudar collection, o dev push acontece só no branch dev
+
+# 2. Gerar migration que descreve a mudança
+pnpm payload migrate:create add_awesome_field
+#   ↓ cria src/migrations/<timestamp>_add_awesome_field.{ts,json}
+
+# 3. Conferir o diff do schema (tem que fazer sentido)
+git diff src/migrations/
+
+# 4. Commitar e abrir PR
+git add .
+git commit -m "feat: add awesome field"
+git push origin feature/awesome
+```
+
+Quando o PR for mergeado para `main`, o Vercel roda `payload migrate` em
+CI, que aplica a nova migration no banco de produção.
+
+---
+
+## 4. Passo a Passo do Workflow
+
+### Passo 1: Desenvolvimento Local
 1. Crie uma branch para a tarefa:
    ```bash
    git checkout -b feature/nova-funcionalidade
    ```
-2. Baixe as variáveis de ambiente do Vercel para a sua máquina (isso criará o arquivo `.env.local` contendo as chaves de desenvolvimento):
+2. Baixe as variáveis de ambiente do Vercel (cria `.env.local`):
    ```bash
    vercel env pull
    ```
-3. Suba o banco de dados local com Docker para trabalhar de forma rápida e offline:
-   ```bash
-   docker-compose up -d
-   ```
-4. Inicie o servidor local:
+3. **Troque o `POSTGRES_URL` no `.env.local` para apontar ao branch `dev` do Neon.**
+4. Suba o servidor local:
    ```bash
    pnpm dev
    ```
-   *Qualquer alteração que você fizer no banco de dados local não afetará o ambiente de produção nem os testes.*
+5. Abra `http://localhost:3000` e `http://localhost:3000/admin`.
 
-### Passo 2: No GitHub e Vercel (Revisão e Preview Colaborativo)
-1. Envie sua branch para o GitHub:
+> *Qualquer alteração que você fizer no banco vai para o branch `dev`,
+> nunca em produção. Sem medo de quebrar nada.*
+
+### Passo 2: Preview Colaborativo (PR)
+1. Push da branch:
    ```bash
-   git add .
-   git commit -m "feat: adiciona nova funcionalidade"
-   git push origin feature/nova-funcionalidade
+   git add . && git commit -m "feat: ..." && git push origin feature/nova-funcionalidade
    ```
-2. Abra um **Pull Request (PR)** no GitHub.
-3. **Automação Neon + Vercel**: 
-   * O Neon cria uma ramificação (branch) instantânea do banco de dados contendo os dados atuais.
-   * O Vercel cria uma build isolada (Preview Deployment) conectada a esse banco clonado.
-   * O Vercel adiciona um comentário no PR com o link da prévia.
-4. **Colaboração (Vercel Toolbar)**: Você e sua equipe abrem o link e usam a barra de ferramentas do Vercel para deixar comentários, testar e aprovar diretamente na tela.
+2. Abra PR no GitHub.
+3. Vercel + Neon criam **automaticamente**:
+   - Um deploy de preview isolado
+   - Um branch temporário do banco de dados (snapshot do estado atual)
+4. O link do preview aparece como comentário no PR.
+5. Use a Vercel Toolbar para deixar comentários e testar.
 
-### Passo 3: Publicação (Produção)
-1. Ao aprovar o Pull Request no GitHub, faça o **Merge**.
-2. O Vercel detecta o merge na branch `main` e atualiza o site de produção em segundos.
-3. O banco de dados de produção (`main` do Neon) é atualizado com as novas migrações automaticamente.
-
----
-
-## 3. Alinhamento de Environment Variables
-
-Para garantir que esse fluxo funcione, as variáveis de ambiente já foram configuradas no Vercel para responder dinamicamente:
-
-*   **`POSTGRES_URL`**: 
-    *   No ambiente **Local**, você usará o arquivo `.env.local` apontando para o seu Docker (`postgresql://postgres@localhost:54320/neondb`).
-    *   No ambiente **Preview**, o Vercel e o Neon substituem essa variável automaticamente pelo banco de dados temporário gerado para a branch.
-    *   No ambiente **Production**, ela aponta para o banco de dados principal no Neon.
-*   **`BLOB_READ_WRITE_TOKEN`**: Gerenciado diretamente pelo Vercel. Tanto em Produção quanto em Preview, os arquivos de upload (fotos, mídias) irão para o Vercel Blob de forma transparente.
-*   **`PAYLOAD_SECRET`**, **`CRON_SECRET`**, **`PREVIEW_SECRET`**: Já estão configuradas no painel do Vercel para proteger a autenticação do seu CMS em todos os deploys.
+### Passo 3: Produção
+1. Aprove e faça merge do PR na `main`.
+2. Vercel dispara deploy de produção.
+3. O Vercel roda `pnpm run ci` que executa:
+   - `payload migrate` → aplica migrations pendentes no banco prod
+   - `pnpm build` → build do Next.js
+4. Em ~2 min, a versão nova está no ar.
 
 ---
 
-## 4. O que fazer antes de Clonar o Projeto Localmente?
+## 5. Alinhamento de Environment Variables
 
-Como a nuvem (Vercel, GitHub e Neon) já está 100% configurada e sincronizada, os requisitos para você começar na sua máquina local são apenas:
+| Variável | Dev Local | Preview | Produção |
+| :--- | :--- | :--- | :--- |
+| `POSTGRES_URL` | Branch `dev` do Neon | Branch temporário | Branch `main` (prod) |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob (dev) | Vercel Blob (preview) | Vercel Blob (prod) |
+| `PAYLOAD_SECRET` | Mesmo valor (vem do Vercel) | Automático | Automático |
+| `CRON_SECRET` | Mesmo valor | Automático | Automático |
+| `PREVIEW_SECRET` | Mesmo valor | Automático | Automático |
 
-1.  **Ter o Docker instalado**: Necessário para rodar o banco localmente de forma simples sem precisar instalar o Postgres diretamente na sua máquina.
-2.  **Ter o Node.js (v24+) e pnpm instalados**: Para rodar o Next.js.
-3.  **Instalar a Vercel CLI**:
-    ```bash
-    npm install -g vercel
-    ```
-4.  **Clonar e Linkar**:
-    ```bash
-    git clone https://github.com/kayroalexandre/kayro-gomes.git
-    cd kayro-gomes
-    vercel link # Para conectar o seu clone local ao projeto na nuvem do Vercel
-    ```
+Para gerar os secrets, use algo como:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+---
+
+## 6. Arquivos de Ambiente — NUNCA commite credenciais
+
+```
+.env.example     → commitado, modelo sem valores reais
+.env.local       → gitignored, dev local (gerado por `vercel env pull`)
+prod.env         → gitignored, prod local (gerado por `vercel env pull --environment=production`)
+.env             → se existir, gitignored (legado do docker-compose)
+```
+
+> O `.gitignore` deste projeto tem `.env*` na última linha, o que
+> ignora qualquer um desses. Confirmado: `git check-ignore` retorna
+> match para `.env.local` e `prod.env`.
+
+**Regra de ouro:** se você ver uma string de 40+ chars em hex, é secret.
+Não commita, não cola em chat, não sobe em PR.
+
+---
+
+## 7. Scripts Úteis (definidos em `package.json`)
+
+| Comando | O que faz |
+| :--- | :--- |
+| `pnpm dev` | Inicia o Next.js em modo dev (Turbopack) |
+| `pnpm build` | Build de produção |
+| `pnpm ci` | `payload migrate && pnpm build` (usado pela Vercel) |
+| `pnpm db:check` | Mostra estado da tabela `payload_migrations` |
+| `pnpm db:fix-dev-migration` | Limpa dev migrations (`batch=-1`) do banco |
+| `pnpm db:seed` | Roda o seed via CLI (precisa blobs limpos) |
+| `pnpm payload` | Atalho para o CLI do Payload |
+| `pnpm lint` / `pnpm lint:fix` | ESLint |
+| `pnpm test:int` / `pnpm test:e2e` | Testes (Vitest + Playwright) |
+
+---
+
+## 8. Comandos do dia a dia
+
+```bash
+# Banco de dados
+pnpm db:check                           # estado do banco
+pnpm db:fix-dev-migration               # limpar batch=-1
+pnpm payload migrate:create <nome>      # criar migration
+pnpm payload migrate                    # aplicar migrations pendentes
+pnpm payload migrate:status             # ver status das migrations
+
+# Vercel
+vercel env pull                         # atualizar .env.local com envs de dev
+vercel env pull --environment=production # atualizar prod.env com envs de prod
+vercel logs <url-do-deploy>             # ver logs de runtime
+vercel inspect <url-do-deploy> --logs   # ver logs de build
+
+# Neon (se tiver neonctl instalado)
+neonctl branches                        # listar branches
+neonctl branches create --name dev      # criar branch dev
+neonctl connection-string dev           # ver connection string do dev
+```
+
+---
+
+## 9. Quando algo dá errado
+
+1. Rode `pnpm db:check` primeiro — o estado do banco é responsável por 50% dos problemas
+2. Veja [`docs/TROUBLESHOOTING.md`](TROUBLESHOOTING.md) — tem a lista de erros mais comuns com a causa e a solução
+3. Se for erro de deploy no Vercel, pegue o ID do deploy e rode `vercel inspect <id> --logs`
+4. Em último caso, force um deploy limpo: `vercel deploy --force`
+
+---
+
+## 10. Histórico de mudanças deste guia
+
+- **2026-06-07** — Adicionada seção 3 (branch `dev` do Neon) e referências a `docs/TROUBLESHOOTING.md` depois de descobrir que `pnpm dev` contra prod cria o problema do "data loss will occur" no Vercel
+- Versão anterior focava em arquitetura geral mas não alertava sobre o anti-padrão de `.env.local` apontando pra prod

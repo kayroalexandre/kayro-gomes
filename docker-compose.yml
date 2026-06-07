@@ -7,7 +7,11 @@ services:
       - '54320:5432'
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_DB: your-database-name # THIS MUST MATCH YOUR DB NAME IN .env
+      # O nome do banco precisa bater com o último segmento da POSTGRES_URL do seu .env.local
+      # Ex: postgresql://postgres@localhost:54320/kayro_local -> POSTGRES_DB: kayro_local
+      POSTGRES_DB: your-database-name
       POSTGRES_HOST_AUTH_METHOD: trust
+    # Usa .env.local (que é o arquivo que o `vercel env pull` gera).
+    # Se preferir um arquivo separado, copie o env_file para `.env` e troque aqui.
     env_file:
-      - .env
+      - .env.local

@@ -17,6 +17,9 @@
     "lint:fix": "cross-env NODE_OPTIONS=--no-deprecation eslint . --fix",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "reinstall": "cross-env NODE_OPTIONS=--no-deprecation rm -rf node_modules && rm pnpm-lock.yaml && pnpm --ignore-workspace install",
+    "db:check": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/db-check.ts",
+    "db:fix-dev-migration": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/db-fix-dev-migration.ts",
+    "db:seed": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
@@ -64,6 +67,7 @@
     "@testing-library/react": "16.3.2",
     "@types/escape-html": "^1.0.4",
     "@types/node": "25.9.2",
+    "@types/pg": "^8.11.6",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
@@ -71,6 +75,7 @@
     "eslint": "^10.4.1",
     "eslint-config-next": "16.2.7",
     "jsdom": "29.1.1",
+    "pg": "^8.20.0",
     "postcss": "^8.5.15",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.3.0",
@@ -82,13 +87,6 @@
   },
   "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=24.15.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp",
-      "esbuild",
-      "unrs-resolver"
-    ]
+    "node": "24.x"
   }
 }
