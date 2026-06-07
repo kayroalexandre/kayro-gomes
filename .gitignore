@@ -6,6 +6,8 @@ node_modules
 .next
 next-env.d.ts
 .vercel
+# TypeScript incremental build cache (gerado por `tsc --noEmit`/next build)
+tsconfig.tsbuildinfo
 
 # Payload default media upload directory
 public/media/
