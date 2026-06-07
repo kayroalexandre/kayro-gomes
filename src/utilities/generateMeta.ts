@@ -26,9 +26,14 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+  const SITE_NAME = 'Kayro Gomes'
+  const rawTitle = doc?.meta?.title?.trim()
+  const title =
+    !rawTitle
+      ? `${SITE_NAME} — Desenvolvedor Full-Stack`
+      : rawTitle === SITE_NAME || rawTitle.includes(SITE_NAME)
+        ? rawTitle
+        : `${rawTitle} | ${SITE_NAME}`
 
   return {
     description: doc?.meta?.description,
