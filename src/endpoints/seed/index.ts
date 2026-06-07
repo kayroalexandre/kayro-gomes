@@ -140,12 +140,15 @@ export const seed = async ({
   // Cria o demo author PRIMEIRO, depois as mídias em sequência (não
   // Promise.all) — Payload mutates req.file entre chamadas e misturar
   // user (sem file) com media (com file) causa race condition.
+  // A senha é trocada no primeiro login; em produção, o seed deve ser
+  // pulado ou usar credenciais geradas via PAYLOAD_DEMO_USER_PASSWORD.
+  const demoPassword = process.env.PAYLOAD_DEMO_USER_PASSWORD || 'changeMe!2026'
   const demoAuthor = await payload.create({
     collection: 'users',
     data: {
       name: 'Kayro Gomes',
       email: 'demo-author@example.com',
-      password: 'password',
+      password: demoPassword,
     },
     req,
   })

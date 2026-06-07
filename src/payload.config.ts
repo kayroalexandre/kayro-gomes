@@ -89,19 +89,16 @@ export default buildConfig({
   ],
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [
-    vercelBlobStorage({
-      collections: {
-        media: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
-      // Seed idempotente: blobs com mesmo nome são sobrescritos. Sem isso,
-      // o segundo seed falha com 500 "blob already exists". O plugin não
-      // expõe `allowOverwrite` no tipo, mas o @vercel/blob subjacente
-      // sobrescreve por padrão quando o pathname já existe — o erro vinha
-      // do fato de o seed usar `addRandomSuffix: false` (default) + nome fixo.
-      // A solução de produção é apagar os blobs antes do re-seed (veja
-      // scripts/blob-reset.ts e docs/TROUBLESHOOTING.md § 8).
-    }),
+    ...(process.env.BLOB_READ_WRITE_TOKEN?.startsWith('vercel_blob_rw_')
+      ? [
+          vercelBlobStorage({
+            collections: {
+              media: true,
+            },
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+          }),
+        ]
+      : []),
     ...plugins,
   ],
   globals: [Header, Footer],

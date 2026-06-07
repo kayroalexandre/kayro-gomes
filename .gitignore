@@ -1,25 +1,43 @@
+# Build artifacts
 build
-dist / media
-node_modules
-.DS_Store
-.env
+dist
 .next
-next-env.d.ts
-.vercel
-# TypeScript incremental build cache (gerado por `tsc --noEmit`/next build)
-tsconfig.tsbuildinfo
 
-# Payload default media upload directory
+# Media
+media
 public/media/
 
-public/robots.txt
-public/sitemap*.xml
+# Env files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
 
+# Logs / caches
+.DS_Store
+*.log
+.cache/
+.turbo/
+.vercel/
 
-# Playwright
-node_modules/
+# TypeScript incremental
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Tests
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-.env*
+coverage/
+
+# Node / deps
+node_modules/
+
+# Generated sitemap/robots
+public/robots.txt
+public/sitemap*.xml
+
+# Local Docker env (NÃO commit)
+.env.docker
