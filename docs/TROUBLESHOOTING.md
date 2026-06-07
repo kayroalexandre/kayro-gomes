@@ -213,5 +213,3 @@ neonctl branches delete <branch>
 
 Sempre confirme o banco de destino (rode `pnpm db:check` antes) antes
 de qualquer um desses.
-
-<!-- force-rebuild -->
