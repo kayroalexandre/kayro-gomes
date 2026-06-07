@@ -120,7 +120,6 @@ app.post('/projects', zValidator('json', CreateProjectSchema), async (c) => {
   
   return c.json({ project }, 201)
 })`,
-              language: 'typescript',
             },
             format: '',
             version: 2,
@@ -196,7 +195,6 @@ app.openapi(
 
 // Gera /doc e /openapi.json automaticamente
 app.doc('/openapi.json', { openapi: '3.1.0', info: { title: 'Kayro API', version: '1.0.0' } })`,
-              language: 'typescript',
             },
             format: '',
             version: 2,

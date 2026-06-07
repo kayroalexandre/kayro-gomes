@@ -77,15 +77,17 @@ export const seed = async ({
     ),
   )
 
-  // Limpa collections e versões
-  await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
-  )
-  await Promise.all(
-    collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
-  )
+  // Limpa collections e versões — sequencial para evitar deadlock no Postgres.
+  // Em paralelo, tabelas `_rels` (que têm FKs para várias collections) travam
+  // entre si quando múltiplas collections são apagadas ao mesmo tempo.
+  for (const collection of collections) {
+    await payload.db.deleteMany({ collection, req, where: {} })
+  }
+  for (const collection of collections.filter(
+    (collection) => Boolean(payload.collections[collection].config.versions),
+  )) {
+    await payload.db.deleteVersions({ collection, req, where: {} })
+  }
 
   payload.logger.info(`— Seeding demo author and user...`)
 

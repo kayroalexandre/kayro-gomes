@@ -158,7 +158,6 @@ export async function addToCart(productId: string, variantId: string) {
   cookieStore.set('cart-id', String(cart.id), { httpOnly: true, sameSite: 'lax' })
   return { success: true, cartId: cart.id }
 }`,
-              language: 'typescript',
             },
             format: '',
             version: 2,

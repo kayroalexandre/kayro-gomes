@@ -93,7 +93,6 @@ Commands:
   drop <name>              Apaga uma branch (com confirmação)
   url <name>               Imprime a connection string da branch
   reset <name>             Drop + recriar a branch (wipe state)`,
-              language: 'bash',
             },
             format: '',
             version: 2,
@@ -169,7 +168,6 @@ export async function listBranches(apiKey: string, projectId: string): Promise<B
   // Valida na borda — o que entra no resto do código é Branch tipado
   return z.array(BranchSchema).parse(json.branches)
 }`,
-              language: 'typescript',
             },
             format: '',
             version: 2,
