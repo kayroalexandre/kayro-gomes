@@ -1,5 +1,14 @@
 # AGENTS.md — Kayro Gomes (Portfólio)
 
+> **⚠️ CONSOLIDAÇÃO REALIZADA (2026-06-08):** O projeto foi consolidado
+> de volta a uma única fonte de verdade (`main`). Branches antigas
+> (`develop`, `fix/docker-standalone-build`, `feature/turbopack-migration`,
+> worktree `glorious-scribe`) foram removidas. `.env.local` agora aponta
+> para **Postgres via Docker Compose** (porta 54320) para evitar push
+> acidental no Neon de produção. Backup completo salvo em
+> `.env.local.backup-neon-prod`. Consulte o histórico de commits e
+> `backup/docker-standalone-build` se precisar recuperar algo.
+
 Este arquivo documenta o **workflow oficial** de desenvolvimento, deploy
 e operações do projeto. Toda IA (Kilo, GitHub Copilot, etc.) e todo
 contribuidor humano deve seguir estas convenções.
@@ -126,6 +135,11 @@ Autenticação via header `Authorization: Bearer $CRON_SECRET`.
 
 ## Pendências Conhecidas
 
-- Docker build requer `DOCKER_BUILD=true pnpm build` antes de `docker build`.
+- ~~Docker build requer `DOCKER_BUILD=true pnpm build` antes de `docker build`.~~
+  **Resolvido em `fix/docker-standalone-build`:** o Dockerfile agora seta
+  `DOCKER_BUILD=true` internamente na fase `builder` e roda `pnpm run build`
+  lá. O único comando necessário é `docker build -t kayro-gomes .`. Foi
+  adicionado também um `.dockerignore` para evitar vazar `.env*`, `node_modules`
+  e artefatos de teste. Veja o cabeçalho do `Dockerfile` para detalhes.
 - Testes E2E não rodam no CI (lentos + requerem Vercel Preview). Rodam manualmente.
 - Neon branching ainda não implementado (DB compartilhado entre Preview/Prod).

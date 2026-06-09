@@ -84,6 +84,8 @@ jobs:
             echo "Waiting for Postgres... ($i)"
             sleep 2
           done
+      - name: Run Payload migrations
+        run: pnpm payload migrate
       - run: pnpm run test:int
 
   build:
