@@ -14,6 +14,9 @@
 # Para rodar: docker run --rm -p 3000:3000 \
 #   -e PAYLOAD_SECRET=... -e POSTGRES_URL=... -e BLOB_READ_WRITE_TOKEN=... \
 #   kayro-gomes
+#
+# Node 24-alpine: escolhido por performance e suporte LTS recente.
+# Ver: https://nodejs.org/en/about/previous-releases
 
 FROM node:24-alpine AS base
 # Dependências só quando necessárias

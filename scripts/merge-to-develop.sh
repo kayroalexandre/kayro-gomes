@@ -190,7 +190,7 @@ main() {
   # 7. Instruções finais
   echo ""
   log "PR: https://github.com/kayroalexandre/kayro-gomes/compare/main...develop"
-  log "Após aprovação do PR #9, rode: git push origin --delete ${merged[*]}"
+  log "Após aprovação do PR, rode: git push origin --delete \${merged[*]}"
 }
 
 main "$@"

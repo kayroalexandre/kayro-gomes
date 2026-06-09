@@ -151,8 +151,13 @@ main() {
     if [[ ${#to_delete_remote[@]} -gt 0 ]]; then
       echo ""
       if ! $FORCE && ! $DRY_RUN; then
-        read -rp "  Deletar estas ${#to_delete_remote[@]} branches remotas? [y/N] " c
-        [[ "$c" =~ ^[Yy]$ ]] || { log "Cancelado."; exit 0; }
+        if [[ -t 0 ]]; then
+          read -rp "  Deletar estas ${#to_delete_remote[@]} branches remotas? [y/N] " c
+          [[ "$c" =~ ^[Yy]$ ]] || { log "Cancelado."; exit 0; }
+        else
+          log "Modo não-interativo: use --force para deletar sem confirmação."
+          exit 0
+        fi
       fi
       local del=0 fail=0
       for b in "${to_delete_remote[@]}"; do delete_remote "$b" && ((del++)) || ((fail++)); done
