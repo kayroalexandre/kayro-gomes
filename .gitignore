@@ -41,3 +41,7 @@ public/sitemap*.xml
 
 # Local Docker env (NÃO commit)
 .env.docker
+
+# Backup de envs (NÃO commit)
+.env.local.backup*
+.env.*.backup*
