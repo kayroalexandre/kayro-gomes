@@ -1,5 +1,14 @@
 # AGENTS.md — Kayro Gomes (Portfólio)
 
+> **⚠️ CONSOLIDAÇÃO REALIZADA (2026-06-08):** O projeto foi consolidado
+> de volta a uma única fonte de verdade (`main`). Branches antigas
+> (`develop`, `fix/docker-standalone-build`, `feature/turbopack-migration`,
+> worktree `glorious-scribe`) foram removidas. `.env.local` agora aponta
+> para **Postgres via Docker Compose** (porta 54320) para evitar push
+> acidental no Neon de produção. Backup completo salvo em
+> `.env.local.backup-neon-prod`. Consulte o histórico de commits e
+> `backup/docker-standalone-build` se precisar recuperar algo.
+
 Este arquivo documenta o **workflow oficial** de desenvolvimento, deploy
 e operações do projeto. Toda IA (Kilo, GitHub Copilot, etc.) e todo
 contribuidor humano deve seguir estas convenções.

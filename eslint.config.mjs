@@ -18,6 +18,7 @@ export default [
   {
     ignores: [
       '.next/**',
+      '.vercel/**',
       'node_modules/**',
       '.kilo/**',
       'src/payload-types.ts',

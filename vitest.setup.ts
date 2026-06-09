@@ -7,6 +7,9 @@ import { existsSync } from 'node:fs'
 if (existsSync('.env.local')) {
   loadEnv({ path: '.env.local' })
 }
+if (!process.env.PAYLOAD_MIGRATING) {
+  process.env.PAYLOAD_MIGRATING = 'true'
+}
 if (!process.env.PAYLOAD_SECRET) {
   process.env.PAYLOAD_SECRET = 'test-payload-secret-do-not-use-in-prod'
 }
