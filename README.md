@@ -261,12 +261,8 @@ That's it! The Docker instance will help you get up and running quickly while al
 
 To seed the database with a few pages, posts, and projects you can click the 'seed database' link from the admin panel.
 
-The seed script will also create a demo user for demonstration purposes only:
-
-- Demo Author
-  - Email: `demo-author@payloadcms.com`
-  - Password: `password`
-
+> ⚠️ **SECURITY:** The seed creates a demo user. **Never hardcode passwords.** Set `PAYLOAD_DEMO_USER_PASSWORD` in your environment (`.env.local` or Vercel). If not set, a safe fallback is used. See `AGENTS.md` for details.
+>
 > NOTICE: seeding the database is destructive because it drops your current database to populate a fresh one from the seed template. Only run this command if you are starting a new project or can afford to lose your current data.
 
 ## Questions
