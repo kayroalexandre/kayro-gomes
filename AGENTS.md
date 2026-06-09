@@ -13,6 +13,33 @@ Este arquivo documenta o **workflow oficial** de desenvolvimento, deploy
 e operações do projeto. Toda IA (Kilo, GitHub Copilot, etc.) e todo
 contribuidor humano deve seguir estas convenções.
 
+---
+
+## ⚠️ Instruções para IA (Kilo, Copilot, etc.)
+
+**SEMPRE avise ANTES de executar quando o usuário pedir algo que:**
+
+1. **Quebre o fluxo de trabalho** (ex: commit direto em `main`, deploy automático de `develop`, deploy de `preview` sem pedido explícito)
+2. **Exija migration de banco** (mudança de schema em collections, relations, indexes)
+3. **Possa causar conflito, erro, ou quebrar o CMS/projeto** (ex: resetar banco de produção, editar migration já aplicada, rodar seed em produção, mudar config crítica sem backup)
+
+**NUNCA execute automaticamente nesses casos.** Em vez disso:
+
+- Avise claramente o risco
+- **Proponha uma alternativa segura** antes de qualquer ação
+- Aguarde confirmação explícita do usuário
+
+**Exemplo de resposta esperada:**
+> ⚠️ Isso exige criar uma migration de banco (`pnpm payload migrate:create`).
+> Posso:
+> - (A) Criar a migration e testar localmente no Docker
+> - (B) Apenas documentar a mudança sem aplicar
+> Qual prefere?
+
+---
+
+> **Consulte também:** `docs/MIGRATIONS.md` para fluxo detalhado de banco de dados.
+
 ## Stack
 
 - **Next.js 16** (App Router) + **React 19**
@@ -27,8 +54,8 @@ contribuidor humano deve seguir estas convenções.
 | Ambiente    | Branch        | URL                                           | Banco                | Cron  |
 |-------------|---------------|-----------------------------------------------|----------------------|-------|
 | Production  | `main`        | https://www.kayrogomes.com                    | Neon `main` branch   | ✅     |
-| Preview     | qualquer PR   | https://kayro-gomes-<branch>.vercel.app       | Neon `preview` branch | ❌     |
-| Development | local         | http://localhost:3000                         | Docker `postgres:16` | ❌     |
+| Preview     | `preview`     | https://kayro-gomes-git-preview-....vercel.app | Neon `preview` branch | ❌     |
+| Development | `develop`     | http://localhost:3000 (local)                 | Docker `postgres:16` | ❌     |
 
 ### Onde cada config vive
 
@@ -37,16 +64,20 @@ contribuidor humano deve seguir estas convenções.
 - **Local dev env vars:** `.env.local`, regenerado com `vercel env pull`.
 - **Local Postgres:** `docker compose up -d` (usa `.env.docker`, não `.env.local`).
 
-## Git Workflow
+## Git Workflow (Simples — 3 Branches Permanentes)
 
 ### Branches
 
-- `main` — produção. Protegida (1 review, CI verde, linear history).
-- `develop` — integração contínua.
-- `feature/*` — novas funcionalidades. Base: `develop`.
-- `fix/*` — correções. Base: `develop`.
-- `hotfix/*` — correções urgentes em produção. Base: `main`.
-- `release/*` — preparação de releases.
+| Branch | Proteção | Commits diretos | Propósito |
+|--------|----------|-----------------|-----------|
+| `main` | ✅ Protegida | ❌ Nunca | Produção real |
+| `develop` | ❌ Sem proteção | ✅ Sim | Desenvolvimento contínuo (branch de trabalho principal) |
+| `preview` | ❌ Sem proteção | ✅ Sim | Deploys temporários / testes em ambiente isolado |
+
+**Regras:**
+- `main` → **só recebe merges via PR** (de `develop` ou `preview`)
+- `develop` → commit direto permitido
+- `preview` → commit direto permitido
 
 ### Conventional Commits
 
@@ -67,15 +98,35 @@ Exemplos:
 - `fix(seed): serialize media uploads`
 - `chore(ci): add lint workflow`
 
+### Fluxo Diário (Simples)
+
+```bash
+# Desenvolvimento normal (commit direto em develop)
+git checkout develop && git pull origin develop
+# ... fazer mudanças ...
+git add . && git commit -m "feat: minha mudança"
+git push origin develop
+
+# Preview / deploy temporário (commit direto em preview)
+git checkout preview && git pull origin preview
+# ... fazer mudanças ...
+git add . && git commit -m "chore: teste em preview"
+git push origin preview
+# → Vercel cria deploy temporário automaticamente
+
+# Quando quiser subir algo pra produção (main)
+# → Abre PR: develop → main  OU  preview → main
+gh pr create --base main --head develop
+```
+
 ### Fluxo
 
-1. Crie branch: `git checkout develop && git pull && git checkout -b feature/minha-feature`
-2. Faça commits usando Conventional Commits.
-3. Abra PR para `develop` (ou `main` em hotfix).
-4. CI roda lint + typecheck + tests + build.
-5. Vercel gera Preview deployment automático.
-6. Reviewer aprova.
-7. Merge (squash) → Vercel rebuilda.
+1. Trabalhe diretamente em `develop` ou `preview` (commits diretos)
+2. Faça commits usando Conventional Commits
+3. CI roda lint + typecheck + tests + build automaticamente
+4. Para produção: abra PR de `develop` ou `preview` → `main`
+5. Todos os 4 status checks devem passar
+6. Merge (squash) → Vercel rebuilda produção
 
 ## Comandos Locais
 
