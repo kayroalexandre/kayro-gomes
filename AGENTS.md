@@ -126,6 +126,11 @@ Autenticação via header `Authorization: Bearer $CRON_SECRET`.
 
 ## Pendências Conhecidas
 
-- Docker build requer `DOCKER_BUILD=true pnpm build` antes de `docker build`.
+- ~~Docker build requer `DOCKER_BUILD=true pnpm build` antes de `docker build`.~~
+  **Resolvido em `fix/docker-standalone-build`:** o Dockerfile agora seta
+  `DOCKER_BUILD=true` internamente na fase `builder` e roda `pnpm run build`
+  lá. O único comando necessário é `docker build -t kayro-gomes .`. Foi
+  adicionado também um `.dockerignore` para evitar vazar `.env*`, `node_modules`
+  e artefatos de teste. Veja o cabeçalho do `Dockerfile` para detalhes.
 - Testes E2E não rodam no CI (lentos + requerem Vercel Preview). Rodam manualmente.
 - Neon branching ainda não implementado (DB compartilhado entre Preview/Prod).
