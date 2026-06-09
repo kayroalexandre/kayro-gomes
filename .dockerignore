@@ -1,0 +1,64 @@
+# Arquivos/pastas ignorados pelo contexto do `docker build`.
+# Reduz drasticamente o tamanho do contexto e evita vazar secrets.
+
+# Dependências e build local
+node_modules
+.next
+.turbo
+.pnpm-store
+
+# Ambientes (NUNCA entrar na imagem)
+.env
+.env.local
+.env.development
+.env.production
+.env.docker
+prod.env
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Mídia e uploads de dev
+public/uploads
+public/media
+
+# Logs e arquivos temporários
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+.cache
+coverage
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+
+# Documentação operacional (não precisa ir pra imagem)
+docs
+README.md
+AGENTS.md
+workflow_guide.md
+next-sitemap.config.cjs
+Dockerfile
+.dockerignore
+
+# Worktrees de IA
+.kilo
+
+# Testes e e2e (não usados em produção)
+tests
+
+# Scripts locais (não precisam na imagem)
+scripts
+
+# TypeScript build info
+*.tsbuildinfo
+next-env.d.ts
