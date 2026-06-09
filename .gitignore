@@ -45,3 +45,9 @@ public/sitemap*.xml
 # Backup de envs (NÃO commit)
 .env.local.backup*
 .env.*.backup*
+
+# Agent tooling / skills (NÃO commit)
+.agents/
+.kilo/
+.neon
+skills-lock.json
