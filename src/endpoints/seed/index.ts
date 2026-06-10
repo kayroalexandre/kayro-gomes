@@ -101,8 +101,8 @@ export const seed = async ({
       await payload.db.deleteMany({ collection, req, where: {} })
     }
   }
-  for (const collection of collections.filter(
-    (collection) => Boolean(payload.collections[collection].config.versions),
+  for (const collection of collections.filter((collection) =>
+    Boolean(payload.collections[collection].config.versions),
   )) {
     await payload.db.deleteVersions({ collection, req, where: {} })
   }
@@ -338,8 +338,20 @@ export const seed = async ({
           { link: { type: 'custom', label: 'Início', url: '/' } },
           { link: { type: 'custom', label: 'Blog', url: '/posts' } },
           { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
-          { link: { type: 'reference', label: 'Sobre', reference: { relationTo: 'pages', value: sobrePage.id } } },
-          { link: { type: 'reference', label: 'Contato', reference: { relationTo: 'pages', value: contactPage.id } } },
+          {
+            link: {
+              type: 'reference',
+              label: 'Sobre',
+              reference: { relationTo: 'pages', value: sobrePage.id },
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Contato',
+              reference: { relationTo: 'pages', value: contactPage.id },
+            },
+          },
         ],
       },
       req,
@@ -348,8 +360,22 @@ export const seed = async ({
       slug: 'footer',
       data: {
         navItems: [
-          { link: { type: 'custom', label: 'GitHub', newTab: true, url: 'https://github.com/kayroalexandre' } },
-          { link: { type: 'custom', label: 'LinkedIn', newTab: true, url: 'https://linkedin.com/in/kayroalexandre' } },
+          {
+            link: {
+              type: 'custom',
+              label: 'GitHub',
+              newTab: true,
+              url: 'https://github.com/kayroalexandre',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'LinkedIn',
+              newTab: true,
+              url: 'https://linkedin.com/in/kayroalexandre',
+            },
+          },
           { link: { type: 'custom', label: 'Admin', url: '/admin' } },
         ],
       },
