@@ -70,7 +70,7 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 
    > _NOTE: If the connection string value includes `localhost` or `127.0.0.1`, the code will automatically use a normal postgres adapter instead of Vercel._. You can override this functionality by setting `forceUseVercelPostgres: true` if desired.
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
+3. `bun install && bun dev` (recomendado) ou `pnpm install && pnpm dev` para instalar dependências e iniciar o servidor de desenvolvimento
 4. open `http://localhost:3000` to open the app in your browser
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.

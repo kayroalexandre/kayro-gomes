@@ -9,7 +9,8 @@
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "prebuild": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "ci": "payload migrate && pnpm build",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "predev": "bash scripts/ensure-db.sh",
+    "dev": "next dev",
     "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation rm -rf .next && pnpm build && pnpm start",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
@@ -93,8 +94,8 @@
     "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.1.8"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "bun@1.3.14",
   "engines": {
-    "node": "24.x"
+    "bun": "1.3.x"
   }
 }
