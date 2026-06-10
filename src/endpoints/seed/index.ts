@@ -13,6 +13,8 @@ import { project1 } from './project-1'
 import { project2 } from './project-2'
 import { project3 } from './project-3'
 import { sobre as sobrePageData } from './sobre-page'
+import { projetos as projetosPageData } from './projetos-page'
+import { postsPage as postsPageData } from './posts-page'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -305,9 +307,9 @@ export const seed = async ({
     req,
   })
 
-  payload.logger.info(`— Seeding pages (home, sobre, contato)...`)
+  payload.logger.info(`— Seeding pages (home, contato, sobre, projetos, posts)...`)
 
-  const [homePage, contactPage, sobrePage] = await Promise.all([
+  const [homePage, contactPage, sobrePage, projetosPage, postsPage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -324,6 +326,18 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       data: sobrePageData(),
+      req,
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: projetosPageData(),
+      req,
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: postsPageData(),
       req,
     }),
   ])
