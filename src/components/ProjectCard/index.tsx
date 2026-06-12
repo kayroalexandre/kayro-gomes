@@ -31,28 +31,30 @@ export const ProjectCard: React.FC<{
     <ShadcnCard
       ref={card.ref as React.Ref<HTMLDivElement>}
       className={cn(
-        'overflow-hidden hover:cursor-pointer flex flex-col h-full transition-all duration-200 hover:-translate-y-1 hover:shadow-xl',
+        'group overflow-hidden hover:cursor-pointer flex flex-col h-full border border-border bg-card rounded-[20px] transition-colors hover:border-border/80',
         className,
       )}
     >
-      <div className="relative w-full aspect-video bg-muted/10">
-        {cover && typeof cover !== 'string' && <MediaComponent resource={cover} size="50vw" />}
+      <div className="relative w-full aspect-video bg-muted/5 overflow-hidden border-b border-border/10">
+        {cover && typeof cover !== 'string' && (
+          <div className="transition-transform duration-500 group-hover:scale-105 h-full w-full">
+            <MediaComponent resource={cover} size="50vw" />
+          </div>
+        )}
       </div>
-      <div className="p-4 flex flex-col gap-3 flex-1">
-        <div className="prose">
-          <h3 className="text-xl font-bold leading-snug">
-            <Link className="not-prose hover:underline" href={`/projetos/${slug}`} ref={link.ref}>
-              {title}
-            </Link>
-          </h3>
-        </div>
-        {summary && <p className="text-sm text-muted-foreground line-clamp-3">{summary}</p>}
+      <div className="p-5 flex flex-col gap-3 flex-1 font-sans">
+        <h3 className="text-lg md:text-xl font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
+          <Link className="hover:no-underline" href={`/projetos/${slug}`} ref={link.ref}>
+            {title}
+          </Link>
+        </h3>
+        {summary && <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{summary}</p>}
         {techList.length > 0 && (
           <ul className="flex flex-wrap gap-1.5 mt-auto">
             {techList.slice(0, 5).map((t) => (
               <li
                 key={t}
-                className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
+                className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/10 transition-all duration-200 hover:border-primary/30 hover:bg-primary/5"
               >
                 {t}
               </li>
