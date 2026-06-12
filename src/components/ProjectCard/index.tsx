@@ -23,13 +23,15 @@ export const ProjectCard: React.FC<{
   const coverFromMeta = typeof meta?.image === 'object' ? (meta.image as Media) : null
   const cover = coverImage || coverFromMeta
 
-  const techList = Array.isArray(tech) ? tech.map((t) => (typeof t === 'object' ? t?.name : t)).filter(Boolean) as string[] : []
+  const techList = Array.isArray(tech)
+    ? (tech.map((t) => (typeof t === 'object' ? t?.name : t)).filter(Boolean) as string[])
+    : []
 
   return (
     <ShadcnCard
       ref={card.ref as React.Ref<HTMLDivElement>}
       className={cn(
-        'overflow-hidden hover:cursor-pointer flex flex-col h-full',
+        'overflow-hidden hover:cursor-pointer flex flex-col h-full transition-all duration-200 hover:-translate-y-1 hover:shadow-xl',
         className,
       )}
     >

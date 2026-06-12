@@ -33,7 +33,7 @@ export const Card: React.FC<{
   return (
     <ShadcnCard
       className={cn(
-        'overflow-hidden hover:cursor-pointer flex flex-col h-full',
+        'overflow-hidden hover:cursor-pointer flex flex-col h-full transition-all duration-200 hover:-translate-y-1 hover:shadow-lg',
         className,
       )}
       ref={card.ref as React.Ref<HTMLDivElement>}
@@ -73,7 +73,11 @@ export const Card: React.FC<{
             </h3>
           </div>
         )}
-        {description && <p className="text-sm text-muted-foreground line-clamp-3 mt-auto">{sanitizedDescription}</p>}
+        {description && (
+          <p className="text-sm text-muted-foreground line-clamp-3 mt-auto">
+            {sanitizedDescription}
+          </p>
+        )}
       </div>
     </ShadcnCard>
   )

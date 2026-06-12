@@ -1,46 +1,60 @@
+'use client'
+
 import React from 'react'
+import { motion } from 'framer-motion'
 
 import type { Page } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { motion as motionTokens } from '@/design-system/tokens/motion'
 
 export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
   return (
-    <div className="">
-      <div className="container mb-8">
-        {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
+    <section className="relative border-b border-border bg-background pt-20 pb-12">
+      <div className="container">
+        {/* RichText com tipografia consistente */}
+        {richText && (
+          <div className="max-w-4xl">
+            <RichText className="mb-8" data={richText} enableGutter={false} />
+          </div>
+        )}
 
+        {/* CTAs */}
         {Array.isArray(links) && links.length > 0 && (
-          <ul className="flex gap-4">
+          <motion.div
+            className="flex flex-wrap gap-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
             {links.map(({ link }, i) => {
-              return (
-                <li key={i}>
-                  <CMSLink {...link} />
-                </li>
-              )
+              return <CMSLink key={i} {...link} />
             })}
-          </ul>
+          </motion.div>
         )}
       </div>
-      <div className="container ">
-        {media && typeof media === 'object' && (
-          <div>
-            <Media
-              className="-mx-4 md:-mx-8 2xl:-mx-16"
-              imgClassName=""
-              priority
-              resource={media}
-            />
+
+      {/* Media com animação sutil */}
+      {media && typeof media === 'object' && (
+        <div className="container mt-12">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.6, ease: motionTokens.easing.smooth }}
+          >
+            <div className="-mx-4 md:-mx-8 2xl:-mx-16">
+              <Media imgClassName="rounded-xl shadow-lg" priority resource={media} />
+            </div>
             {media?.caption && (
-              <div className="mt-3">
+              <div className="mt-4 text-sm text-muted-foreground">
                 <RichText data={media.caption} enableGutter={false} />
               </div>
             )}
-          </div>
-        )}
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </section>
   )
 }
