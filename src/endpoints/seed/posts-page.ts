@@ -7,6 +7,7 @@ import type { RequiredDataFromCollectionSlug } from 'payload'
  */
 export const postsPage: () => RequiredDataFromCollectionSlug<'pages'> = () => {
   return {
+    title: 'Blog',
     slug: 'posts',
     _status: 'published',
     hero: {
