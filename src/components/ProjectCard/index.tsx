@@ -7,6 +7,7 @@ import React from 'react'
 import type { Project, Media } from '@/payload-types'
 
 import { Media as MediaComponent } from '@/components/Media'
+import { Card as ShadcnCard } from '@/components/ui/card'
 
 export type ProjectCardData = Pick<
   Project,
@@ -25,20 +26,20 @@ export const ProjectCard: React.FC<{
   const techList = Array.isArray(tech) ? tech.map((t) => (typeof t === 'object' ? t?.name : t)).filter(Boolean) as string[] : []
 
   return (
-    <article
-      ref={card.ref}
+    <ShadcnCard
+      ref={card.ref as React.Ref<HTMLDivElement>}
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer flex flex-col h-full',
+        'overflow-hidden hover:cursor-pointer flex flex-col h-full',
         className,
       )}
     >
-      <div className="relative w-full aspect-video">
+      <div className="relative w-full aspect-video bg-muted/10">
         {cover && typeof cover !== 'string' && <MediaComponent resource={cover} size="50vw" />}
       </div>
       <div className="p-4 flex flex-col gap-3 flex-1">
         <div className="prose">
-          <h3>
-            <Link className="not-prose" href={`/projetos/${slug}`} ref={link.ref}>
+          <h3 className="text-xl font-bold leading-snug">
+            <Link className="not-prose hover:underline" href={`/projetos/${slug}`} ref={link.ref}>
               {title}
             </Link>
           </h3>
@@ -57,6 +58,6 @@ export const ProjectCard: React.FC<{
           </ul>
         )}
       </div>
-    </article>
+    </ShadcnCard>
   )
 }

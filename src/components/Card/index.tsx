@@ -7,6 +7,7 @@ import React, { Fragment } from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { Card as ShadcnCard } from '@/components/ui/card'
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
 
@@ -30,20 +31,19 @@ export const Card: React.FC<{
   const href = `/${relationTo}/${slug}`
 
   return (
-    <article
+    <ShadcnCard
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        'overflow-hidden hover:cursor-pointer flex flex-col h-full',
         className,
       )}
-      ref={card.ref}
+      ref={card.ref as React.Ref<HTMLDivElement>}
     >
-      <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
+      <div className="relative w-full aspect-video bg-muted/10">
         {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
       </div>
-      <div className="p-4">
+      <div className="p-4 flex flex-col gap-3 flex-1">
         {showCategories && hasCategories && (
-          <div className="uppercase text-sm mb-4">
+          <div className="uppercase text-sm text-muted-foreground">
             {categories?.map((category, index) => {
               if (typeof category === 'object') {
                 const { title: titleFromCategory } = category
@@ -66,15 +66,15 @@ export const Card: React.FC<{
         )}
         {titleToUse && (
           <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
+            <h3 className="text-xl font-bold leading-snug">
+              <Link className="not-prose hover:underline" href={href} ref={link.ref}>
                 {titleToUse}
               </Link>
             </h3>
           </div>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && <p className="text-sm text-muted-foreground line-clamp-3 mt-auto">{sanitizedDescription}</p>}
       </div>
-    </article>
+    </ShadcnCard>
   )
 }
