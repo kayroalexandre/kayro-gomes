@@ -7,7 +7,7 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
-import type { Project } from '@/payload-types'
+
 
 import { ProjectHero } from '@/heros/ProjectHero'
 import { generateMeta } from '@/utilities/generateMeta'
@@ -35,8 +35,10 @@ type Args = {
 }
 
 export default async function ProjectPage({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+  const [{ isEnabled: _draft }, { slug = '' }] = await Promise.all([
+    draftMode(),
+    paramsPromise,
+  ])
   const decodedSlug = decodeURIComponent(slug)
   const url = '/projetos/' + decodedSlug
   const project = await queryProjectBySlug({ slug: decodedSlug })

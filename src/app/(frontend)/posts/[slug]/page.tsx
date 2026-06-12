@@ -42,8 +42,10 @@ type Args = {
 }
 
 export default async function Post({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+  const [{ isEnabled: draft }, { slug = '' }] = await Promise.all([
+    draftMode(),
+    paramsPromise,
+  ])
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
