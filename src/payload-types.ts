@@ -342,6 +342,13 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    overlayEnabled?: boolean | null;
+    overlayOpacity?: number | null;
+    bottomFadeEnabled?: boolean | null;
+    /**
+     * Controls how the background image fits the hero area.
+     */
+    heroImageFit?: ('cover' | 'contain') | null;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
@@ -1198,6 +1205,10 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        overlayEnabled?: T;
+        overlayOpacity?: T;
+        bottomFadeEnabled?: T;
+        heroImageFit?: T;
       };
   layout?:
     | T
@@ -1811,6 +1822,10 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * When enabled, shows the search icon in the header and enables the /search page.
+   */
+  searchEnabled?: boolean | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1866,6 +1881,7 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  searchEnabled?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
