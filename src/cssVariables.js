@@ -2,8 +2,7 @@
 
 export const cssVariables = {
   breakpoints: {
-    '3xl': 1920,
-    '2xl': 1536,
+    '2xl': 1376,
     xl: 1280,
     lg: 1024,
     md: 768,

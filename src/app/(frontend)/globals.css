@@ -223,12 +223,24 @@ html[data-theme='light'] {
   opacity: initial;
 }
 
-/* Transição suave entre temas — só nas cores, não no layout */
+/* Transição suave entre temas para os elementos principais e interativos */
 html {
   transition: background-color 200ms ease, color 200ms ease;
 }
-html * {
-  transition: background-color 200ms ease, border-color 200ms ease, color 100ms ease;
+body,
+header,
+footer,
+main,
+article,
+section,
+div[data-slot="card"],
+button,
+a,
+input,
+textarea,
+select,
+span {
+  transition: background-color 200ms ease, border-color 200ms ease, color 150ms ease, box-shadow 150ms ease;
 }
 
 /* Foco visível consistente (acessibilidade) */
