@@ -30,7 +30,7 @@ contribuidor humano deve seguir estas convenções.
 - Aguarde confirmação explícita do usuário
 
 **Exemplo de resposta esperada:**
-> ⚠️ Isso exige criar uma migration de banco (`pnpm payload migrate:create`).
+> ⚠️ Isso exige criar uma migration de banco (`bun payload migrate:create`).
 > Posso:
 > - (A) Criar a migration e testar localmente no Docker
 > - (B) Apenas documentar a mudança sem aplicar
@@ -38,7 +38,11 @@ contribuidor humano deve seguir estas convenções.
 
 ---
 
-> **Consulte também:** `docs/MIGRATIONS.md` para fluxo detalhado de banco de dados.
+> **Consulte também:**
+>
+> - [`docs/MIGRATIONS.md`](docs/MIGRATIONS.md) — Fluxo completo de migrations e arquitetura de bancos
+> - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — Catálogo de erros comuns e soluções
+> - [`docs/workflow_guide.md`](docs/workflow_guide.md) — Guia legado (consulte AGENTS.md para o estado atual)
 
 ## Stack
 
@@ -136,18 +140,18 @@ vercel link                       # linkar projeto Vercel
 vercel env pull                   # baixar .env.local
 
 # Dev
-pnpm dev                          # dev server (port 3000)
+bun dev                           # dev server (port 3000)
 docker compose up -d              # Postgres local
-pnpm payload migrate              # rodar migrations
-pnpm generate:types               # regenerar tipos Payload
-pnpm generate:importmap           # regenerar importMap admin
+bun payload migrate               # rodar migrations
+bun generate:types                # regenerar tipos Payload
+bun generate:importmap            # regenerar importMap admin
 
 # Quality
-pnpm lint                         # ESLint
-pnpm exec tsc --noEmit            # Typecheck
-pnpm run test:int                 # Integration tests (Vitest)
-pnpm run test:e2e                 # E2E tests (Playwright)
-pnpm build                        # Production build
+bun run lint                      # ESLint
+bunx tsc --noEmit                 # Typecheck
+bun run test:int                  # Integration tests (Vitest)
+bun run test:e2e                  # E2E tests (Playwright)
+bun run build                     # Production build
 ```
 
 ## Neon Branches
@@ -161,8 +165,8 @@ branching quando o tráfego justificar.
 
 - Migrations ficam em `src/migrations/`.
 - **NUNCA** edite uma migration já aplicada.
-- Crie nova: `pnpm payload migrate:create`.
-- Em CI/prod, `pnpm build` roda `payload migrate` automaticamente (prebuild hook).
+- Crie nova: `bun payload migrate:create`.
+- Em CI/prod, `bun run build` roda `payload migrate` automaticamente (prebuild hook).
 
 ## Segurança
 
@@ -174,7 +178,7 @@ branching quando o tráfego justificar.
 
 ## Seeds
 
-O seed (`pnpm db:seed` ou botão no admin) é **destrutivo** — apaga
+O seed (`bun db:seed` ou botão no admin) é **destrutivo** — apaga
 todos os dados de Pages, Posts, Projects, Media, Forms, etc. antes
 de re-popular. **Nunca rode em produção** sem backup.
 
@@ -186,9 +190,9 @@ Autenticação via header `Authorization: Bearer $CRON_SECRET`.
 
 ## Pendências Conhecidas
 
-- ~~Docker build requer `DOCKER_BUILD=true pnpm build` antes de `docker build`.~~
+- ~~Docker build requer `DOCKER_BUILD=true bun run build` antes de `docker build`.~~
   **Resolvido em `fix/docker-standalone-build`:** o Dockerfile agora seta
-  `DOCKER_BUILD=true` internamente na fase `builder` e roda `pnpm run build`
+  `DOCKER_BUILD=true` internamente na fase `builder` e roda `bun run build`
   lá. O único comando necessário é `docker build -t kayro-gomes .`. Foi
   adicionado também um `.dockerignore` para evitar vazar `.env*`, `node_modules`
   e artefatos de teste. Veja o cabeçalho do `Dockerfile` para detalhes.

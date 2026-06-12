@@ -3,6 +3,8 @@
 > **Objetivo:** Explicar como funciona o fluxo de migrations no Payload CMS,
 > como evitar redeploys desnecessários, e como manter o banco local (Docker)
 > sincronizado com o banco de produção (Neon) sem riscos.
+>
+> **Consulte também:** [`AGENTS.md`](../AGENTS.md) para o workflow oficial consolidado.
 
 ---
 
@@ -12,6 +14,7 @@
 |----------|-------|------|---------|------------|
 | **Local (dev)** | Docker Postgres 16 | `localhost:54320` | `.env.local` | Desenvolvimento diário, testes, seed |
 | **Produção** | Neon Postgres | `ep-*.neon.tech` | `POSTGRES_URL` (Vercel env) | Deploy real via `main` |
+| **Preview** | Neon Postgres (shared) | `ep-*.neon.tech` | `POSTGRES_URL` (Vercel env) | Deploys temporários de PRs |
 
 **Regra:** Nunca misture conexões. O `.env.local` aponta para Docker local.
 O deploy na Vercel usa `POSTGRES_URL` do Neon (configurado em Vercel Project Settings).
@@ -25,9 +28,9 @@ O deploy na Vercel usa `POSTGRES_URL` do Neon (configurado em Vercel Project Set
    - `YYYYMMDD_HHMMSS_nome.ts` — código TypeScript executável
    - `YYYYMMDD_HHMMSS_nome.json` — snapshot do schema (para diff)
 3. **NUNCA** edite uma migration já aplicada.
-4. Para criar nova migration: `pnpm payload migrate:create`
-5. Para aplicar: `pnpm payload migrate`
-6. Para ver status: `pnpm payload migrate:status`
+4. Para criar nova migration: `bun payload migrate:create`
+5. Para aplicar: `bun payload migrate`
+6. Para ver status: `bun payload migrate:status`
 
 ---
 
@@ -48,7 +51,7 @@ O deploy na Vercel usa `POSTGRES_URL` do Neon (configurado em Vercel Project Set
 ```bash
 # 1. Faça mudanças no código normalmente
 # 2. Teste localmente (usa Docker Postgres via .env.local)
-pnpm dev
+bun dev
 
 # 3. Commit direto em develop (automático por task)
 git checkout develop
@@ -87,7 +90,7 @@ gh pr create --base main --head develop
 #    Exemplo: adicionar campo "category" em Projects
 
 # 2. Crie a migration ANTES de commitar
-pnpm payload migrate:create
+bun payload migrate:create
 # → Gera: src/migrations/20260609_XXXXXX_add_category_to_projects.ts
 # → Gera: src/migrations/20260609_XXXXXX_add_category_to_projects.json
 
@@ -96,8 +99,8 @@ pnpm payload migrate:create
 #    - NUNCA edite manualmente (use o Payload para gerar)
 
 # 4. Teste localmente (aplica no Docker Postgres)
-pnpm payload migrate
-pnpm dev
+bun payload migrate
+bun dev
 # → Teste a aplicação com o novo schema
 
 # 5. Commit: código + arquivos de migration
@@ -110,8 +113,8 @@ git push origin develop
 gh pr create --base main --head develop
 
 # 7. Merge → Vercel:
-#    - prebuild hook: pnpm payload migrate (roda no Neon)
-#    - Depois: pnpm build
+#    - prebuild hook: bun payload migrate (roda no Neon)
+#    - Depois: bun run build
 #    - Deploy com schema atualizado
 
 # 8. ✅ Schema sincronizado em produção
@@ -125,11 +128,11 @@ gh pr create --base main --head develop
 
 | Comando | Onde Roda | O que Faz | Quando Usar |
 |---------|-----------|-----------|-------------|
-| `pnpm payload migrate:create` | Local | Cria nova migration (detecta diff de schema) | Sempre que mudar schema |
-| `pnpm payload migrate` | Local / CI | Aplica migrations pendentes | Antes de testar/deploy |
-| `pnpm payload migrate:status` | Local / CI | Mostra migrations aplicadas vs pendentes | Antes de PR para main |
-| `pnpm generate:types` | Local | Regenera `src/payload-types.ts` | Após migration ou mudança de schema |
-| `pnpm generate:importmap` | Local | Regenera importMap do admin | Após adicionar plugins/coleções |
+| `bun payload migrate:create` | Local | Cria nova migration (detecta diff de schema) | Sempre que mudar schema |
+| `bun payload migrate` | Local / CI | Aplica migrations pendentes | Antes de testar/deploy |
+| `bun payload migrate:status` | Local / CI | Mostra migrations aplicadas vs pendentes | Antes de PR para main |
+| `bun generate:types` | Local | Regenera `src/payload-types.ts` | Após migration ou mudança de schema |
+| `bun generate:importmap` | Local | Regenera importMap do admin | Após adicionar plugins/coleções |
 
 ---
 
@@ -157,14 +160,14 @@ gh pr create --base main --head develop
 2. **Nunca aplique migrations manualmente no Neon** — deixe o CI fazer isso
 3. **Se precisar testar migration localmente:**
    ```bash
-   pnpm payload migrate          # aplica no Docker
-   pnpm dev                      # testa
+   bun payload migrate          # aplica no Docker
+   bun dev                      # testa
    ```
 4. **Se precisar resetar local:**
    ```bash
    docker compose down -v        # remove volume do Docker
    docker compose up -d          # recria banco limpo
-   pnpm payload migrate          # aplica todas as migrations
+   bun payload migrate          # aplica todas as migrations
    ```
 
 ---
@@ -173,7 +176,7 @@ gh pr create --base main --head develop
 
 | Erro | Causa | Solução |
 |------|-------|---------|
-| `relation "users" does not exist` | Migration não aplicada antes de testes | Rode `pnpm payload migrate` antes de `pnpm test:int` |
+| `relation "users" does not exist` | Migration não aplicada antes de testes | Rode `bun payload migrate` antes de `bun run test:int` |
 | Deploy falha no prebuild | Migration com erro de sintaxe | Teste localmente antes de PR |
 | Schema inconsistente | Migration editada manualmente | Nunca edite migrations já geradas |
 | Seed falha com "blob already exists" | Blobs duplicados no Vercel Blob | Apague blobs ou use botão do admin UI |
@@ -184,19 +187,19 @@ gh pr create --base main --head develop
 
 ```bash
 # 1. Verifique migrations pendentes
-pnpm payload migrate:status
+bun payload migrate:status
 
 # 2. Se houver pendentes, aplique e teste
-pnpm payload migrate
-pnpm dev
+bun payload migrate
+bun dev
 
 # 3. Regere tipos (se schema mudou)
-pnpm generate:types
+bun generate:types
 
 # 4. Rode lint + typecheck + tests
-pnpm lint
-pnpm exec tsc --noEmit
-pnpm run test:int
+bun run lint
+bunx tsc --noEmit
+bun run test:int
 
 # 5. Commit migrations + código
 git add src/migrations/ ...

@@ -1,4 +1,17 @@
-# Guia de Workflow Sincronizado: Local ⇄ GitHub ⇄ Vercel ⇄ Neon
+# ⚠️ GUIA LEGADO — Consulte AGENTS.md
+
+> **Este arquivo está obsoleto.** O workflow atual está documentado em
+> [`AGENTS.md`](../AGENTS.md) (fonte de verdade única desde 2026-06-08).
+
+---
+
+# Guia de Workflow Sincronizado: Local ⇄ GitHub ⇄ Vercel ⇄ Neon (LEGADO)
+
+> **⚠️ Este guia descreve uma arquitetura antiga com Neon branching para dev.
+> A realidade atual usa Docker Postgres local (porta 54320) para desenvolvimento.
+> Consulte [`AGENTS.md`](../AGENTS.md) para o estado consolidado.**
+
+---
 
 Este guia explica o fluxo de desenvolvimento do projeto **kayro-gomes**,
 integrando desenvolvimento local, deploys de preview, produção e banco
