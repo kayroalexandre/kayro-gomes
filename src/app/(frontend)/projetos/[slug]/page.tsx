@@ -46,7 +46,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
   if (!project) return <PayloadRedirects url={url} />
 
   return (
-    <article className="pt-16 pb-16">
+    <article className="pt-0 pb-16">
       {/* Allows redirects for valid projects too */}
       <PayloadRedirects disableNotFound url={url} />
 
