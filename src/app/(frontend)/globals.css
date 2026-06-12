@@ -249,6 +249,63 @@ span {
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* ============================================
+   HERO - Estilos específicos da referência visual
+   ============================================ */
+
+.hero-rich-text h1,
+.hero-rich-text h2 {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-rich-text p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+/* ============================================
+   ANIMAÇÕES - Transições e microinterações
+   ============================================ */
+
+/* Hover suave em links de navegação */
+nav a {
+  transition: color 150ms ease, opacity 150ms ease;
+}
+
+nav a:hover {
+  color: var(--primary);
+  opacity: 0.9;
+}
+
+/* Cards com elevação sutil */
+[data-slot="card"] {
+  transition: transform 200ms cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+[data-slot="card"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Seções com espaçamento generoso */
+section {
+  scroll-margin-top: 4rem;
+}
 button:focus-visible,
 a:focus-visible {
   outline-offset: 3px;
