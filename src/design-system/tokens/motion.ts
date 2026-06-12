@@ -18,13 +18,13 @@ export const motion = {
   // Easing curves
   easing: {
     linear: 'linear',
-    easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-    easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
-    easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    easeIn: [0.4, 0, 1, 1],
+    easeOut: [0, 0, 0.2, 1],
+    easeInOut: [0.4, 0, 0.2, 1],
     // Easing suave para scroll reveals
-    smooth: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+    smooth: [0.25, 0.1, 0.25, 1],
     // Easing para microinterações
-    snappy: 'cubic-bezier(0.2, 0, 0, 1)',
+    snappy: [0.2, 0, 0, 1],
   },
 
   // Delays para sequências de animação

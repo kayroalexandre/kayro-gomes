@@ -7,8 +7,9 @@
 export const typography = {
   // Famílias de fonte
   fontFamily: {
-    sans: 'var(--font-geist-sans)',
-    mono: 'var(--font-geist-mono)',
+    sans: 'var(--font-sans)',
+    heading: 'var(--font-heading)',
+    mono: 'var(--font-mono)',
   },
 
   // Tamanhos de fonte (em rem)
