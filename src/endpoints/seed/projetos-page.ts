@@ -69,16 +69,6 @@ export const projetos: () => RequiredDataFromCollectionSlug<'pages'> = () => {
         relationTo: 'projects',
         categories: [],
         limit: 12,
-        introContent: {
-          root: {
-            type: 'root',
-            children: [],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
-          },
-        },
       },
     ],
     meta: {

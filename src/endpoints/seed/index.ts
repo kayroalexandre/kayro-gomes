@@ -374,6 +374,22 @@ export const seed = async ({
       slug: 'footer',
       data: {
         navItems: [
+          { link: { type: 'custom', label: 'Blog', url: '/posts' } },
+          { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
+          {
+            link: {
+              type: 'reference',
+              label: 'Sobre',
+              reference: { relationTo: 'pages', value: sobrePage.id },
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Contato',
+              reference: { relationTo: 'pages', value: contactPage.id },
+            },
+          },
           {
             link: {
               type: 'custom',
