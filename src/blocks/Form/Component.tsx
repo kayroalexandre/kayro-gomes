@@ -7,6 +7,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
+import { Loader2 } from 'lucide-react'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
@@ -123,8 +124,17 @@ export const FormBlock: React.FC<
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <RichText data={confirmationMessage} />
           )}
-          {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
-          {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
+          {isLoading && !hasSubmitted && (
+            <div className="flex items-center gap-2 py-4 text-muted-foreground justify-center">
+              <Loader2 className="size-4 animate-spin" />
+              <span>Enviando dados, por favor aguarde...</span>
+            </div>
+          )}
+          {error && (
+            <div className="p-3 mb-6 text-sm rounded-md border border-destructive bg-destructive/10 text-destructive-foreground">
+              {`${error.status || 'Erro'}: ${error.message || 'Ocorreu um problema ao enviar o formulário.'}`}
+            </div>
+          )}
           {!hasSubmitted && (
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-4 last:mb-0">

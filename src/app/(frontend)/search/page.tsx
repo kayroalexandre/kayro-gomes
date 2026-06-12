@@ -75,7 +75,12 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       {posts.docs.length > 0 ? (
         <CollectionArchive posts={posts.docs as CardPostData[]} />
       ) : (
-        <div className="container">Nenhum resultado encontrado.</div>
+        <div className="container">
+          <div className="text-center py-16 px-4 border border-dashed rounded-lg bg-card/20 max-w-[50rem] mx-auto">
+            <p className="text-muted-foreground text-lg">Nenhum resultado encontrado.</p>
+            <p className="text-sm text-muted-foreground/60 mt-1">Tente pesquisar com outros termos ou palavras-chave.</p>
+          </div>
+        </div>
       )}
     </div>
   )
