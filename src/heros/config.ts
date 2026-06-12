@@ -67,6 +67,55 @@ export const hero: Field = {
       relationTo: 'media',
       required: true,
     },
+    {
+      name: 'overlayEnabled',
+      type: 'checkbox',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+      },
+      defaultValue: false,
+      label: 'Enable Background Overlay',
+    },
+    {
+      name: 'overlayOpacity',
+      type: 'number',
+      admin: {
+        condition: (_, { type, overlayEnabled } = {}) => type === 'highImpact' && overlayEnabled === true,
+      },
+      defaultValue: 60,
+      label: 'Overlay Opacity (%)',
+      max: 100,
+      min: 0,
+    },
+    {
+      name: 'bottomFadeEnabled',
+      type: 'checkbox',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+      },
+      defaultValue: true,
+      label: 'Enable Bottom Fade Gradient',
+    },
+    {
+      name: 'heroImageFit',
+      type: 'select',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+        description: 'Controls how the background image fits the hero area.',
+      },
+      defaultValue: 'cover',
+      label: 'Image Fit Mode',
+      options: [
+        {
+          label: 'Cover — Fills the area, cropping if necessary',
+          value: 'cover',
+        },
+        {
+          label: 'Contain — Shows full image without cropping',
+          value: 'contain',
+        },
+      ],
+    },
   ],
   label: false,
 }

@@ -9,86 +9,88 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
-import { motion as motionTokens } from '@/design-system/tokens/motion'
+import { ScrollIndicator } from '@/components/ui/scroll-indicator'
 
-export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+export const HighImpactHero: React.FC<Page['hero']> = ({
+  links,
+  media,
+  richText,
+  overlayEnabled,
+  overlayOpacity,
+  bottomFadeEnabled,
+  heroImageFit,
+}) => {
   const { setHeaderTheme } = useHeaderTheme()
 
   useEffect(() => {
     setHeaderTheme('dark')
   })
 
-  // Animação de entrada para palavras (equivalente à referência)
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.2,
-      },
-    },
-  }
-
-  const wordVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: motionTokens.duration.normal,
-        ease: motionTokens.easing.smooth,
-      },
-    },
-  }
+  const imgFitClass = heroImageFit === 'contain' ? 'object-contain' : 'object-cover'
 
   return (
-    <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-background pt-16 text-foreground">
+    <section className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden text-white">
       <div className="container relative z-10 flex flex-col items-center justify-center px-4 text-center">
-        {/* Heading principal com animação palavra-por-palavra */}
+        {/* Heading principal com animação de entrada premium */}
         {richText && (
-          <div className="mb-6 max-w-5xl">
+          <motion.div
+            className="mb-6 max-w-5xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+          >
             <RichText className="hero-rich-text" data={richText} enableGutter={false} />
-          </div>
+          </motion.div>
         )}
 
         {/* CTAs */}
         {Array.isArray(links) && links.length > 0 && (
           <motion.div
             className="mt-8 flex flex-wrap justify-center gap-4"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.4 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
           >
             {links.map(({ link }, i) => {
-              return <CMSLink key={i} {...link} />
+              const appearance = i === 0 ? 'default' : 'outline'
+              return (
+                <CMSLink
+                  key={i}
+                  {...link}
+                  appearance={appearance}
+                  size="lg"
+                  className="rounded-full font-sans font-medium"
+                />
+              )
             })}
           </motion.div>
         )}
 
         {/* Indicador de scroll */}
         <motion.div
-          className="mt-16 flex flex-col items-center gap-2 text-sm text-muted-foreground"
+          className="mt-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
         >
-          <span>Role para explorar</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-xs"
-          >
-            ↓
-          </motion.div>
+          <ScrollIndicator label="Role para explorar" />
         </motion.div>
       </div>
 
-      {/* Media de fundo (se existir) - sutil */}
+      {/* Media de fundo (se existir) */}
       {media && typeof media === 'object' && (
-        <div className="absolute inset-0 -z-10 opacity-30">
-          <Media fill imgClassName="object-cover" priority resource={media} />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        <div className="absolute inset-0 z-0">
+          <Media fill imgClassName={imgFitClass} priority resource={media} />
+          {/* Overlay escuro controlado pelo CMS */}
+          {overlayEnabled && (
+            <div
+              className="absolute inset-0 bg-background"
+              style={{ opacity: (overlayOpacity ?? 60) / 100 }}
+            />
+          )}
+          {bottomFadeEnabled !== false && (
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          )}
         </div>
       )}
     </section>
