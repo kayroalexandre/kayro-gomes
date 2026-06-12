@@ -41,7 +41,7 @@ export const ProjectHero: React.FC<{
                   target="_blank"
                   className="inline-flex items-center gap-2 rounded-md bg-white text-black px-4 py-2 text-sm font-medium hover:bg-white/90"
                 >
-                  Ver projeto <ExternalLink className="w-4 h-4" aria-hidden />
+                  Ver projeto <ExternalLink className="size-4" aria-hidden />
                 </a>
               )}
               {repoUrl && (
@@ -53,7 +53,7 @@ export const ProjectHero: React.FC<{
                 >
                   <svg
                     aria-hidden
-                    className="w-4 h-4"
+                    className="size-4"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
