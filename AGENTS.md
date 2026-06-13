@@ -188,6 +188,80 @@ Definidos em `vercel.json`. Endpoint: `/api/payload-jobs/run`.
 Autenticação via header `Authorization: Bearer $CRON_SECRET`.
 - Schedule: `0 0 * * *` (diário, meia-noite UTC).
 
+## Frontend Architecture — Hero Layout (HighImpact)
+
+> **⚠️ Regras críticas para IA:** As classes CSS do `HighImpactHero`
+> estão **deliberadamente calibradas**. Toda margem, padding, altura e
+> espaçamento têm uma função geométrica interdependente. **Não altere**
+> classes CSS no componente `src/heros/HighImpact/index.tsx` sem
+> entender o diagrama abaixo e sem consultar esta documentação.
+
+### Layout Geometry (logado, AdminBar visível)
+
+```
+viewport top
+├─ AdminBar ( h: var(--adminbar-h) ≈ 3rem, publicada via ResizeObserver )
+│  fixed top-0 z-[9999]
+├─ Header ( top: var(--adminbar-h), h: var(--header-h) = 5rem )
+│  fixed top-[var(--adminbar-h)]
+│
+│  section: h-[calc(100dvh-var(--adminbar-h,0px))]
+│  ┌─ container: mt-[var(--header-h)] ──────────────────┐
+│  │  h-[calc(100%-var(--header-h))]                     │
+│  │  py-16 (= 4rem each, igual top e bottom)            │
+│  │  flex-col justify-between                           │
+│  │                                                      │
+│  │  heading ───────────────────── ← 64px abaixo header  │
+│  │  [↕ gap automático = justify-between]                │
+│  │  CTAs                                                │
+│  │  [↕ gap automático = justify-between]                │
+│  │  scroll indicator ─────────── ← 64px do viewport end │
+│  └──────────────────────────────────────────────────────┘
+└─ viewport bottom
+```
+
+### CSS Variables (single source of truth)
+
+| Variável | Localização | Valor | Propósito |
+|---|---|---|---|
+| `--adminbar-h` | `<html>` (set via JS, AdminBar component) | `≈ 3rem` quando logado, `0px` quando não | Altura real do AdminBar, medida por `ResizeObserver`. Publicada em `src/components/AdminBar/index.tsx:71` |
+| `--header-h` | `:root` em `globals.css` | `5rem` | Altura do Header. Usada pelo Header (`h-[var(--header-h)]`), pelo container do hero (`mt-[var(--header-h)]`) e pelo calc de altura do hero content |
+| `--spacing` | Tailwind v4 (default theme) | `0.25rem` | Unidade base do design system. `p-16` = `calc(var(--spacing) * 16)` = `4rem` = `64px` |
+
+### Key Design Rules
+
+1. **Container nunca ultrapassa a hero.**
+   `mt-[var(--header-h)]` (5rem) + `h-[calc(100%-var(--header-h))]` (hero - 5rem) = `100%` da section. O container não overflowa e não força a section a crescer.
+
+2. **Padding igual (4rem top e bottom).**
+   `py-16` em vez de padding assimétrico. O buffer do header (5rem) fica na **margem**, não no padding.
+
+3. **Espaçamento entre filhos é automático.**
+   `justify-between` distribui heading, CTAs e scroll indicator com gap igual. **Não use** `mt-*`/`mb-*` nos filhos — isso quebra a distribuição e força a hero a crescer.
+
+4. **`--adminbar-h` é descontada da altura da hero.**
+   A section usa `h-[calc(100dvh-var(--adminbar-h,0px))]`. Isso garante que a hero termine exatamente no final da viewport quando o AdminBar está visível.
+
+5. **`100%` no calc do container funciona porque a section tem altura definida.**
+   A section usa `h-[calc(...)]` (altura fixa), não `min-h-*`. Por isso `h-[calc(100%-var(--header-h))]` no container resolve corretamente para a altura real da section.
+
+### Onde está o código
+
+- `src/heros/HighImpact/index.tsx` — componente do hero
+- `src/app/(frontend)/globals.css` — `:root { --header-h: 5rem; }` e tokens de cor/design system
+- `src/Header/Component.client.tsx` — usa `h-[var(--header-h)]`
+- `src/components/AdminBar/index.tsx` — publica `--adminbar-h` no `<html>` via ResizeObserver
+
+### O que NÃO fazer
+
+- ❌ **Não** colocar `mt-[var(--header-h)]` nos filhos (heading, CTAs, scroll). O margin-top do container já desloca todo o bloco.
+- ❌ **Não** trocar `py-16` por `pt-[calc(...)]` assimétrico. O padding deve ser igual.
+- ❌ **Não** trocar a section para `min-h-*` — `h-full` no container precisa de altura definida no pai.
+- ❌ **Não** remover `justify-between` nem adicionar `mt-*`/`mb-*` nos filhos — isso quebra o espaçamento auto e faz a hero crescer.
+- ❌ **Não** ignorar `--adminbar-h` no calc da section — senão o final da hero fica cortado quando logado.
+
+---
+
 ## Pendências Conhecidas
 
 - ~~Docker build requer `DOCKER_BUILD=true bun run build` antes de `docker build`.~~
