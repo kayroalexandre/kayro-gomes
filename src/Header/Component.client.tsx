@@ -31,13 +31,21 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 w-full bg-background/30 backdrop-blur-lg transition-all duration-300"
+      // `top-[var(--adminbar-h,0px)]` faz o Header descer quando o
+      // AdminBar aparece (logado), em vez de ficar coberto por ele.
+      // Como o header é `position:fixed` com `bg-background/30
+      // backdrop-blur-lg`, ele sobrepõe o topo do hero (que está em
+      // fluxo normal começando em top:0). O hero tem min-h-dvh, então
+      // preenche 100dvh a partir do body (top:0). O efeito visual é que
+      // o hero "começa no topo do header" e se estende até o final do
+      // viewport.
+      className="fixed top-[var(--adminbar-h,0px)] left-0 right-0 z-50 w-full bg-background/30 backdrop-blur-lg transition-[top] duration-300"
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className="container grid h-20 grid-cols-[auto_1fr_auto] items-center">
+      <div className="container grid h-[var(--header-h)] grid-cols-[auto_1fr_auto] items-center">
         {/* Left: Logo */}
         <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-          <Logo loading="eager" priority="high" className="text-foreground" />
+          <Logo className="text-foreground" />
         </Link>
 
         {/* Center: Navigation links (absolute center) */}

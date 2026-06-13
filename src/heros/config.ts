@@ -116,6 +116,41 @@ export const hero: Field = {
         },
       ],
     },
+    {
+      name: 'scrollIndicator',
+      type: 'group',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: true,
+          label: 'Show scroll indicator',
+        },
+        {
+          name: 'position',
+          type: 'select',
+          admin: {
+            condition: (_, siblingData) => siblingData?.enabled !== false,
+          },
+          defaultValue: 'bottom',
+          label: 'Position',
+          options: [
+            {
+              label: 'Always at bottom of hero',
+              value: 'bottom',
+            },
+            {
+              label: 'Inline with content (distributed evenly)',
+              value: 'inline',
+            },
+          ],
+        },
+      ],
+      label: 'Scroll Indicator',
+    },
   ],
   label: false,
 }

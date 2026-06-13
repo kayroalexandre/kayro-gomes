@@ -5,7 +5,7 @@ import type { PayloadAdminBarProps, PayloadMeUser } from '@payloadcms/admin-bar'
 import { cn } from '@/utilities/ui'
 import { useSelectedLayoutSegments } from 'next/navigation'
 import { PayloadAdminBar } from '@payloadcms/admin-bar'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import './index.scss'
@@ -46,12 +46,57 @@ export const AdminBar: React.FC<{
     setShow(Boolean(user?.id))
   }, [])
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Mede a altura real do AdminBar e publica como CSS var no <html>.
+  // O Header usa `top-[var(--adminbar-h,0px)]` para deslocar para baixo
+  // quando o AdminBar aparece, sem folga e sem sobreposição.
+  //
+  // Usamos ResizeObserver (em vez de medir uma vez) porque a altura
+  // pode mudar quando o menu do usuário abre/fecha ou em viewports
+  // diferentes.
+  React.useEffect(() => {
+    if (!show) {
+      document.documentElement.style.setProperty('--adminbar-h', '0px')
+      return
+    }
+
+    const el = containerRef.current
+    if (!el) return
+
+    const update = () => {
+      // offsetHeight inclui padding+border. borderBox garante isso mesmo
+      // se box-sizing mudar no futuro.
+      const h = el.getBoundingClientRect().height
+      document.documentElement.style.setProperty('--adminbar-h', `${h}px`)
+    }
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => {
+      observer.disconnect()
+      document.documentElement.style.setProperty('--adminbar-h', '0px')
+    }
+  }, [show])
+
   return (
     <div
-      className={cn(baseClass, 'py-2 bg-black text-white', {
-        block: show,
-        hidden: !show,
-      })}
+      ref={containerRef}
+      className={cn(
+        // Payload admin-bar padrão: position:fixed + z alto. Fica
+        // acima de todo o site (incluindo o Header) sem afetar o
+        // layout — quando `hidden` (não logado), `display:none` remove
+        // do flow completamente. Quando logado, é uma faixa fina
+        // no topo que desloca o Header para baixo (via CSS var
+        // `--adminbar-h`, atualizada por ResizeObserver aqui).
+        baseClass,
+        'fixed top-0 left-0 right-0 z-[9999] py-2 bg-black text-white',
+        {
+          block: show,
+          hidden: !show,
+        },
+      )}
     >
       <div className="container">
         <PayloadAdminBar

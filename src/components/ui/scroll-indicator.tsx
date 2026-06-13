@@ -6,7 +6,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { Mouse } from 'lucide-react'
 
 const scrollIndicatorVariants = cva(
-  'inline-flex items-center gap-2 font-sans text-xs font-medium tracking-wide transition-opacity duration-300',
+  'inline-flex items-center gap-2 text-xs font-medium transition-opacity duration-300',
   {
     variants: {
       variant: {
@@ -55,6 +55,7 @@ const ScrollIndicator = React.forwardRef<HTMLDivElement, ScrollIndicatorProps>(
       <div
         ref={ref}
         className={cn(scrollIndicatorVariants({ variant, size }), className)}
+        data-slot="scroll-indicator"
         role="presentation"
         aria-hidden="true"
         {...props}
