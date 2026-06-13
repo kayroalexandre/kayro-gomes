@@ -349,6 +349,10 @@ export interface Page {
      * Controls how the background image fits the hero area.
      */
     heroImageFit?: ('cover' | 'contain') | null;
+    scrollIndicator?: {
+      enabled?: boolean | null;
+      position?: ('bottom' | 'inline') | null;
+    };
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
@@ -941,10 +945,15 @@ export interface Search {
   id: number;
   title?: string | null;
   priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: number | Post;
-  };
+  doc:
+    | {
+        relationTo: 'posts';
+        value: number | Post;
+      }
+    | {
+        relationTo: 'projects';
+        value: number | Project;
+      };
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -1209,6 +1218,12 @@ export interface PagesSelect<T extends boolean = true> {
         overlayOpacity?: T;
         bottomFadeEnabled?: T;
         heroImageFit?: T;
+        scrollIndicator?:
+          | T
+          | {
+              enabled?: T;
+              position?: T;
+            };
       };
   layout?:
     | T
