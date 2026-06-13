@@ -5,14 +5,15 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
+import React from 'react'
 import RichText from '@/components/RichText'
 
 import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
+import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
+import { queryDocBySlug } from '@/utilities/queryDocBySlug'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
@@ -49,13 +50,13 @@ export default async function Post({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const post = (await queryDocBySlug({ collection: 'posts', slug: decodedSlug })) as Post | null
 
   if (!post) return <PayloadRedirects url={url} />
 
   return (
     <article className="pt-0 pb-16">
-      <PageClient />
+      <PageHeaderTheme theme="dark" />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -83,28 +84,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const post = (await queryDocBySlug({ collection: 'posts', slug: decodedSlug })) as Post | null
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: post, pathOverride: `/posts/${decodedSlug}` })
 }
-
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'posts',
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return result.docs?.[0] || null
-})
