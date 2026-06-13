@@ -69,5 +69,3 @@ export const motion = {
     },
   },
 } as const
-
-export type MotionToken = keyof typeof motion.duration

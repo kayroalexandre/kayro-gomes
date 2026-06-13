@@ -73,4 +73,4 @@ const ScrollIndicator = React.forwardRef<HTMLDivElement, ScrollIndicatorProps>(
 )
 ScrollIndicator.displayName = 'ScrollIndicator'
 
-export { ScrollIndicator, scrollIndicatorVariants }
+export { ScrollIndicator }
