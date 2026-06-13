@@ -35,6 +35,12 @@ const nextConfig: NextConfig = {
           protocol: url.protocol.replace(':', '') as 'http' | 'https',
         }
       }),
+      {
+        // Vercel Blob storage hostname — permite Next/Image otimizar
+        // imagens servidas diretamente do Blob (uploads, seed).
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
   webpack: (webpackConfig) => {
