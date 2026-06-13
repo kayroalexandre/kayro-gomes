@@ -5,6 +5,7 @@ import React from 'react'
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
+import { JsonLd, buildPersonJsonLd, buildWebSiteJsonLd } from '@/components/JsonLd'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
@@ -45,6 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <main id="main">{children}</main>
           <Footer />
         </Providers>
+        {/* Structured data — Person + WebSite com SearchAction */}
+        <JsonLd data={[buildPersonJsonLd(), buildWebSiteJsonLd()]} />
       </body>
     </html>
   )
