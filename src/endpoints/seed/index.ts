@@ -309,7 +309,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages (home, contato, sobre, projetos, posts)...`)
 
-  const [homePage, contactPage, sobrePage, projetosPage, postsPage] = await Promise.all([
+  const [homePage, contactPage, sobrePage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
