@@ -1,4 +1,4 @@
-import type { Post, Project, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
+import type { Post, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -7,6 +7,7 @@ import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { ProjectGrid } from '@/components/ProjectGrid'
+import type { ProjectCardData } from '@/components/ProjectCard'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -52,7 +53,7 @@ export const ArchiveBlock: React.FC<
             <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
           </div>
         )}
-        <ProjectGrid projects={fetchedProjects.docs as any} />
+        <ProjectGrid projects={fetchedProjects.docs as ProjectCardData[]} />
       </div>
     )
   }

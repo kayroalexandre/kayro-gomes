@@ -42,7 +42,7 @@ export const ProjectCard: React.FC<{
           </div>
         )}
       </div>
-      <div className="p-5 flex flex-col gap-3 flex-1 font-sans">
+      <div className="p-5 flex flex-col gap-3 flex-1">
         <h3 className="text-lg md:text-xl font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
           <Link className="hover:no-underline" href={`/projetos/${slug}`} ref={link.ref}>
             {title}
@@ -54,7 +54,7 @@ export const ProjectCard: React.FC<{
             {techList.slice(0, 5).map((t) => (
               <li
                 key={t}
-                className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/10 transition-all duration-200 hover:border-primary/30 hover:bg-primary/5"
+                className="text-xs font-semibold px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/10 transition-all duration-200 hover:border-primary/30 hover:bg-primary/5"
               >
                 {t}
               </li>

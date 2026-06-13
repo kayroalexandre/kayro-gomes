@@ -3,8 +3,6 @@ import React from 'react'
 
 interface Props {
   className?: string
-  loading?: 'lazy' | 'eager'
-  priority?: 'auto' | 'high' | 'low'
 }
 
 /**
@@ -12,9 +10,7 @@ interface Props {
  * Substitui o logo da Payload (que era hardcoded) por uma marca de texto
  * adequada a um portfólio pessoal. Sem dependência externa.
  */
-export const Logo = (props: Props) => {
-  const { className } = props
-
+export const Logo = ({ className }: Props) => {
   return (
     <span
       className={clsx(

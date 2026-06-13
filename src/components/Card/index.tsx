@@ -45,7 +45,7 @@ export const Card: React.FC<{
           </div>
         )}
       </div>
-      <div className="p-5 flex flex-col gap-3 flex-1 font-sans">
+      <div className="p-5 flex flex-col gap-3 flex-1">
         {showCategories && hasCategories && (
           <div className="flex flex-wrap gap-1.5 mb-1">
             {categories?.map((category, index) => {
@@ -57,7 +57,7 @@ export const Card: React.FC<{
                 return (
                   <span
                     key={index}
-                    className="text-[10px] font-bold text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full"
+                    className="text-xs font-semibold text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full"
                   >
                     {categoryTitle}
                   </span>
