@@ -73,6 +73,17 @@ async function main() {
   --font-heading: ${resolveValue(typography.font.heading.value)};
   --font-mono: ${resolveValue(typography.font.mono.value)};
 
+  /* Font Weights */
+  --weight-normal: ${resolveValue(typography.weight.normal.value)};
+  --weight-medium: ${resolveValue(typography.weight.medium.value)};
+  --weight-semibold: ${resolveValue(typography.weight.semibold.value)};
+  --weight-bold: ${resolveValue(typography.weight.bold.value)};
+  --weight-extrabold: ${resolveValue(typography.weight.extrabold.value)};
+
+  /* Font Sizes */
+  --size-display: ${resolveValue(typography.size.display.value)};
+  --size-body-large: ${resolveValue(typography.size['body-large'].value)};
+
   /* Breakpoints */
   --breakpoint-sm: ${resolveValue(spacing.breakpoint.sm.value)};
   --breakpoint-md: ${resolveValue(spacing.breakpoint.md.value)};
@@ -124,6 +135,17 @@ async function main() {
   --font-sans: var(--font-sans);
   --font-heading: var(--font-heading);
   --font-mono: var(--font-mono);
+
+  /* Font Weights Mapping */
+  --font-weight-normal: var(--weight-normal);
+  --font-weight-medium: var(--weight-medium);
+  --font-weight-semibold: var(--weight-semibold);
+  --font-weight-bold: var(--weight-bold);
+  --font-weight-extrabold: var(--weight-extrabold);
+
+  /* Font Sizes Mapping */
+  --font-size-display: var(--size-display);
+  --font-size-body-large: var(--size-body-large);
 
   /* Breakpoints Mapping */
   --breakpoint-sm: ${resolveValue(spacing.breakpoint.sm.value)};

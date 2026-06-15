@@ -12,6 +12,8 @@
     "extrabold": { "value": "800" }
   },
   "size": {
+    "display": { "value": "4.5rem" },
+    "body-large": { "value": "clamp(1rem, 2vw, 1.25rem)" },
     "h1": {
       "base": { "value": "2.5rem" },
       "md": { "value": "3rem" }

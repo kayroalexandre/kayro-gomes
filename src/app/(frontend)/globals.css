@@ -142,16 +142,16 @@ span {
 /* Hero Display — título principal do hero HighImpact.
    72px fixo (text-7xl no Tailwind v4). */
 .hero-display {
-  font-size: 4.5rem;
-  font-weight: 400;
+  font-size: var(--size-display);
+  font-weight: var(--weight-normal);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
 /* Hero Body — parágrafo no hero. 16–20px fluido. */
 .hero-body {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 400;
+  font-size: var(--size-body-large);
+  font-weight: var(--weight-normal);
   line-height: 1.7;
 }
 
@@ -159,8 +159,8 @@ span {
    font-size = 4.5rem (72px), igual a .hero-display. */
 .hero-rich-text h1,
 .hero-rich-text h2 {
-  font-size: 4.5rem;
-  font-weight: 400;
+  font-size: var(--size-display);
+  font-weight: var(--weight-normal);
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
@@ -169,8 +169,8 @@ span {
 }
 
 .hero-rich-text p {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 400;
+  font-size: var(--size-body-large);
+  font-weight: var(--weight-normal);
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
