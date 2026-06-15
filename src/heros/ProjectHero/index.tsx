@@ -15,8 +15,8 @@ export const ProjectHero: React.FC<{
     : []
 
   return (
-    <div className="relative flex items-end">
-      <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] text-white pb-8">
+    <header className="relative min-h-[80vh] flex items-end text-white">
+      <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] pb-8 mt-[var(--header-h)]">
         <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
           <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl">{title}</h1>
           {summary && <p className="text-lg max-w-2xl text-white/80 mb-6">{summary}</p>}
@@ -63,12 +63,13 @@ export const ProjectHero: React.FC<{
           )}
         </div>
       </div>
-      <div className="relative min-h-[80vh] select-none">
+      <div className="absolute inset-0 select-none z-0">
         {coverImage && typeof coverImage !== 'string' && (
-          <Media fill priority imgClassName="-z-10 object-cover" resource={coverImage} />
+          <Media fill priority imgClassName="object-cover" resource={coverImage} />
         )}
-        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-linear-to-t from-black to-transparent" />
+        <div className="absolute pointer-events-none inset-0 bg-black/40" />
+        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-linear-to-t from-background to-transparent" />
       </div>
-    </div>
+    </header>
   )
 }

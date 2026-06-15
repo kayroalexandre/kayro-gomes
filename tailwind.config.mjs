@@ -1,3 +1,10 @@
+import fs from 'fs'
+import path from 'path'
+
+const typography = JSON.parse(
+  fs.readFileSync(path.resolve('./src/design-system/tokens/typography.json'), 'utf-8')
+)
+
 /** @type {import('tailwindcss').Config} */
 const config = {
   theme: {
@@ -41,20 +48,20 @@ const config = {
         base: {
           css: [
             {
-              h1: { fontSize: '2.5rem' },
-              h2: { fontSize: '1.5rem' },
-              h3: { fontSize: '1.25rem' },
-              h4: { fontSize: '1rem' },
+              h1: { fontSize: typography.size.h1.base.value },
+              h2: { fontSize: typography.size.h2.base.value },
+              h3: { fontSize: typography.size.h3.base.value },
+              h4: { fontSize: typography.size.h4.base.value },
             },
           ],
         },
         md: {
           css: [
             {
-              h1: { fontSize: '3rem' },
-              h2: { fontSize: '1.75rem' },
-              h3: { fontSize: '1.5rem' },
-              h4: { fontSize: '1.125rem' },
+              h1: { fontSize: typography.size.h1.md.value },
+              h2: { fontSize: typography.size.h2.md.value },
+              h3: { fontSize: typography.size.h3.md.value },
+              h4: { fontSize: typography.size.h4.md.value },
             },
           ],
         },

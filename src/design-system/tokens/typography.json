@@ -1,0 +1,32 @@
+{
+  "font": {
+    "sans": { "value": "\"Google Sans Flex\", sans-serif" },
+    "heading": { "value": "\"Google Sans Flex\", sans-serif" },
+    "mono": { "value": "\"Google Sans Code\", monospace" }
+  },
+  "weight": {
+    "normal": { "value": "400" },
+    "medium": { "value": "500" },
+    "semibold": { "value": "600" },
+    "bold": { "value": "700" },
+    "extrabold": { "value": "800" }
+  },
+  "size": {
+    "h1": {
+      "base": { "value": "2.5rem" },
+      "md": { "value": "3rem" }
+    },
+    "h2": {
+      "base": { "value": "1.5rem" },
+      "md": { "value": "1.875rem" }
+    },
+    "h3": {
+      "base": { "value": "1.25rem" },
+      "md": { "value": "1.5rem" }
+    },
+    "h4": {
+      "base": { "value": "1rem" },
+      "md": { "value": "1.125rem" }
+    }
+  }
+}

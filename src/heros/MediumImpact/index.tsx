@@ -12,7 +12,7 @@ import { motion as motionTokens } from '@/design-system/tokens/motion'
 
 export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
   return (
-    <section className="relative border-b border-border bg-background pt-20 pb-12">
+    <section className="relative border-b border-border bg-background py-16 md:py-24">
       <div className="container">
         {/* RichText com tipografia consistente */}
         {richText && (

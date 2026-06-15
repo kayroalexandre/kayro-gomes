@@ -63,11 +63,11 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="py-16 md:py-24">
       <PageHeaderTheme theme="light" />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Busca</h1>
+      <div className="container mb-12">
+        <div className="max-w-none text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 text-foreground">Busca</h1>
 
           <div className="max-w-[50rem] mx-auto">
             <Search />

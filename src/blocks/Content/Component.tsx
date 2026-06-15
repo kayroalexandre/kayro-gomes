@@ -20,7 +20,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   }
 
   return (
-    <section className="container py-24 md:py-32">
+    <section className="container py-16 md:py-24">
       <div className="grid grid-cols-4 lg:grid-cols-12 gap-y-16 gap-x-12">
         {columns &&
           columns.length > 0 &&
@@ -38,7 +38,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ delay: index * 0.1, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
-                {richText && <RichText data={richText} enableGutter={false} className="prose-h2:text-3xl prose-h2:font-normal prose-h2:tracking-tight prose-h3:text-2xl prose-p:text-muted-foreground prose-p:leading-relaxed" />}
+                {richText && <RichText data={richText} enableGutter={false} className="prose-p:text-muted-foreground prose-p:leading-relaxed" />}
 
                 {enableLink && <CMSLink {...link} className="self-start mt-2" />}
               </motion.div>

@@ -15,8 +15,8 @@ export const PostHero: React.FC<{
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
 
   return (
-    <div className="relative flex items-end">
-      <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] text-white pb-8">
+    <header className="relative min-h-[80vh] flex items-end text-white">
+      <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] pb-8 mt-[var(--header-h)]">
         <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
           <div className="text-sm mb-6">
             {categories?.map((category, index) => {
@@ -46,28 +46,29 @@ export const PostHero: React.FC<{
             {hasAuthors && (
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm">Author</p>
+                  <p className="text-sm text-white/60">Autor</p>
 
-                  <p>{formatAuthors(populatedAuthors)}</p>
+                  <p className="font-medium">{formatAuthors(populatedAuthors)}</p>
                 </div>
               </div>
             )}
             {publishedAt && (
               <div className="flex flex-col gap-1">
-                <p className="text-sm">Date Published</p>
+                <p className="text-sm text-white/60">Publicado em</p>
 
-                <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
+                <time className="font-medium" dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
               </div>
             )}
           </div>
         </div>
       </div>
-      <div className="relative min-h-[80vh] select-none">
+      <div className="absolute inset-0 select-none z-0">
         {heroImage && typeof heroImage !== 'string' && (
-          <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
+          <Media fill priority imgClassName="object-cover" resource={heroImage} />
         )}
-        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-linear-to-t from-black to-transparent" />
+        <div className="absolute pointer-events-none inset-0 bg-black/40" />
+        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-linear-to-t from-background to-transparent" />
       </div>
-    </div>
+    </header>
   )
 }

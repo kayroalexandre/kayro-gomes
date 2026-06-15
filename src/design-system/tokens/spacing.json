@@ -1,0 +1,18 @@
+{
+  "spacing": {
+    "base": { "value": "0.25rem" }
+  },
+  "radius": {
+    "base": { "value": "1.25rem" }
+  },
+  "layout": {
+    "header-h": { "value": "5rem" }
+  },
+  "breakpoint": {
+    "sm": { "value": "40rem" },
+    "md": { "value": "48rem" },
+    "lg": { "value": "64rem" },
+    "xl": { "value": "80rem" },
+    "xxl": { "value": "86rem" }
+  }
+}

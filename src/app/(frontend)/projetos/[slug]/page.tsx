@@ -49,7 +49,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
       <ProjectHero project={project} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
+      <div className="flex flex-col items-center pt-16">
         <div className="container">
           {project.content && (
             <RichText

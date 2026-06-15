@@ -1,0 +1,18 @@
+{
+  "duration": {
+    "instant": { "value": "0s" },
+    "fast": { "value": "0.15s" },
+    "normal": { "value": "0.3s" },
+    "slow": { "value": "0.5s" },
+    "slower": { "value": "0.7s" },
+    "slowest": { "value": "1s" }
+  },
+  "easing": {
+    "linear": { "value": "linear" },
+    "easeIn": { "value": "cubic-bezier(0.4, 0, 1, 1)" },
+    "easeOut": { "value": "cubic-bezier(0, 0, 0.2, 1)" },
+    "easeInOut": { "value": "cubic-bezier(0.4, 0, 0.2, 1)" },
+    "smooth": { "value": "cubic-bezier(0.25, 0.1, 0.25, 1)" },
+    "snappy": { "value": "cubic-bezier(0.2, 0, 0, 1)" }
+  }
+}

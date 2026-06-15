@@ -40,12 +40,13 @@ export default async function Page({ params: paramsPromise }: Args) {
   if (posts.totalPages > 0 && sanitizedPageNumber > posts.totalPages) notFound()
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="py-16 md:py-24">
       <PageHeaderTheme theme="light" />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Blog</h1>
-        </div>
+      <div className="container mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-foreground">Blog</h1>
+        <p className="text-lg text-muted-foreground max-w-2xl">
+          Compartilhando aprendizados, tutoriais e reflexões sobre engenharia de software e desenvolvimento web.
+        </p>
       </div>
 
       <div className="container mb-8">
