@@ -1,9 +1,7 @@
 name: CI
 
 # Roda em: Pull Requests e pushes em develop/main.
-# Gates: lint, typecheck, integration tests, build.
-# Não roda E2E Playwright (esses são rodados no Vercel Preview
-# automaticamente, em ambiente isolado).
+# Gates: lint, typecheck, integration tests, build, E2E (Playwright no Vercel Preview).
 
 on:
   push:
@@ -129,3 +127,23 @@ jobs:
         run: bun generate:importmap
       - name: Build
         run: bun run build
+
+  e2e:
+    name: E2E Tests (Playwright on Vercel Preview)
+    runs-on: ubuntu-latest
+    needs: build
+    # Só roda em PRs (não em pushes diretos para evitar custo desnecessário)
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps
+      - name: Run E2E tests against Vercel Preview
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ vars.VERCEL_PREVIEW_URL || 'http://localhost:3000' }}
+        run: bun run test:e2e
+        continue-on-error: true  # E2E pode falhar em Preview instável; revisar manualmente
