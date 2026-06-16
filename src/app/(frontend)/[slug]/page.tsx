@@ -44,10 +44,7 @@ type Args = {
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
-  const [{ isEnabled: draft }, { slug = 'home' }] = await Promise.all([
-    draftMode(),
-    paramsPromise,
-  ])
+  const [{ isEnabled: draft }, { slug = 'home' }] = await Promise.all([draftMode(), paramsPromise])
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
@@ -67,7 +64,9 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <article className={`${hasHero ? 'pt-0' : 'pt-24'} pb-24`}>
-      <PageHeaderTheme theme="light" />
+      {/* PageHeaderTheme removido — o Header agora usa useHeaderContrast para detectar
+          automaticamente o fundo atrás dele (highImpact hero tem imagem escura).
+          Forçar 'light' conflita com o contraste dinâmico. */}
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
