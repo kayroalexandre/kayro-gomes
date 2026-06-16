@@ -2,8 +2,11 @@
 
 > **Este arquivo está obsoleto.** O workflow atual está documentado em
 > [`AGENTS.md`](../AGENTS.md) (fonte de verdade única desde 2026-06-08).
-
----
+>
+> **⚠️ IMPORTANTE:** O projeto migrou exclusivamente para **bun** como gerenciador de pacotes.
+> Todos os comandos que aparecem neste guia com `pnpm` devem ser executados com `bun`
+> (ex: `bun dev`, `bun run build`, `bun run lint`). Este documento é mantido apenas
+> para referência histórica da arquitetura anterior.---
 
 # Guia de Workflow Sincronizado: Local ⇄ GitHub ⇄ Vercel ⇄ Neon (LEGADO)
 

@@ -270,5 +270,10 @@ viewport top
   lá. O único comando necessário é `docker build -t kayro-gomes .`. Foi
   adicionado também um `.dockerignore` para evitar vazar `.env*`, `node_modules`
   e artefatos de teste. Veja o cabeçalho do `Dockerfile` para detalhes.
-- Testes E2E não rodam no CI (lentos + requerem Vercel Preview). Rodam manualmente.
+- ~~Testes E2E não rodam no CI (lentos + requerem Vercel Preview). Rodam manualmente.~~
+  **Resolvido em auditoria 2026-06-15 (Fase 2):** job `e2e` adicionado ao
+  workflow de CI. Roda apenas em PRs, com `continue-on-error: true` para
+  não bloquear merges em Preview instável. Scripts de debug movidos para
+  `scripts/debug/`.
 - Neon branching ainda não implementado (DB compartilhado entre Preview/Prod).
+  Recomendação: implementar somente após monitorar tráfego real em produção.
