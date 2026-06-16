@@ -67,6 +67,8 @@
   --success: oklch(78% 0.08 200deg);
   --warning: oklch(89% 0.1 75deg);
   --error: oklch(75% 0.15 25deg);
+  --overlay-dark: oklch(0% 0 0deg / 0.4);
+  --overlay-fade: oklch(9.44% 0 0deg / 0);
 }
 
 [data-theme='dark'] {
@@ -101,6 +103,14 @@
   --success: oklch(28% 0.1 200deg);
   --warning: oklch(35% 0.08 70deg);
   --error: oklch(45% 0.1 25deg);
+  --overlay-dark: oklch(0% 0 0deg / 0.4);
+  --overlay-fade: oklch(9.44% 0 0deg / 0);
+  --text-on-dark: oklch(9.44% 0 0deg);
+  --text-on-dark-muted: oklch(100% 0 0deg / 0.65);
+  --text-on-dark-subtle: oklch(100% 0 0deg / 0.45);
+  --text-on-light: oklch(98.5% 0 0deg);
+  --text-on-light-muted: oklch(9.44% 0 0deg / 0.65);
+  --text-on-light-subtle: oklch(9.44% 0 0deg / 0.45);
 }
 
 @theme inline {
@@ -135,6 +145,8 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
+  --color-overlay-dark: var(--overlay-dark);
+  --color-overlay-fade: var(--overlay-fade);
 
   /* Radius Mapping */
   --radius-sm: calc(var(--radius) - 6px);

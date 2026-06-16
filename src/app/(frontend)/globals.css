@@ -156,7 +156,12 @@ span {
 }
 
 /* Contexto RichText do hero (HighImpact passa className="hero-rich-text").
-   font-size = 4.5rem (72px), igual a .hero-display. */
+   font-size = 4.5rem (72px), igual a .hero-display.
+   Herda cor dinâmica do wrapper (useDynamicTextColor) para contraste automático. */
+.hero-rich-text {
+  color: inherit;
+}
+
 .hero-rich-text h1,
 .hero-rich-text h2 {
   font-size: var(--size-display);
@@ -164,18 +169,24 @@ span {
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
-  color: #fff;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+  color: inherit;
 }
 
 .hero-rich-text p {
   font-size: var(--size-body-large);
   font-weight: var(--weight-normal);
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  color: inherit;
+  opacity: 0.85;
   max-width: 42rem;
   margin: 0 auto;
+}
+
+/* Strong/bold dentro do hero herda a cor dinâmica */
+.hero-rich-text strong,
+.hero-rich-text b {
+  color: inherit;
+  font-weight: 900;
 }
 
 /* ============================================
