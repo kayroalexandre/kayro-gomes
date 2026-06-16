@@ -1,15 +1,11 @@
 'use client'
 
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import React, { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React from 'react'
 
 import type { Page } from '@/payload-types'
 
-import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
-import RichText from '@/components/RichText'
-import { ScrollIndicator } from '@/components/ui/scroll-indicator'
+import { DynamicHighImpactContent } from './DynamicHighImpactContent'
 
 export const HighImpactHero: React.FC<Page['hero']> = ({
   links,
@@ -17,16 +13,9 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
   richText,
   overlayEnabled,
   overlayOpacity,
-  bottomFadeEnabled,
   heroImageFit,
   scrollIndicator: scrollIndicatorProp,
 }) => {
-  const { setHeaderTheme } = useHeaderTheme()
-
-  useEffect(() => {
-    setHeaderTheme('dark')
-  }, [setHeaderTheme])
-
   const imgFitClass = heroImageFit === 'contain' ? 'object-contain' : 'object-cover'
   const scrollEnabled = scrollIndicatorProp?.enabled ?? true
   const scrollAtBottom = (scrollIndicatorProp?.position ?? 'bottom') === 'bottom'
@@ -41,7 +30,7 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
     // baixo da AdminBar. Descontar a mesma altura aqui faz o final
     // do hero coincidir com o final da viewport. Quando deslogado,
     // o fallback `0px` mantém a hero em 100dvh como antes.
-    <section className="relative h-[calc(100dvh-var(--adminbar-h,0px))] overflow-hidden text-white">
+    <section className="relative h-[calc(100dvh-var(--adminbar-h,0px))] overflow-hidden">
       {/*
         Container do conteúdo da hero.
         - `mt-[var(--header-h)]` → margem superior igual à altura do
@@ -61,54 +50,12 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
           de quais campos estão habilitados/desabilitados no CMS.
       */}
       <div className="container relative z-10 px-4 text-center mt-[var(--header-h)] flex h-[calc(100%-var(--header-h))] flex-col items-center py-16">
-        {/* Heading + CTAs — centralizados via flex-1 justify-center */}
-        <div className="flex-1 flex flex-col items-center justify-center w-full">
-          <div className="flex flex-col items-center">
-            {richText && (
-              <motion.div
-                className="max-w-5xl"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-              >
-                <RichText className="hero-rich-text" data={richText} enableGutter={false} />
-              </motion.div>
-            )}
-            {Array.isArray(links) && links.length > 0 && (
-              <motion.div
-                className="flex flex-wrap justify-center gap-4 mt-6"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-              >
-                {links.map(({ link }, i) => {
-                  const appearance = i === 0 ? 'default' : 'outline'
-                  return (
-                    <CMSLink
-                      key={i}
-                      {...link}
-                      appearance={appearance}
-                      size="lg"
-                      className="rounded-full font-medium"
-                    />
-                  )
-                })}
-              </motion.div>
-            )}
-          </div>
-        </div>
-        {/* Indicador de scroll — fixo no rodapé */}
-        {scrollEnabled && (
-          <motion.div
-            data-slot="scroll-indicator"
-            className={scrollAtBottom ? 'pb-[calc(var(--spacing)*8)]' : ''}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-          >
-            <ScrollIndicator label="Role para explorar" />
-          </motion.div>
-        )}
+        <DynamicHighImpactContent
+          richText={richText}
+          links={links}
+          scrollEnabled={scrollEnabled}
+          scrollAtBottom={scrollAtBottom}
+        />
       </div>
 
       {/* Media de fundo (se existir) */}
@@ -121,9 +68,6 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
               className="absolute inset-0 bg-background"
               style={{ opacity: (overlayOpacity ?? 60) / 100 }}
             />
-          )}
-          {bottomFadeEnabled !== false && (
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
           )}
         </div>
       )}

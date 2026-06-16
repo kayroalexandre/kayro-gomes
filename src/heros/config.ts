@@ -71,7 +71,7 @@ export const hero: Field = {
       name: 'overlayEnabled',
       type: 'checkbox',
       admin: {
-        condition: (_, { type } = {}) => type === 'highImpact',
+        hidden: true, // Desativado — overlay não deve aparecer sobre a imagem do hero
       },
       defaultValue: false,
       label: 'Enable Background Overlay',
@@ -80,21 +80,12 @@ export const hero: Field = {
       name: 'overlayOpacity',
       type: 'number',
       admin: {
-        condition: (_, { type, overlayEnabled } = {}) => type === 'highImpact' && overlayEnabled === true,
+        hidden: true, // Desativado — overlay não deve aparecer sobre a imagem do hero
       },
       defaultValue: 60,
       label: 'Overlay Opacity (%)',
       max: 100,
       min: 0,
-    },
-    {
-      name: 'bottomFadeEnabled',
-      type: 'checkbox',
-      admin: {
-        condition: (_, { type } = {}) => type === 'highImpact',
-      },
-      defaultValue: true,
-      label: 'Enable Bottom Fade Gradient',
     },
     {
       name: 'heroImageFit',

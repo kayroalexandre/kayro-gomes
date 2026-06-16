@@ -344,7 +344,6 @@ export interface Page {
     media?: (number | null) | Media;
     overlayEnabled?: boolean | null;
     overlayOpacity?: number | null;
-    bottomFadeEnabled?: boolean | null;
     /**
      * Controls how the background image fits the hero area.
      */
@@ -1216,7 +1215,6 @@ export interface PagesSelect<T extends boolean = true> {
         media?: T;
         overlayEnabled?: T;
         overlayOpacity?: T;
-        bottomFadeEnabled?: T;
         heroImageFit?: T;
         scrollIndicator?:
           | T
