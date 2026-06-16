@@ -1,9 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import { Moon, Sun } from 'lucide-react'
 import { useTheme } from './index'
 import { Button } from '@/components/ui/button'
+import { Icon } from '@/components/ui/icon'
+import { Sun, Moon } from 'lucide-react'
 
 export const ThemeToggle: React.FC = () => {
   const { setTheme, theme } = useTheme()
@@ -27,8 +28,16 @@ export const ThemeToggle: React.FC = () => {
       }
       onClick={toggleTheme}
     >
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground hover:text-foreground" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground hover:text-foreground" />
+      <Icon
+        icon={Sun}
+        size="lg"
+        className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground hover:text-foreground"
+      />
+      <Icon
+        icon={Moon}
+        size="lg"
+        className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground hover:text-foreground"
+      />
       <span className="sr-only">Alternar tema</span>
     </Button>
   )
