@@ -8,6 +8,13 @@
   "layout": {
     "header-h": { "value": "5rem" }
   },
+  "icon": {
+    "sm": { "value": "1rem" },
+    "md": { "value": "1.25rem" },
+    "lg": { "value": "1.5rem" },
+    "xl": { "value": "2rem" },
+    "2xl": { "value": "3rem" }
+  },
   "breakpoint": {
     "sm": { "value": "40rem" },
     "md": { "value": "48rem" },

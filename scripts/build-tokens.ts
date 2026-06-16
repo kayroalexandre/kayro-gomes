@@ -91,6 +91,13 @@ async function main() {
   --breakpoint-xl: ${resolveValue(spacing.breakpoint.xl.value)};
   --breakpoint-2xl: ${resolveValue(spacing.breakpoint.xxl.value)};
 
+  /* Icon Sizes */
+  --icon-sm: ${resolveValue(spacing.icon.sm.value)};
+  --icon-md: ${resolveValue(spacing.icon.md.value)};
+  --icon-lg: ${resolveValue(spacing.icon.lg.value)};
+  --icon-xl: ${resolveValue(spacing.icon.xl.value)};
+  --icon-2xl: ${resolveValue(spacing.icon['2xl'].value)};
+
   /* Light Theme Semantic Colors */
 `
 
