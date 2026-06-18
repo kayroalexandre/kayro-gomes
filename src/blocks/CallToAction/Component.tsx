@@ -7,6 +7,7 @@ import type { CallToActionBlock as CTABlockProps } from '@/payload-types'
 
 import RichText from '@/components/RichText'
 import { CMSLink } from '@/components/Link'
+import { easing } from '@/design-system/tokens/motion'
 
 export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) => {
   return (
@@ -16,7 +17,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 0.6, ease: easing.smooth }}
       >
         <div className="max-w-[48rem] prose-h2:text-4xl md:prose-h2:text-5xl prose-h2:mb-4 prose-p:text-lg prose-p:text-muted-foreground">
           {richText && <RichText className="mb-0" data={richText} enableGutter={false} />}

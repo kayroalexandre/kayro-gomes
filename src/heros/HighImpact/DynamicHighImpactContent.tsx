@@ -9,6 +9,7 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import RichText from '@/components/RichText'
 import { ScrollIndicator } from '@/components/ui/scroll-indicator'
+import { easing } from '@/design-system/tokens/motion'
 
 interface DynamicHighImpactContentProps {
   richText?: Page['hero']['richText']
@@ -38,7 +39,7 @@ export const DynamicHighImpactContent: React.FC<DynamicHighImpactContentProps> =
               style={{ color: '#fff' }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+              transition={{ duration: 0.8, ease: easing.emphasized }}
             >
               <RichText
                 className="hero-rich-text"
@@ -53,7 +54,7 @@ export const DynamicHighImpactContent: React.FC<DynamicHighImpactContentProps> =
               className="flex flex-wrap justify-center gap-4 mt-6"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+              transition={{ delay: 0.3, duration: 0.8, ease: easing.emphasized }}
             >
               {links.map(({ link }, i) => {
                 const appearance = i === 0 ? 'default' : 'outline'

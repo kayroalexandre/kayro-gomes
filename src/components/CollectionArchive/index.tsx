@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 import { Card, CardPostData } from '@/components/Card'
+import { easing } from '@/design-system/tokens/motion'
 
 export type Props = {
   posts: CardPostData[]
@@ -31,7 +32,7 @@ export const CollectionArchive: React.FC<Props> = (props) => {
                 key={index}
                 variants={{
                   hidden: { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } }
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easing.smooth } }
                 }}
               >
                 <Card className="h-full" doc={result} relationTo="posts" showCategories />

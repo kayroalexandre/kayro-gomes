@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 import { ProjectCard, type ProjectCardData } from '@/components/ProjectCard'
+import { easing } from '@/design-system/tokens/motion'
 
 export type Props = {
   projects: ProjectCardData[]
@@ -27,7 +28,7 @@ export const ProjectGrid: React.FC<Props> = ({ projects, className }) => {
             key={project.slug}
             variants={{
               hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } }
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easing.smooth } }
             }}
           >
             <ProjectCard project={project} />
