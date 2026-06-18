@@ -387,27 +387,27 @@ async function main() {
     family: string
     weight: string
     size: string
-    leading: string
-    tracking: string
+    lineHeight: string
+    letterSpacing: string
   }> = [
-    { util: 'title-hero',  family: 'title-hero-font-family',  weight: 'title-hero-font-weight',   size: 'title-hero-size',        leading: 'tight',   tracking: 'tight'  },
-    { util: 'title',       family: 'title-page-font-family',  weight: 'title-page-font-weight',   size: 'title-page-size-base',   leading: 'tight',   tracking: 'tight'  },
-    { util: 'subtitle',    family: 'subtitle-font-family',    weight: 'subtitle-font-weight',     size: 'subtitle-size-base',     leading: 'snug',    tracking: 'normal' },
-    { util: 'heading',     family: 'heading-font-family',     weight: 'heading-font-weight',      size: 'heading-size-base',      leading: 'snug',    tracking: 'tight'  },
-    { util: 'subheading',  family: 'subheading-font-family',  weight: 'subheading-font-weight',   size: 'subheading-size-medium', leading: 'snug',    tracking: 'normal' },
-    { util: 'body-large',  family: 'body-font-family',        weight: 'body-font-weight-regular', size: 'body-size-large',        leading: 'relaxed', tracking: 'normal' },
-    { util: 'body',        family: 'body-font-family',        weight: 'body-font-weight-regular', size: 'body-size-medium',       leading: 'normal',  tracking: 'normal' },
-    { util: 'body-strong', family: 'body-font-family',        weight: 'body-font-weight-strong',  size: 'body-size-medium',       leading: 'normal',  tracking: 'normal' },
-    { util: 'body-small',  family: 'body-font-family',        weight: 'body-font-weight-regular', size: 'body-size-small',        leading: 'normal',  tracking: 'normal' },
-    { util: 'code',        family: 'code-font-family',        weight: 'code-font-weight',         size: 'code-size-base',         leading: 'normal',  tracking: 'normal' },
+    { util: 'title-hero',  family: 'title-hero-font-family',  weight: 'title-hero-font-weight',   size: 'title-hero-size',        lineHeight: 'title-hero-line-height',  letterSpacing: 'title-hero-letter-spacing' },
+    { util: 'title',       family: 'title-page-font-family',  weight: 'title-page-font-weight',   size: 'title-page-size-base',   lineHeight: 'title-page-line-height',  letterSpacing: 'title-page-letter-spacing' },
+    { util: 'subtitle',    family: 'subtitle-font-family',    weight: 'subtitle-font-weight',     size: 'subtitle-size-base',     lineHeight: 'subtitle-line-height',    letterSpacing: 'subtitle-letter-spacing' },
+    { util: 'heading',     family: 'heading-font-family',     weight: 'heading-font-weight',      size: 'heading-size-base',      lineHeight: 'heading-line-height',     letterSpacing: 'heading-letter-spacing' },
+    { util: 'subheading',  family: 'subheading-font-family',  weight: 'subheading-font-weight',   size: 'subheading-size-medium', lineHeight: 'subheading-line-height',  letterSpacing: 'subheading-letter-spacing' },
+    { util: 'body-large',  family: 'body-font-family',        weight: 'body-font-weight-regular', size: 'body-size-large',        lineHeight: 'body-line-height-relaxed', letterSpacing: 'body-letter-spacing' },
+    { util: 'body',        family: 'body-font-family',        weight: 'body-font-weight-regular', size: 'body-size-medium',       lineHeight: 'body-line-height',        letterSpacing: 'body-letter-spacing' },
+    { util: 'body-strong', family: 'body-font-family',        weight: 'body-font-weight-strong',  size: 'body-size-medium',       lineHeight: 'body-line-height',        letterSpacing: 'body-letter-spacing' },
+    { util: 'body-small',  family: 'body-font-family',        weight: 'body-font-weight-regular', size: 'body-size-small',        lineHeight: 'body-line-height',        letterSpacing: 'body-letter-spacing' },
+    { util: 'code',        family: 'code-font-family',        weight: 'code-font-weight',         size: 'code-size-base',         lineHeight: 'code-line-height',        letterSpacing: 'code-letter-spacing' },
   ]
   const typeUtilities = TYPE_RECIPES.map(
     (r) => `@utility type-${r.util} {
   font-family: var(--${r.family});
   font-weight: var(--${r.weight});
   font-size: var(--${r.size});
-  line-height: var(--line-height-${r.leading});
-  letter-spacing: var(--letter-spacing-${r.tracking});
+  line-height: var(--${r.lineHeight});
+  letter-spacing: var(--${r.letterSpacing});
 }`,
   ).join('\n\n')
 

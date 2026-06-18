@@ -23,10 +23,13 @@ type Leaf = { $value: string | number }
 const isLeaf = (n: unknown): n is Leaf =>
   !!n && typeof n === 'object' && '$value' in (n as Record<string, unknown>)
 
+type TypographyGroup = Record<string, unknown>
+type TypographyJson = Record<string, TypographyGroup>
+
 describe('typography.json — grupos semânticos definem line-height e letter-spacing', () => {
   for (const group of SEMANTIC_TYPE_GROUPS) {
     it(`grupo "${group}" expõe line-height e letter-spacing`, () => {
-      const node = (typography as Record<string, any>)[group]
+      const node = (typography as unknown as TypographyJson)[group]
       expect(node, `grupo ${group} ausente`).toBeTruthy()
       expect(isLeaf(node['line-height']), `${group}.line-height ausente`).toBe(true)
       expect(isLeaf(node['letter-spacing']), `${group}.letter-spacing ausente`).toBe(true)
@@ -34,7 +37,7 @@ describe('typography.json — grupos semânticos definem line-height e letter-sp
   }
 
   it('grupo "body" expõe line-height-relaxed (para a receita body-large)', () => {
-    const body = (typography as Record<string, any>).body
+    const body = (typography as unknown as TypographyJson).body
     expect(isLeaf(body['line-height-relaxed']), 'body.line-height-relaxed ausente').toBe(true)
   })
 })

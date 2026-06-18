@@ -63,7 +63,10 @@
     "font-weight-strong": { "$type": "fontWeight", "$value": "var(--weight-semibold)" },
     "size-small": { "$type": "dimension", "$value": "var(--text-scale-02)" },
     "size-medium": { "$type": "dimension", "$value": "var(--text-scale-03)" },
-    "size-large": { "$type": "dimension", "$value": "var(--text-scale-04)" }
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-04)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-normal)" },
+    "line-height-relaxed": { "$type": "number", "$value": "var(--line-height-relaxed)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
   },
 
   "code": {
@@ -71,7 +74,9 @@
     "font-weight": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
     "size-small": { "$type": "dimension", "$value": "var(--text-scale-02)" },
     "size-base": { "$type": "dimension", "$value": "var(--text-scale-03)" },
-    "size-large": { "$type": "dimension", "$value": "var(--text-scale-04)" }
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-04)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-normal)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
   },
 
   "heading": {
@@ -79,7 +84,9 @@
     "font-weight": { "$type": "fontWeight", "$value": "var(--weight-semibold)" },
     "size-small": { "$type": "dimension", "$value": "var(--text-scale-04)" },
     "size-base": { "$type": "dimension", "$value": "var(--text-scale-05)" },
-    "size-large": { "$type": "dimension", "$value": "var(--text-scale-06)" }
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-06)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-snug)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-tight)" }
   },
 
   "subheading": {
@@ -87,7 +94,9 @@
     "font-weight": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
     "size-small": { "$type": "dimension", "$value": "var(--text-scale-03)" },
     "size-medium": { "$type": "dimension", "$value": "var(--text-scale-04)" },
-    "size-large": { "$type": "dimension", "$value": "var(--text-scale-05)" }
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-05)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-snug)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
   },
 
   "subtitle": {
@@ -95,7 +104,9 @@
     "font-weight": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
     "size-small": { "$type": "dimension", "$value": "var(--text-scale-05)" },
     "size-base": { "$type": "dimension", "$value": "var(--text-scale-06)" },
-    "size-large": { "$type": "dimension", "$value": "var(--text-scale-07)" }
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-07)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-snug)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
   },
 
   "title-page": {
@@ -103,12 +114,16 @@
     "font-weight": { "$type": "fontWeight", "$value": "var(--weight-bold)" },
     "size-small": { "$type": "dimension", "$value": "var(--text-scale-07)" },
     "size-base": { "$type": "dimension", "$value": "var(--text-scale-08)" },
-    "size-large": { "$type": "dimension", "$value": "var(--text-scale-09)" }
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-09)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-tight)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-tight)" }
   },
 
   "title-hero": {
     "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
     "font-weight": { "$type": "fontWeight", "$value": "var(--weight-bold)" },
-    "size": { "$type": "dimension", "$value": "var(--text-scale-10)" }
+    "size": { "$type": "dimension", "$value": "var(--text-scale-10)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-tight)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-tight)" }
   }
 }
