@@ -11,7 +11,7 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto border-t border-border/10 bg-background/50 backdrop-blur-sm">
+    <footer className="mt-auto border-t border-border/10 glass">
       <div className="container py-16 flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-4">
           <Link className="flex items-center hover:opacity-95 transition-opacity" href="/">

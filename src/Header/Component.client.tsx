@@ -33,9 +33,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     <header
       // `top-[var(--adminbar-h,0px)]` faz o Header descer quando o
       // AdminBar aparece (logado), em vez de ficar coberto por ele.
-      // O header é `position:fixed` com `bg-background/50 backdrop-blur-sm`
-      // (50% opaco = 50% transparente), igual ao Footer.
-      className="fixed top-[var(--adminbar-h,0px)] left-0 right-0 z-50 w-full bg-background/50 backdrop-blur-sm transition-[top] duration-300"
+      // Efeito vidro via utility aberta `glass` (tokens effects.glass),
+      // compartilhada com o Footer e qualquer outro componente.
+      className="fixed top-[var(--adminbar-h,0px)] left-0 right-0 z-50 w-full glass transition-[top] duration-300"
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className="container grid h-[var(--header-h)] grid-cols-[auto_1fr_auto] items-center">
