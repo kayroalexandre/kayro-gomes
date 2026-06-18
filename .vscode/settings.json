@@ -39,5 +39,6 @@
     }
   },
   "python-envs.defaultEnvManager": "ms-python.python:system",
-  "claudeCode.environmentVariables": []
+  "claudeCode.environmentVariables": [],
+  "remote.autoForwardPortsFallback": 0
 }
