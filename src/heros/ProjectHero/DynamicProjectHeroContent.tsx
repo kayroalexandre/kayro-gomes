@@ -68,12 +68,10 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
         <div className="flex flex-wrap gap-3">
           {liveUrl && (
             <a
-              ref={ctaPrimaryRef as React.RefObject<HTMLAnchorElement>}
               href={liveUrl}
               rel="noopener noreferrer"
               target="_blank"
               className="inline-flex items-center gap-2 rounded-md bg-white text-black px-4 py-2 text-sm font-medium hover:bg-white/90"
-              style={{ color: ctaPrimaryColor }}
             >
               Ver projeto <ExternalLink className="size-4" aria-hidden />
             </a>

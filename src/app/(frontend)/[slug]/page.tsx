@@ -8,7 +8,6 @@ import React from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
-import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import { generateMeta } from '@/utilities/generateMeta'
 import { queryDocBySlug } from '@/utilities/queryDocBySlug'
 import { LivePreviewListener } from '@/components/LivePreviewListener'

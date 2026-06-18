@@ -98,8 +98,7 @@ test.describe('HighImpactHero Layout (AGENTS.md rules)', () => {
     await page.waitForTimeout(500) // pequena espera para framer-motion
 
     // Captura screenshot da hero (apenas a seção superior)
-    await expect(page.locator('section').first()).toHaveScreenshot({
-      name: 'high-impact-hero-homepage.png',
+    await expect(page.locator('section').first()).toHaveScreenshot('high-impact-hero-homepage.png', {
       threshold: 0.2, // tolerância para pequenas variações de renderização
     })
   })
@@ -109,8 +108,7 @@ test.describe('HighImpactHero Layout (AGENTS.md rules)', () => {
     await page.goto('http://localhost:3000')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.locator('section').first()).toHaveScreenshot({
-      name: 'high-impact-hero-mobile.png',
+    await expect(page.locator('section').first()).toHaveScreenshot('high-impact-hero-mobile.png', {
       threshold: 0.2,
     })
   })
