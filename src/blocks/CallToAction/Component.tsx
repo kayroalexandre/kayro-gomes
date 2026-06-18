@@ -13,7 +13,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) 
   return (
     <section className="container py-16 md:py-24">
       <motion.div
-        className="bg-card rounded-[32px] border border-border/50 p-10 md:p-16 flex flex-col gap-10 md:flex-row md:justify-between md:items-center shadow-lg shadow-black/20"
+        className="bg-card rounded-panel border border-border/50 p-10 md:p-16 flex flex-col gap-10 md:flex-row md:justify-between md:items-center shadow-lg shadow-black/20"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}

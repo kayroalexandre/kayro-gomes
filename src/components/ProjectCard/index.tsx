@@ -31,7 +31,7 @@ export const ProjectCard: React.FC<{
     <ShadcnCard
       ref={card.ref as React.Ref<HTMLDivElement>}
       className={cn(
-        'group overflow-hidden hover:cursor-pointer flex flex-col h-full border border-border bg-card rounded-[20px] transition-colors hover:border-border/80',
+        'group overflow-hidden hover:cursor-pointer flex flex-col h-full border border-border bg-card rounded-card transition-colors hover:border-border/80',
         className,
       )}
     >

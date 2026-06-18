@@ -15,7 +15,7 @@ const scrollIndicatorVariants = cva(
       },
       size: {
         default: 'text-xs',
-        sm: 'text-[10px]',
+        sm: 'text-[10px]', // design-lint-disable-line micro-label decorativo abaixo da escala SDS (mín. 12px)
         lg: 'text-sm',
       },
     },

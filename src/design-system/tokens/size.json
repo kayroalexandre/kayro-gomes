@@ -12,6 +12,8 @@
     "xl": { "$value": "calc(var(--radius) + 4px)" },
     "2xl": { "$value": "calc(var(--radius) + 8px)" },
     "3xl": { "$value": "calc(var(--radius) + 16px)" },
+    "card": { "$value": "calc(var(--radius) + 12px)", "$description": "Raio de superfícies de card (Card, ProjectCard, Form). = 20px no --radius padrão; acompanha --radius." },
+    "panel": { "$value": "calc(var(--radius) + 24px)", "$description": "Raio de painéis de destaque (CallToAction). = 32px no --radius padrão; acompanha --radius." },
     "full": { "$value": "9999px" }
   },
 

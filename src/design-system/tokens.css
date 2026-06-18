@@ -398,10 +398,12 @@
   /* Radius scale */
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 16px);
+  --radius-card: calc(var(--radius) + 12px);
   --radius-full: 9999px;
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-none: 0;
+  --radius-panel: calc(var(--radius) + 24px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-xl: calc(var(--radius) + 4px);
 

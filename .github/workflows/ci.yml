@@ -23,6 +23,8 @@ jobs:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
       - run: bun run lint
+      - name: Design tokens lint (uso — cor/bezier bloqueiam, dimensão avisa)
+        run: bun run lint:tokens:check
 
   typecheck:
     name: Typecheck
