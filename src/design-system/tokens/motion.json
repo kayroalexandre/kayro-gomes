@@ -1,18 +1,37 @@
 {
+  "$description": "Tokens de movimento em formato DTCG: durações, curvas de easing e delays de sequência. Fonte da verdade ÚNICA — o build gera motion.generated.ts (constantes tipadas p/ Framer Motion) a partir deste arquivo, eliminando duplicação. Desvio documentado: easing mantém $value como string CSS crua (o build a converte em tupla [x1,y1,x2,y2] na geração do TS).",
+
   "duration": {
-    "instant": { "value": "0s" },
-    "fast": { "value": "0.15s" },
-    "normal": { "value": "0.3s" },
-    "slow": { "value": "0.5s" },
-    "slower": { "value": "0.7s" },
-    "slowest": { "value": "1s" }
+    "$type": "duration",
+    "$description": "Durações de transição/animação (segundos). Emitidas como --duration-*.",
+    "instant": { "$value": "0s" },
+    "fast": { "$value": "0.15s" },
+    "normal": { "$value": "0.3s" },
+    "slow": { "$value": "0.5s" },
+    "slower": { "$value": "0.7s" },
+    "slowest": { "$value": "1s" }
   },
+
   "easing": {
-    "linear": { "value": "linear" },
-    "easeIn": { "value": "cubic-bezier(0.4, 0, 1, 1)" },
-    "easeOut": { "value": "cubic-bezier(0, 0, 0.2, 1)" },
-    "easeInOut": { "value": "cubic-bezier(0.4, 0, 0.2, 1)" },
-    "smooth": { "value": "cubic-bezier(0.25, 0.1, 0.25, 1)" },
-    "snappy": { "value": "cubic-bezier(0.2, 0, 0, 1)" }
+    "$type": "cubicBezier",
+    "$description": "Curvas de easing. Emitidas como --ease-* (easeIn → --ease-in, easeInOut → --ease-in-out).",
+    "linear": { "$value": "linear" },
+    "easeIn": { "$value": "cubic-bezier(0.4, 0, 1, 1)" },
+    "easeOut": { "$value": "cubic-bezier(0, 0, 0.2, 1)" },
+    "easeInOut": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)" },
+    "smooth": { "$value": "cubic-bezier(0.25, 0.1, 0.25, 1)" },
+    "snappy": { "$value": "cubic-bezier(0.2, 0, 0, 1)" },
+    "emphasized": { "$value": "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+  },
+
+  "delay": {
+    "$type": "duration",
+    "$description": "Delays para sequências/stagger de animação (segundos). Emitidos como --delay-*.",
+    "none": { "$value": "0s" },
+    "xs": { "$value": "0.05s" },
+    "sm": { "$value": "0.1s" },
+    "md": { "$value": "0.2s" },
+    "lg": { "$value": "0.3s" },
+    "xl": { "$value": "0.4s" }
   }
 }

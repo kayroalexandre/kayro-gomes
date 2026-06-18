@@ -1,0 +1,40 @@
+{
+  "$description": "Tokens estruturais de layout: dimensões do chrome da aplicação, padding de container, breakpoints responsivos e escala de empilhamento (z-index). Formato DTCG. Dimensões em string rem/px (desvio documentado).",
+
+  "structure": {
+    "$type": "dimension",
+    "$description": "Dimensões fixas do chrome da aplicação. --header-h é consumido pelos heros (offset do conteúdo abaixo do header).",
+    "header-h": { "$value": "5rem" },
+    "sidebar-w": { "$value": "16rem" },
+    "sheet-w": { "$value": "20rem" }
+  },
+
+  "container": {
+    "$type": "dimension",
+    "$description": "Padding horizontal do utilitário .container (globals.css). base no mobile, md a partir do breakpoint md.",
+    "padding": { "$value": "1rem" },
+    "padding-md": { "$value": "2rem" }
+  },
+
+  "breakpoint": {
+    "$type": "dimension",
+    "$description": "Breakpoints responsivos. Mapeados para o namespace --breakpoint-* do Tailwind v4 (usados em @custom-variant e no max-width do .container).",
+    "sm": { "$value": "40rem" },
+    "md": { "$value": "48rem" },
+    "lg": { "$value": "64rem" },
+    "xl": { "$value": "80rem" },
+    "2xl": { "$value": "96rem" }
+  },
+
+  "z-index": {
+    "$type": "number",
+    "$description": "Escala semântica de empilhamento para camadas flutuantes (overlays, popovers, toasts). Emitida como --z-* para uso direto via var() em CSS de componentes.",
+    "dropdown": { "$value": "1000" },
+    "sticky": { "$value": "1100" },
+    "modal-backdrop": { "$value": "1200" },
+    "modal": { "$value": "1300" },
+    "popover": { "$value": "1400" },
+    "tooltip": { "$value": "1500" },
+    "toast": { "$value": "1600" }
+  }
+}

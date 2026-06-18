@@ -1,0 +1,35 @@
+{
+  "$description": "Tokens de dimensão NÃO relacionados a espaçamento: raio de borda, tamanho de ícone e espessura de traço. Formato DTCG. Desvio intencional: $value de dimensão é string rem/px (não o objeto {value,unit}) — necessário para os calc() do shadcn e para emitir CSS vars diretas.",
+
+  "radius": {
+    "$type": "dimension",
+    "$description": "Escala de raio. `base` vira o --radius cru (padrão shadcn); a escala usa calc(var(--radius) ± Npx) para acompanhar o --radius dinamicamente.",
+    "none": { "$value": "0" },
+    "sm": { "$value": "calc(var(--radius) - 4px)" },
+    "base": { "$value": "0.5rem" },
+    "md": { "$value": "calc(var(--radius) - 2px)" },
+    "lg": { "$value": "var(--radius)" },
+    "xl": { "$value": "calc(var(--radius) + 4px)" },
+    "2xl": { "$value": "calc(var(--radius) + 8px)" },
+    "3xl": { "$value": "calc(var(--radius) + 16px)" },
+    "full": { "$value": "9999px" }
+  },
+
+  "icon": {
+    "$type": "dimension",
+    "$description": "Tamanhos canônicos de ícone (lidos por src/components/ui/icon.tsx via --icon-*).",
+    "xs": { "$value": "0.75rem" },
+    "sm": { "$value": "1rem" },
+    "md": { "$value": "1.25rem" },
+    "lg": { "$value": "1.5rem" },
+    "xl": { "$value": "2rem" },
+    "2xl": { "$value": "3rem" }
+  },
+
+  "stroke": {
+    "$type": "dimension",
+    "$description": "Espessuras de traço (bordas, anel de foco).",
+    "border": { "$value": "1px" },
+    "focus-ring": { "$value": "2px" }
+  }
+}

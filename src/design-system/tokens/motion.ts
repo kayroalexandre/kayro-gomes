@@ -1,41 +1,18 @@
 /**
- * Design System - Motion Tokens
- * Baseado na referência visual: heymessage.framer.ai
- * Animações suaves, transições fluidas, microinterações
+ * Design System — Motion Tokens (camada de composição p/ Framer Motion).
+ *
+ * Durações, easings e delays NÃO são definidos aqui: são GERADOS de motion.json
+ * (→ motion.generated.ts), a fonte da verdade única. Este arquivo só agrega
+ * essas constantes e adiciona as `variants` de composição usadas no app.
+ *
+ * Para editar valores de movimento, altere motion.json e rode `bun run design:build`.
  */
+import { delay, duration, easing } from './motion.generated'
 
 export const motion = {
-  // Durações (em segundos)
-  duration: {
-    instant: 0,
-    fast: 0.15,
-    normal: 0.3,
-    slow: 0.5,
-    slower: 0.7,
-    slowest: 1,
-  },
-
-  // Easing curves
-  easing: {
-    linear: 'linear',
-    easeIn: [0.4, 0, 1, 1],
-    easeOut: [0, 0, 0.2, 1],
-    easeInOut: [0.4, 0, 0.2, 1],
-    // Easing suave para scroll reveals
-    smooth: [0.25, 0.1, 0.25, 1],
-    // Easing para microinterações
-    snappy: [0.2, 0, 0, 1],
-  },
-
-  // Delays para sequências de animação
-  delay: {
-    none: 0,
-    xs: 0.05,
-    sm: 0.1,
-    md: 0.2,
-    lg: 0.3,
-    xl: 0.4,
-  },
+  duration,
+  easing,
+  delay,
 
   // Variantes de animação para Framer Motion
   variants: {
@@ -69,3 +46,6 @@ export const motion = {
     },
   },
 } as const
+
+export { delay, duration, easing } from './motion.generated'
+export type { DelayToken, DurationToken, EasingToken } from './motion.generated'
