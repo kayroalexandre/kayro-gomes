@@ -35,7 +35,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       // AdminBar aparece (logado), em vez de ficar coberto por ele.
       // Efeito vidro via utility aberta `glass` (tokens effects.glass),
       // compartilhada com o Footer e qualquer outro componente.
-      className="fixed top-[var(--adminbar-h,0px)] left-0 right-0 z-50 w-full glass transition-[top] duration-300"
+      className="fixed top-[var(--adminbar-h,0px)] left-0 right-0 z-50 w-full glass transition-[top] duration-[var(--duration-normal)]"
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className="container grid h-[var(--header-h)] grid-cols-[auto_1fr_auto] items-center">
