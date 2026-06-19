@@ -14,6 +14,10 @@ import path from 'path'
      - bezier literal (cubic-bezier(...), array de easing) → ERROR (preventivo)
      - dimensão solta (rounded-[Npx], text-[Npx], border-radius/letter-spacing
        literais em CSS)                                    → ERROR (exceções via disable inline)
+     - tipografia crua (escala de tamanho do Tailwind: text-xs..9xl) → ERROR
+     - cor crua (paleta do Tailwind: text-white, bg-gray-500…)       → ERROR
+   (as duas últimas foram promovidas de warning→error em 2026-06-19, após o
+    consumo crú zerar — definition of done do contrato de design system.)
 
    `max-w-[*rem]` e afins (medida de leitura) NÃO são sinalizados: largura de
    linha é semântica de layout, não falta de token.
@@ -128,7 +132,7 @@ function findDimensions(line: string, lang: 'css' | 'ts'): Hit[] {
   return hits
 }
 
-// no-raw-typography (warning): escala de TAMANHO crua do Tailwind, que fura a
+// no-raw-typography (error): escala de TAMANHO crua do Tailwind, que fura a
 // escala semântica (--text-body/--text-heading/…). text-[Npx] já é pego por
 // no-literal-dimension. PESO fica de fora de propósito: font-* é token-backed
 // (--font-weight-*) e é escape legítimo (ver docs/DESIGN-SYSTEM.md).
@@ -141,7 +145,7 @@ function findRawTypography(line: string, lang: 'css' | 'ts'): Hit[] {
   return hits
 }
 
-// no-raw-color (warning): classes de PALETA crua do Tailwind (text-white,
+// no-raw-color (error): classes de PALETA crua do Tailwind (text-white,
 // bg-gray-500…). Mira só os nomes nativos da paleta — os tokens semânticos
 // (foreground/card/primary/on-dark*/background-inverse/border/ring…) NÃO estão
 // nessa lista, então não casam. A sombra opcional cobre 50/100–900/950.
@@ -176,8 +180,10 @@ const RULE_SEVERITY: Record<string, Severity> = {
   'no-literal-color': 'error',
   'no-literal-bezier': 'error',
   'no-literal-dimension': 'error',
-  'no-raw-typography': 'warning',
-  'no-raw-color': 'warning',
+  // Promovidas de warning → error em 2026-06-19: o consumo de tipografia/cor crua
+  // zerou (definition of done atingido), então o contrato passa a bloquear o CI.
+  'no-raw-typography': 'error',
+  'no-raw-color': 'error',
 }
 
 /**

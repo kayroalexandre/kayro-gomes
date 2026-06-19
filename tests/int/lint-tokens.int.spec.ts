@@ -6,9 +6,11 @@ import { lintContent, type Violation } from '../../scripts/lint-tokens'
  * Especificação executável do linter de design tokens.
  *
  * Calibração ESTRITA (após tokenização completa do código):
- *   - cor literal    → severity 'error' (bloqueia o CI)
- *   - bezier literal → severity 'error' (bloqueia o CI; preventivo)
- *   - dimensão solta → severity 'error' (bloqueia o CI; exceções via disable inline)
+ *   - cor literal      → severity 'error' (bloqueia o CI)
+ *   - bezier literal   → severity 'error' (bloqueia o CI; preventivo)
+ *   - dimensão solta   → severity 'error' (bloqueia o CI; exceções via disable inline)
+ *   - tipografia crua  → severity 'error' (promovida de warning em 2026-06-19)
+ *   - cor crua         → severity 'error' (promovida de warning em 2026-06-19)
  *
  * O núcleo testado é a função pura `lintContent(filePath, content)`: sem I/O,
  * recebe o caminho (para decidir allowlist por arquivo) e o conteúdo.
@@ -133,12 +135,12 @@ describe('lintContent — dimensão literal (error)', () => {
   })
 })
 
-describe('lintContent — tipografia crua (warning, só tamanho)', () => {
-  it('sinaliza text-5xl como warning', () => {
+describe('lintContent — tipografia crua (error, só tamanho)', () => {
+  it('sinaliza text-5xl como error', () => {
     const vs = lintContent('src/heros/Foo.tsx', `<h1 className="text-5xl font-bold">`)
     expect(rules(vs)).toContain('no-raw-typography')
-    expect(bySeverity(vs, 'warning').map((v) => v.rule)).toContain('no-raw-typography')
-    expect(bySeverity(vs, 'error')).toHaveLength(0)
+    expect(bySeverity(vs, 'error').map((v) => v.rule)).toContain('no-raw-typography')
+    expect(bySeverity(vs, 'warning')).toHaveLength(0)
   })
 
   it('sinaliza text-sm e text-2xl', () => {
@@ -180,12 +182,12 @@ describe('lintContent — tipografia crua (warning, só tamanho)', () => {
   })
 })
 
-describe('lintContent — cor crua (warning)', () => {
-  it('sinaliza text-white como warning', () => {
+describe('lintContent — cor crua (error)', () => {
+  it('sinaliza text-white como error', () => {
     const vs = lintContent('src/components/Foo.tsx', `className="text-white"`)
     expect(rules(vs)).toContain('no-raw-color')
-    expect(bySeverity(vs, 'warning').map((v) => v.rule)).toContain('no-raw-color')
-    expect(bySeverity(vs, 'error')).toHaveLength(0)
+    expect(bySeverity(vs, 'error').map((v) => v.rule)).toContain('no-raw-color')
+    expect(bySeverity(vs, 'warning')).toHaveLength(0)
   })
 
   it('sinaliza bg-gray-500, text-red-500, border-zinc-200', () => {
