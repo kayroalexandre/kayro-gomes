@@ -1,8 +1,9 @@
 # Design System — Registro de Layout & Espaçamento
 
-Complemento do [contrato de consumo](./DESIGN-SYSTEM.md). Enquanto o `DESIGN-SYSTEM.md`
-define o **vocabulário** (tipografia, cor, foco), este documento é o **registro vivo**
-da auditoria de **estrutura**: containers, hierarquia de `div`s, padding/margin, gaps,
+Parte da trilogia do design system, ao lado do [contrato de consumo](./DESIGN-SYSTEM.md)
+(**vocabulário**) e do [guia de uso de componentes](./DESIGN-SYSTEM-COMPONENTS.md)
+(**uso aplicado + receitas por contexto**). Este documento é o **registro vivo** da
+auditoria de **estrutura**: containers, hierarquia de `div`s, padding/margin, gaps,
 alinhamento e os padrões de espaçamento por tipo de conteúdo (chrome, cards, seções…).
 
 Vai sendo preenchido componente a componente conforme a auditoria avança.
@@ -89,7 +90,9 @@ lateral manualmente (`px-4 md:px-8`) — usar `.container`.
 ### Header — ✅ auditado (2026-06-19)
 
 Arquivos: [Component.client.tsx](../src/Header/Component.client.tsx),
-[Nav/index.tsx](../src/Header/Nav/index.tsx), [Nav/NavItem.tsx](../src/Header/Nav/NavItem.tsx).
+[Nav/index.tsx](../src/Header/Nav/index.tsx), [Nav/NavItem.tsx](../src/Header/Nav/NavItem.tsx),
+[Nav/MobileMenu.tsx](../src/Header/Nav/MobileMenu.tsx),
+[Nav/getNavItemHref.ts](../src/Header/Nav/getNavItemHref.ts).
 
 **Estrutura de container:**
 
@@ -97,8 +100,8 @@ Arquivos: [Component.client.tsx](../src/Header/Component.client.tsx),
 <header> fixed, glass, h=--header-h
 └── .container  → grid grid-cols-[auto_1fr_auto] items-center
     ├── [auto] Logo (Link)
-    ├── [1fr]  <nav> justify-self-center  → itens HeaderNavItem
-    └── [auto] ações: <div> flex gap-2 justify-self-end → Search + ThemeToggle
+    ├── [1fr]  <nav> hidden md:flex justify-self-center  → itens HeaderNavItem
+    └── [auto] ações: <div> flex gap-2 justify-self-end → Search + ThemeToggle + MobileMenu
 ```
 
 - **Grid de 3 colunas** `[auto_1fr_auto]`: logo à esquerda, nav perfeitamente
@@ -117,6 +120,14 @@ Arquivos: [Component.client.tsx](../src/Header/Component.client.tsx),
 - **Itens de nav:** componente `HeaderNavItem` (dinâmico). **16px** (`type-body`). Ativo =
   `type-body-strong text-foreground`; inativo = `type-body text-muted-foreground hover:text-foreground`.
 - **Logo:** `text-heading` = **24px** (`scale-05`), `font-semibold tracking-tight`.
+- **Mobile (`< md`):** o `<nav>` central é `hidden md:flex` (em telas estreitas vazava
+  sobre o logo no grid `1fr`). Os links migram para o `MobileMenu`: botão hambúrguer
+  `size-10` glass (mesmo footprint das ações) que abre um painel dropdown ancorado em
+  `absolute top-full left-0 right-0`. O painel usa superfície **sólida** (`bg-background`),
+  **não `glass`** — o vidro tem só ~50% de opacidade e ficaria ilegível sobre o conteúdo.
+  Fecha com Escape, clique-fora e ao navegar (`aria-expanded`/`aria-controls`). Os itens
+  com estado ativo são computados uma vez em `index.tsx` (`getNavItemHref`) e
+  compartilhados entre o nav desktop e o mobile.
 
 **Alinhamento (vertical + horizontal):** o eixo vertical é garantido por `items-center`
 em **todos** os níveis — no grid do header, no `<nav>`, na `<div>` de ações e no
@@ -128,9 +139,10 @@ posicionar; o alinhamento é responsabilidade do grid + `items-center`.
 
 **Pendências:** `useHeaderContrast.ts` parece órfão (ver auditoria geral).
 
-### Footer — ⏳ pendente
+### Footer — 🟡 parcial (tipografia ✅ 2026-06-19)
 
-Arquivo: [Component.tsx](../src/Footer/Component.tsx). Já mapeado, ainda **não corrigido**.
+Arquivo: [Component.tsx](../src/Footer/Component.tsx). Tipografia já tokenizada; ajustes
+estruturais/cor ainda pendentes.
 
 **Estrutura de container:**
 
@@ -141,8 +153,9 @@ Arquivo: [Component.tsx](../src/Footer/Component.tsx). Já mapeado, ainda **não
     └── <div> flex flex-col gap-6 md:items-end → <nav> de links
 ```
 
-**Vazamentos já identificados (a corrigir em rodada dedicada):**
-- `text-sm` cru (parágrafo e nav) → receita `type-body-small` / `type-body`.
-- Logo: já tokenizada (componente compartilhado com o Header).
-- Opacidades de cor (`border-border/10`) — avaliar token de borda dedicado.
-- Confirmar escala de espaçamento (`py-16`, `gap-10`) vs hierarquia de seções.
+**Estado:**
+
+- ✅ `text-sm` cru (parágrafo e nav) → `text-body-sm` (tokenizado em 2026-06-19).
+- ✅ Logo: tokenizada (componente compartilhado com o Header).
+- ⏳ Opacidades de cor (`border-border/10`) — avaliar token de borda dedicado.
+- ⏳ Confirmar escala de espaçamento (`py-16`, `gap-10`) vs hierarquia de seções.

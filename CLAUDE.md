@@ -74,7 +74,10 @@ Tokens are authored in **`src/design-system/tokens/*.json`** (DTCG format — th
 - **Tailwind v4 is CSS-first**: the `@theme inline` mapping (`--color-*`, `--text-*`, `--font-*`, `--ease-*`, …) lives in the generated `tokens.css`, not in a JS config. `tailwind.config.mjs` exists **only** to configure the `@tailwindcss/typography` `prose` plugin (CMS rich text). It must reference CSS vars (`var(--text-scale-*)`), never the internal shape of `typography.json` — coupling JS to the JSON shape has broken the build before.
 - `--font-sans`/`--font-mono` (Google Sans Flex/Code) are owned by `next/font` and set as the `<html>` className; typography tokens point at them via `var()`. Don't redefine them as literals.
 - Framer Motion easing/duration constants come from `motion.generated.ts` (via `@/design-system/tokens/motion`) — don't hardcode bezier curves.
-- **Consumption contract:** how to apply these tokens in components — the canonical vocabulary (`type-*` typography, semantic + contrast colors, `focus-ring`, the `design-lint-disable-line` escape) and what the anti-hardcode linter (`bun run lint:tokens`) enforces — lives in **`docs/DESIGN-SYSTEM.md`**. Read it before styling components/blocks/heros.
+- **Design-system docs (trilogy)** — read before styling components/blocks/heros:
+  - **`docs/DESIGN-SYSTEM.md`** — consumption contract: the canonical vocabulary (`type-*` typography, semantic + contrast colors, `focus-ring`, the `design-lint-disable-line` escape) and what the anti-hardcode linter (`bun run lint:tokens`) enforces.
+  - **`docs/DESIGN-SYSTEM-COMPONENTS.md`** — applied usage: component catalog (Button/Card/Input/Icon/…), recipes by context/need, cross-cutting best practices, anti-patterns, and a token quick-reference.
+  - **`docs/DESIGN-SYSTEM-LAYOUT.md`** — structure/spacing registry + per-component layout audit.
 
 ## Workflow essentials (see AGENTS.md for the full version)
 

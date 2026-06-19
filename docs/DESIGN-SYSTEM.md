@@ -4,6 +4,11 @@
 > Define o vocabulário canônico (tipografia, cor, dimensão, motion, foco) e o que a
 > trava anti-hardcode (`bun run lint:tokens`) cobra. Ao criar/refatorar componentes,
 > blocos, heros e seções, siga este contrato.
+>
+> **Trilogia do design system:** este documento é o **vocabulário**; veja também
+> [`DESIGN-SYSTEM-COMPONENTS.md`](./DESIGN-SYSTEM-COMPONENTS.md) (uso de componentes +
+> receitas por contexto) e [`DESIGN-SYSTEM-LAYOUT.md`](./DESIGN-SYSTEM-LAYOUT.md)
+> (estrutura/espaçamento + auditoria por componente).
 
 ## Princípio
 
@@ -19,7 +24,7 @@ Tailwind crua de paleta/escala (`text-white`, `text-5xl`), provavelmente existe 
 
 ## O contrato (resumo)
 
-| Eixo | Canônico | Proibido (vira `warning` → `error`) |
+| Eixo | Canônico | Proibido (`error` — bloqueia o CI) |
 | --- | --- | --- |
 | **Tipografia** | `type-*` (receita completa); escape componível `text-*` semântico / `font-*` / `leading-*` / `tracking-*` | escala crua do Tailwind (`text-5xl`, `text-sm`), `text-[14px]` |
 | **Cor** | semânticos shadcn (`text-foreground`, `bg-card`, `text-muted-foreground`, `bg-primary`…); contraste sobre mídia (`text-on-dark*`/`text-on-light*`); superfície invertida (`bg-background-inverse`, `text-foreground-inverse`) | paleta crua (`text-white`, `bg-gray-500`, `text-red-500`), `#hex`, `oklch(...)` solto |
@@ -88,16 +93,16 @@ anote `// design-lint-disable-line <motivo>`.
 
 `bun run lint:tokens` (e `bun run lint:tokens:check` no CI) varre o código de consumo em `src/`.
 
-- **Hoje (bloqueiam o CI — `error`):** `no-literal-color` (`#hex`, `rgb/hsl/oklch`),
+- **Bloqueiam o CI (`error`):** `no-literal-color` (`#hex`, `rgb/hsl/oklch`),
   `no-literal-bezier` (`cubic-bezier`, array de easing), `no-literal-dimension`
-  (`rounded-[Npx]`, `text-[Npx]`, `border-radius`/`letter-spacing` literais em CSS).
-- **Em adoção (`warning`):** `no-raw-typography` (escala/peso cru do Tailwind) e
-  `no-raw-color` (paleta crua). Entram como aviso para **guiar** a refatoração de
-  componentes sem quebrar o CI.
+  (`rounded-[Npx]`, `text-[Npx]`, `border-radius`/`letter-spacing` literais em CSS),
+  `no-raw-typography` (escala de tamanho crua do Tailwind) e `no-raw-color` (paleta crua).
 
-**Definition of done da consistência:** quando o consumo de tipografia/cor crua zerar,
-`no-raw-typography` e `no-raw-color` são promovidas de `warning` para `error` (em
-`scripts/lint-tokens.ts`, `RULE_SEVERITY`). A partir daí, o contrato é obrigatório no CI.
+**Definition of done da consistência — atingido (2026-06-19):** `no-raw-typography` e
+`no-raw-color` nasceram como `warning` para **guiar** a refatoração sem quebrar o CI;
+quando o consumo crú zerou, foram **promovidas a `error`** em `scripts/lint-tokens.ts`
+(`RULE_SEVERITY`). O contrato agora é **obrigatório no CI** — tipografia/cor crua quebram
+o build; use os tokens semânticos ou o escape `// design-lint-disable-line <motivo>`.
 
 **Escape:** para os raros casos legítimos, `// design-lint-disable-line <motivo>` na
 própria linha (sempre com o motivo). Arquivos gerados/de infra estão na `FILE_ALLOWLIST`.
