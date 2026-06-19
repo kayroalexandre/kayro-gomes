@@ -9,6 +9,7 @@ import RichText from '@/components/RichText'
 import type { Project } from '@/payload-types'
 
 import { ProjectHero } from '@/heros/ProjectHero'
+import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import { generateMeta } from '@/utilities/generateMeta'
 import { queryDocBySlug } from '@/utilities/queryDocBySlug'
 
@@ -44,6 +45,10 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
   return (
     <article className="pt-0 pb-16">
+      {/* ProjectHero tem mídia de fundo escura (igual ao PostHero): força o header
+          em tema dark para o contraste do logo/nav sobre a imagem. */}
+      <PageHeaderTheme theme="dark" />
+
       {/* Allows redirects for valid projects too */}
       <PayloadRedirects disableNotFound url={url} />
 

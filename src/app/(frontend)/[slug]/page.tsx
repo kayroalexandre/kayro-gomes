@@ -8,6 +8,7 @@ import React from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
+import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import { generateMeta } from '@/utilities/generateMeta'
 import { queryDocBySlug } from '@/utilities/queryDocBySlug'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
@@ -63,9 +64,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <article className={`${hasHero ? 'pt-0' : 'pt-24'} pb-24`}>
-      {/* PageHeaderTheme removido — o Header agora usa useHeaderContrast para detectar
-          automaticamente o fundo atrás dele (highImpact hero tem imagem escura).
-          Forçar 'light' conflita com o contraste dinâmico. */}
+      {/* O hero highImpact tem imagem de fundo escura full-bleed: força o header em
+          tema dark para o contraste do logo/nav (mesmo mecanismo de posts/projetos).
+          Os demais heros (medium/low/none) mantêm o tema padrão. */}
+      {hero?.type === 'highImpact' && <PageHeaderTheme theme="dark" />}
+
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
