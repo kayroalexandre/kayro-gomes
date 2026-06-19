@@ -528,6 +528,11 @@
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
 }
 
+@utility focus-ring {
+  outline: var(--stroke-focus-ring) solid var(--ring);
+  outline-offset: var(--stroke-focus-ring);
+}
+
 @utility type-title-hero {
   font-family: var(--title-hero-font-family);
   font-weight: var(--title-hero-font-weight);

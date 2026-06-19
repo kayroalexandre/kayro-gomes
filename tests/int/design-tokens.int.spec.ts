@@ -66,3 +66,17 @@ describe('tokens.css — contraste sobre mídia exposto no @theme', () => {
     })
   }
 })
+
+describe('tokens.css — @utility focus-ring tokenizado', () => {
+  const block = tokensCss.match(/@utility focus-ring \{[^}]*\}/)?.[0] ?? ''
+
+  it('declara o utilitário @utility focus-ring', () => {
+    expect(block).not.toBe('')
+  })
+
+  it('usa os tokens --stroke-focus-ring e --ring, sem literais de px', () => {
+    expect(block).toContain('var(--stroke-focus-ring)')
+    expect(block).toContain('var(--ring)')
+    expect(block).not.toMatch(/\d+px/)
+  })
+})

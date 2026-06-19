@@ -389,6 +389,17 @@ async function main() {
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
 }`
 
+  // Anel de foco acessível e componível: tokeniza a espessura (size.json:
+  // stroke.focus-ring) e a cor (--ring semântico, reativo ao tema). Aplicar via
+  // variante, ex.: focus-visible:focus-ring. Espelha a regra global :focus-visible
+  // de globals.css, agora sem o literal 2px. Os primitivos shadcn (button/input/…)
+  // mantêm sua própria receita inline (ring-4/outline-1) — este utilitário é para
+  // elementos custom (skip-link, navegação, CTAs).
+  const focusRingUtility = `@utility focus-ring {
+  outline: var(--stroke-focus-ring) solid var(--ring);
+  outline-offset: var(--stroke-focus-ring);
+}`
+
   // Estilos de texto compostos (recipes) — "type styles" do SDS. Cada type-*
   // aplica família + peso + tamanho + line-height + letter-spacing de uma vez.
   const TYPE_RECIPES: Array<{
@@ -420,7 +431,7 @@ async function main() {
 }`,
   ).join('\n\n')
 
-  const utilities = `${glassUtility}\n\n${typeUtilities}`
+  const utilities = `${glassUtility}\n\n${focusRingUtility}\n\n${typeUtilities}`
 
   const cssOutput = `/* =========================================================================
    ESTE ARQUIVO É GERADO AUTOMATICAMENTE POR scripts/build-tokens.ts.
@@ -449,7 +460,7 @@ ${utilities}
     'overlay-dark', 'overlay-fade',
     'header-h',
     'icon-sm', 'icon-md', 'icon-lg', 'icon-xl', 'icon-2xl',
-    'background', 'foreground', 'primary', 'border', 'ring',
+    'background', 'foreground', 'primary', 'border', 'ring', 'stroke-focus-ring',
     'radius', 'spacing', 'font-sans', 'font-mono',
   ]
   const missing = REQUIRED_VARS.filter((v) => !cssOutput.includes(`--${v}:`))
