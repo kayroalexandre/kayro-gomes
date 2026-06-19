@@ -325,6 +325,14 @@ async function main() {
   const themeShadow: Entry[] = group(effects.shadow, 'shadow-')
   const themeBlur: Entry[] = group(effects.blur, 'blur-')
 
+  // Contraste sobre mídia: expõe os tokens theme-agnósticos (--text-on-*) como
+  // cores Tailwind (--color-on-*), habilitando text-on-dark / bg-on-dark-subtle /
+  // border-on-light para texto e superfícies sobre imagem/vídeo (C2 do design).
+  const themeContrast: Entry[] = contrastEntries.map((e) => ({
+    name: `color-${e.name.replace(/^text-/, '')}`,
+    value: `var(--${e.name})`,
+  }))
+
   // ---------------------------------------------------------------------
   // Montagem do CSS
   // ---------------------------------------------------------------------
@@ -358,6 +366,7 @@ async function main() {
 
   const theme = [
     section('Colors — semantic + aliases', themeColors),
+    section('Contrast over media (on-dark-*/on-light-*)', themeContrast),
     section('Radius scale', radiusScale),
     section('Font Families', themeFont),
     section('Font Weights', themeWeight),

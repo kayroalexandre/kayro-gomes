@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest'
 
 import typography from '../../src/design-system/tokens/typography.json'
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
+
+const tokensCss = readFileSync(
+  resolve(__dirname, '../../src/design-system/tokens.css'),
+  'utf-8',
+)
 
 /**
  * Guard de estrutura: a tipografia semântica deve ser 100% definida no JSON.
@@ -40,4 +47,22 @@ describe('typography.json — grupos semânticos definem line-height e letter-sp
     const body = (typography as unknown as TypographyJson).body
     expect(isLeaf(body['line-height-relaxed']), 'body.line-height-relaxed ausente').toBe(true)
   })
+})
+
+describe('tokens.css — contraste sobre mídia exposto no @theme', () => {
+  const CONTRAST_THEME_VARS = [
+    '--color-on-dark',
+    '--color-on-dark-muted',
+    '--color-on-dark-subtle',
+    '--color-on-light',
+    '--color-on-light-muted',
+    '--color-on-light-subtle',
+  ] as const
+
+  for (const v of CONTRAST_THEME_VARS) {
+    it(`expõe ${v} no @theme`, () => {
+      // `${v}: var(` casa a linha exata (o sufixo "-muted:"/"-subtle:" difere de ": var(").
+      expect(tokensCss).toContain(`${v}: var(`)
+    })
+  }
 })

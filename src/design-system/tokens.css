@@ -410,6 +410,14 @@
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
 
+  /* Contrast over media (on-dark-*/on-light-*) */
+  --color-on-dark: var(--text-on-dark);
+  --color-on-dark-muted: var(--text-on-dark-muted);
+  --color-on-dark-subtle: var(--text-on-dark-subtle);
+  --color-on-light: var(--text-on-light);
+  --color-on-light-muted: var(--text-on-light-muted);
+  --color-on-light-subtle: var(--text-on-light-subtle);
+
   /* Radius scale */
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 16px);
