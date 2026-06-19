@@ -91,7 +91,7 @@ export const AdminBar: React.FC<{
         // no topo que desloca o Header para baixo (via CSS var
         // `--adminbar-h`, atualizada por ResizeObserver aqui).
         baseClass,
-        'fixed top-0 left-0 right-0 z-[9999] py-2 bg-black text-white',
+        'fixed top-0 left-0 right-0 z-[9999] py-2 bg-black text-on-dark', // design-lint-disable-line bg-black: chrome fixo do admin (sempre escuro, independe do tema)
         {
           block: show,
           hidden: !show,
@@ -101,11 +101,11 @@ export const AdminBar: React.FC<{
       <div className="container">
         <PayloadAdminBar
           {...adminBarProps}
-          className="py-2 text-white"
+          className="py-2 text-on-dark"
           classNames={{
-            controls: 'font-medium text-white',
-            logo: 'text-white',
-            user: 'text-white',
+            controls: 'font-medium text-on-dark',
+            logo: 'text-on-dark',
+            user: 'text-on-dark',
           }}
           cmsURL={getClientSideURL()}
           collectionSlug={collection}

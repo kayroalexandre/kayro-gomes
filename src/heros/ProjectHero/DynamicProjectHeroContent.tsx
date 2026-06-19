@@ -71,7 +71,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
               href={liveUrl}
               rel="noopener noreferrer"
               target="_blank"
-              className="inline-flex items-center gap-2 rounded-md bg-white text-black px-4 py-2 text-sm font-medium hover:bg-white/90"
+              className="inline-flex items-center gap-2 rounded-md bg-on-dark text-on-light px-4 py-2 text-sm font-medium hover:bg-on-dark/90"
             >
               Ver projeto <ExternalLink className="size-4" aria-hidden />
             </a>
@@ -82,7 +82,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
               href={repoUrl}
               rel="noopener noreferrer"
               target="_blank"
-              className="inline-flex items-center gap-2 rounded-md border border-white/30 px-4 py-2 text-sm font-medium hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-md border border-on-dark/30 px-4 py-2 text-sm font-medium hover:bg-on-dark/10"
               style={{ color: ctaSecondaryColor }}
             >
               <svg aria-hidden className="size-4" viewBox="0 0 24 24" fill="currentColor">

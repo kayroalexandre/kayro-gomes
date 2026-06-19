@@ -10,7 +10,7 @@ const scrollIndicatorVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-white/60',
+        default: 'text-on-dark/60',
         muted: 'text-muted-foreground',
       },
       size: {

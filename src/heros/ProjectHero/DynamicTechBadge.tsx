@@ -18,7 +18,7 @@ export const DynamicTechBadge: React.FC<DynamicTechBadgeProps> = ({ children }) 
   return (
     <li
       ref={ref as React.RefObject<HTMLLIElement>}
-      className="text-xs px-2 py-1 rounded bg-white/10 border border-white/20"
+      className="text-xs px-2 py-1 rounded bg-on-dark/10 border border-on-dark/20"
       style={{ color }}
     >
       {children}
