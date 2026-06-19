@@ -6,7 +6,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { Mouse } from 'lucide-react'
 
 const scrollIndicatorVariants = cva(
-  'inline-flex items-center gap-2 text-xs font-medium transition-opacity duration-300',
+  'inline-flex items-center gap-2 font-medium transition-opacity duration-300',
   {
     variants: {
       variant: {
@@ -14,9 +14,10 @@ const scrollIndicatorVariants = cva(
         muted: 'text-muted-foreground',
       },
       size: {
-        default: 'text-xs',
+        // 12px: menor degrau da escala SDS (scale-01); sem util semântico nomeado.
+        default: 'text-scale-01',
         sm: 'text-[10px]', // design-lint-disable-line micro-label decorativo abaixo da escala SDS (mín. 12px)
-        lg: 'text-sm',
+        lg: 'text-body-sm',
       },
     },
     defaultVariants: {

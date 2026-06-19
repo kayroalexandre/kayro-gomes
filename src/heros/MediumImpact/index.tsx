@@ -48,7 +48,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
               <Media imgClassName="rounded-xl shadow-lg" priority resource={media} />
             </div>
             {media?.caption && (
-              <div className="mt-4 text-sm text-muted-foreground">
+              <div className="mt-4 text-body-sm text-muted-foreground">
                 <RichText data={media.caption} enableGutter={false} />
               </div>
             )}

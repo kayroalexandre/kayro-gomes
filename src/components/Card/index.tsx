@@ -57,7 +57,7 @@ export const Card: React.FC<{
                 return (
                   <span
                     key={index}
-                    className="text-xs font-semibold text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full"
+                    className="text-scale-01 font-semibold text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full"
                   >
                     {categoryTitle}
                   </span>
@@ -69,14 +69,14 @@ export const Card: React.FC<{
           </div>
         )}
         {titleToUse && (
-          <h3 className="text-lg md:text-xl font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
+          <h3 className="text-body-lg font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
             <Link className="hover:no-underline" href={href} ref={link.ref}>
               {titleToUse}
             </Link>
           </h3>
         )}
         {description && (
-          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mt-1">
+          <p className="text-body-sm text-muted-foreground leading-relaxed line-clamp-3 mt-1">
             {sanitizedDescription}
           </p>
         )}

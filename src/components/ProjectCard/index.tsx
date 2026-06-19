@@ -43,18 +43,18 @@ export const ProjectCard: React.FC<{
         )}
       </div>
       <div className="p-5 flex flex-col gap-3 flex-1">
-        <h3 className="text-lg md:text-xl font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
+        <h3 className="text-body-lg font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
           <Link className="hover:no-underline" href={`/projetos/${slug}`} ref={link.ref}>
             {title}
           </Link>
         </h3>
-        {summary && <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{summary}</p>}
+        {summary && <p className="text-body-sm text-muted-foreground leading-relaxed line-clamp-3">{summary}</p>}
         {techList.length > 0 && (
           <ul className="flex flex-wrap gap-1.5 mt-auto">
             {techList.slice(0, 5).map((t) => (
               <li
                 key={t}
-                className="text-xs font-semibold px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/10 transition-all duration-200 hover:border-primary/30 hover:bg-primary/5"
+                className="text-scale-01 font-semibold px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/10 transition-all duration-200 hover:border-primary/30 hover:bg-primary/5"
               >
                 {t}
               </li>

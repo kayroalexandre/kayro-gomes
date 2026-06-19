@@ -67,7 +67,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       <PageHeaderTheme theme="light" />
       <div className="container mb-12">
         <div className="max-w-none text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 text-foreground">Busca</h1>
+          <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-8 text-foreground">Busca</h1>
 
           <div className="max-w-[50rem] mx-auto">
             <Search />
@@ -80,12 +80,12 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       ) : (
         <div className="container">
           <div className="text-center py-16 px-4 border border-dashed rounded-lg bg-card/20 max-w-[50rem] mx-auto">
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-body-lg">
               {query
                 ? `Nenhum resultado encontrado para "${query}".`
                 : 'Nenhum resultado encontrado.'}
             </p>
-            <p className="text-sm text-muted-foreground/60 mt-1">
+            <p className="text-body-sm text-muted-foreground/60 mt-1">
               Tente pesquisar com outros termos ou palavras-chave.
             </p>
           </div>

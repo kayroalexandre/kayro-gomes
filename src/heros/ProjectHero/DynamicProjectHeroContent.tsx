@@ -40,7 +40,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
     <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
       <h1
         ref={titleRef as React.RefObject<HTMLHeadingElement>}
-        className="mb-6 text-3xl md:text-5xl lg:text-6xl"
+        className="mb-6 text-heading-lg md:text-title lg:text-title-lg"
         style={{ color: titleColor }}
       >
         {title}
@@ -49,7 +49,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
       {summary && (
         <p
           ref={summaryRef as React.RefObject<HTMLParagraphElement>}
-          className="text-lg max-w-2xl mb-6"
+          className="text-body-lg max-w-2xl mb-6"
           style={{ color: summaryColor }}
         >
           {summary}
@@ -71,7 +71,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
               href={liveUrl}
               rel="noopener noreferrer"
               target="_blank"
-              className="inline-flex items-center gap-2 rounded-md bg-on-dark text-on-light px-4 py-2 text-sm font-medium hover:bg-on-dark/90"
+              className="inline-flex items-center gap-2 rounded-md bg-on-dark text-on-light px-4 py-2 text-body-sm font-medium hover:bg-on-dark/90"
             >
               Ver projeto <ExternalLink className="size-4" aria-hidden />
             </a>
@@ -82,7 +82,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
               href={repoUrl}
               rel="noopener noreferrer"
               target="_blank"
-              className="inline-flex items-center gap-2 rounded-md border border-on-dark/30 px-4 py-2 text-sm font-medium hover:bg-on-dark/10"
+              className="inline-flex items-center gap-2 rounded-md border border-on-dark/30 px-4 py-2 text-body-sm font-medium hover:bg-on-dark/10"
               style={{ color: ctaSecondaryColor }}
             >
               <svg aria-hidden className="size-4" viewBox="0 0 24 24" fill="currentColor">

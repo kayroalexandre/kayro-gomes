@@ -14,7 +14,7 @@ export const Logo = ({ className }: Props) => {
   return (
     <span
       className={clsx(
-        'inline-flex items-center font-semibold text-lg tracking-tight whitespace-nowrap',
+        'inline-flex items-center font-semibold text-heading tracking-tight whitespace-nowrap',
         className,
       )}
       aria-label="Kayro Gomes — Início"

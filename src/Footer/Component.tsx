@@ -17,14 +17,14 @@ export async function Footer() {
           <Link className="flex items-center hover:opacity-95 transition-opacity" href="/">
             <Logo className="text-foreground" />
           </Link>
-          <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+          <p className="text-body-sm text-muted-foreground max-w-xs leading-relaxed">
             Portfólio profissional com projetos, artigos e experiências.
           </p>
         </div>
 
         <div className="flex flex-col gap-6 md:items-end">
           <div className="flex flex-col md:flex-row gap-6 md:items-center">
-            <nav className="flex flex-col md:flex-row gap-6 text-sm text-muted-foreground">
+            <nav className="flex flex-col md:flex-row gap-6 text-body-sm text-muted-foreground">
               {navItems.map(({ link }, i) => {
                 return <CMSLink key={i} {...link} className="hover:text-foreground transition-colors duration-200" />
               })}

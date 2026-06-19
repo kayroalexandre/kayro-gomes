@@ -19,7 +19,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) 
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6, ease: easing.smooth }}
       >
-        <div className="max-w-[48rem] prose-h2:text-4xl md:prose-h2:text-5xl prose-h2:mb-4 prose-p:text-lg prose-p:text-muted-foreground">
+        <div className="max-w-[48rem] prose-h2:text-title-sm md:prose-h2:text-title prose-h2:mb-4 prose-p:text-body-lg prose-p:text-muted-foreground">
           {richText && <RichText className="mb-0" data={richText} enableGutter={false} />}
         </div>
         <div className="flex flex-col gap-4 md:gap-3 shrink-0">

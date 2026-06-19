@@ -131,7 +131,7 @@ export const FormBlock: React.FC<
             </div>
           )}
           {error && (
-            <div className="p-3 mb-6 text-sm rounded-md border border-destructive bg-destructive/10 text-destructive-foreground">
+            <div className="p-3 mb-6 text-body-sm rounded-md border border-destructive bg-destructive/10 text-destructive-foreground">
               {`${error.status || 'Erro'}: ${error.message || 'Ocorreu um problema ao enviar o formulário.'}`}
             </div>
           )}

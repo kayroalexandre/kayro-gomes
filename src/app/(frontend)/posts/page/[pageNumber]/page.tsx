@@ -43,8 +43,8 @@ export default async function Page({ params: paramsPromise }: Args) {
     <div className="py-16 md:py-24">
       <PageHeaderTheme theme="light" />
       <div className="container mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-foreground">Blog</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl">
+        <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-4 text-foreground">Blog</h1>
+        <p className="text-body-lg text-muted-foreground max-w-2xl">
           Compartilhando aprendizados, tutoriais e reflexões sobre engenharia de software e desenvolvimento web.
         </p>
       </div>

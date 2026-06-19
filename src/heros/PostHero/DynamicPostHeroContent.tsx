@@ -33,7 +33,7 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
     <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
       <div
         ref={categoryRef as React.RefObject<HTMLDivElement>}
-        className="text-sm mb-6"
+        className="text-body-sm mb-6"
         style={{ color: categoryColor }}
       >
         {categories?.map((category, index) => {
@@ -56,7 +56,7 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
       <div className="">
         <h1
           ref={titleRef as React.RefObject<HTMLHeadingElement>}
-          className="mb-6 text-3xl md:text-5xl lg:text-6xl"
+          className="mb-6 text-heading-lg md:text-title lg:text-title-lg"
           style={{ color: titleColor }}
         >
           {title}
@@ -69,7 +69,7 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
             <div className="flex flex-col gap-1">
               <p
                 ref={labelRef as React.RefObject<HTMLParagraphElement>}
-                className="text-sm"
+                className="text-body-sm"
                 style={{ color: labelColor }}
               >
                 Autor
@@ -88,7 +88,7 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
           <div className="flex flex-col gap-1">
             <p
               ref={labelRef as React.RefObject<HTMLParagraphElement>}
-              className="text-sm"
+              className="text-body-sm"
               style={{ color: labelColor }}
             >
               Publicado em
