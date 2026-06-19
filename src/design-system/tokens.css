@@ -410,7 +410,7 @@
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
 
-  /* Contrast over media (on-dark-*/on-light-*) */
+  /* Contrast over media (on-dark / on-light) */
   --color-on-dark: var(--text-on-dark);
   --color-on-dark-muted: var(--text-on-dark-muted);
   --color-on-dark-subtle: var(--text-on-dark-subtle);

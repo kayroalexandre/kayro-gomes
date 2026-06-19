@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
+import postcss from 'postcss'
+
 import typography from '../../src/design-system/tokens/typography.json'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
@@ -65,6 +67,16 @@ describe('tokens.css — contraste sobre mídia exposto no @theme', () => {
       expect(tokensCss).toContain(`${v}: var(`)
     })
   }
+})
+
+describe('tokens.css — saída é CSS sintaticamente válido', () => {
+  // Guard que reproduz o caminho de build (PostCSS/Tailwind). Os outros guards
+  // só checam substrings; este parseia o CSS gerado e falha se um título de
+  // seção/valor produzir comentário ou sintaxe inválida (ex.: `*/` dentro de um
+  // comentário fecha-o cedo). Fecha o buraco do gate por-task, que não parseava CSS.
+  it('parseia sem erro no PostCSS', () => {
+    expect(() => postcss.parse(tokensCss, { from: 'tokens.css' })).not.toThrow()
+  })
 })
 
 describe('tokens.css — @utility focus-ring tokenizado', () => {

@@ -366,7 +366,7 @@ async function main() {
 
   const theme = [
     section('Colors — semantic + aliases', themeColors),
-    section('Contrast over media (on-dark-*/on-light-*)', themeContrast),
+    section('Contrast over media (on-dark / on-light)', themeContrast),
     section('Radius scale', radiusScale),
     section('Font Families', themeFont),
     section('Font Weights', themeWeight),
