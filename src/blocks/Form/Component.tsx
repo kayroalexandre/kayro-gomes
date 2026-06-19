@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
+import { Icon } from '@/components/ui/icon'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import { Loader2 } from 'lucide-react'
 
@@ -126,12 +127,12 @@ export const FormBlock: React.FC<
           )}
           {isLoading && !hasSubmitted && (
             <div className="flex items-center gap-2 py-4 text-muted-foreground justify-center">
-              <Loader2 className="size-4 animate-spin" />
+              <Icon icon={Loader2} size="sm" className="animate-spin" />
               <span>Enviando dados, por favor aguarde...</span>
             </div>
           )}
           {error && (
-            <div className="p-3 mb-6 text-body-sm rounded-md border border-destructive bg-destructive/10 text-destructive-foreground">
+            <div className="p-3 mb-6 text-body-sm rounded-md border border-destructive bg-destructive/10 text-destructive">
               {`${error.status || 'Erro'}: ${error.message || 'Ocorreu um problema ao enviar o formulário.'}`}
             </div>
           )}

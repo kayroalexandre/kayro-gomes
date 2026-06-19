@@ -24,7 +24,7 @@ export const CallToActionBlock: React.FC<CTABlockProps> = ({ links, richText }) 
         </div>
         <div className="flex flex-col gap-4 md:gap-3 shrink-0">
           {(links || []).map(({ link }, i) => {
-            return <CMSLink key={i} size="lg" className="rounded-full px-8" {...link} />
+            return <CMSLink key={i} size="lg" {...link} />
           })}
         </div>
       </motion.div>

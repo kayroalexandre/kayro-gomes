@@ -3,6 +3,7 @@
 import React from 'react'
 
 import { useDynamicTextColor } from '@/utilities/useDynamicTextColor'
+import { Icon } from '@/components/ui/icon'
 import { ExternalLink } from 'lucide-react'
 
 import { DynamicTechBadge } from './DynamicTechBadge'
@@ -73,7 +74,7 @@ export const DynamicProjectHeroContent: React.FC<DynamicProjectHeroContentProps>
               target="_blank"
               className="inline-flex items-center gap-2 rounded-md bg-on-dark text-on-light px-4 py-2 text-body-sm font-medium hover:bg-on-dark/90"
             >
-              Ver projeto <ExternalLink className="size-4" aria-hidden />
+              Ver projeto <Icon icon={ExternalLink} size="sm" />
             </a>
           )}
           {repoUrl && (

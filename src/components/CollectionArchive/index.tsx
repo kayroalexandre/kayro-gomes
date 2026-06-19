@@ -16,7 +16,7 @@ export const CollectionArchive: React.FC<Props> = (props) => {
   return (
     <div className={cn('container')}>
       <motion.div 
-        className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-6 gap-x-6 lg:gap-y-10 lg:gap-x-10 xl:gap-x-10"
+        className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-6 gap-x-6 lg:gap-y-10 lg:gap-x-10"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}

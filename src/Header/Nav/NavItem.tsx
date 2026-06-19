@@ -19,6 +19,7 @@ export const HeaderNavItem: React.FC<{ link: NavLink; active: boolean }> = ({ li
     <CMSLink
       {...link}
       appearance="inline"
+      aria-current={active ? 'page' : undefined}
       className={cn(
         'rounded-md outline-none transition-colors duration-[var(--duration-fast)] focus-visible:focus-ring',
         active

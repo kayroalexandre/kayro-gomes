@@ -11,10 +11,10 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto border-t border-border/10 glass">
+    <footer className="mt-auto border-t border-border-muted glass">
       <div className="container py-16 flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-4">
-          <Link className="flex items-center hover:opacity-95 transition-opacity" href="/">
+          <Link className="flex items-center hover:opacity-90 transition-opacity" href="/">
             <Logo className="text-foreground" />
           </Link>
           <p className="text-body-sm text-muted-foreground max-w-xs leading-relaxed">
@@ -23,13 +23,20 @@ export async function Footer() {
         </div>
 
         <div className="flex flex-col gap-6 md:items-end">
-          <div className="flex flex-col md:flex-row gap-6 md:items-center">
-            <nav className="flex flex-col md:flex-row gap-6 text-body-sm text-muted-foreground">
-              {navItems.map(({ link }, i) => {
-                return <CMSLink key={i} {...link} className="hover:text-foreground transition-colors duration-200" />
-              })}
-            </nav>
-          </div>
+          <nav
+            aria-label="Navegação do rodapé"
+            className="flex flex-col md:flex-row gap-6 text-body-sm text-muted-foreground"
+          >
+            {navItems.map(({ link }, i) => {
+              return (
+                <CMSLink
+                  key={i}
+                  {...link}
+                  className="hover:text-foreground transition-colors duration-200"
+                />
+              )
+            })}
+          </nav>
         </div>
       </div>
     </footer>

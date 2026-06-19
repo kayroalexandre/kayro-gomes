@@ -35,8 +35,7 @@ export const DynamicHighImpactContent: React.FC<DynamicHighImpactContentProps> =
         <div className="flex flex-col items-center">
           {richText && (
             <motion.div
-              className="max-w-5xl"
-              style={{ color: 'var(--text-on-dark)' }}
+              className="max-w-5xl text-on-dark"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: easing.emphasized }}
@@ -77,8 +76,7 @@ export const DynamicHighImpactContent: React.FC<DynamicHighImpactContentProps> =
       {scrollEnabled && (
         <motion.div
           data-slot="scroll-indicator"
-          className={scrollAtBottom ? 'pb-[calc(var(--spacing)*8)]' : ''}
-          style={{ color: 'var(--text-on-dark-muted)' }}
+          className={`text-on-dark-muted ${scrollAtBottom ? 'pb-[calc(var(--spacing)*8)]' : ''}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}

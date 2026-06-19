@@ -18,8 +18,10 @@ export default function Error({
 
   return (
     <div className="container py-28">
-      <h1 style={{ marginBottom: 0 }}>Algo deu errado.</h1>
-      <p className="mb-4">Ocorreu um erro inesperado ao carregar esta página.</p>
+      <h1 className="type-title-sm md:type-title text-foreground mb-4">Algo deu errado.</h1>
+      <p className="type-body text-muted-foreground mb-8">
+        Ocorreu um erro inesperado ao carregar esta página.
+      </p>
       <div className="flex gap-4">
         <Button onClick={reset} variant="default">
           Tentar novamente

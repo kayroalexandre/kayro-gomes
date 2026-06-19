@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { cn } from '@/utilities/ui'
 import React from 'react'
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 export const Logo = ({ className }: Props) => {
   return (
     <span
-      className={clsx(
+      className={cn(
         'inline-flex items-center font-semibold text-heading tracking-tight whitespace-nowrap',
         className,
       )}
