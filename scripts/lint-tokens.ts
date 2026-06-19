@@ -128,6 +128,37 @@ function findDimensions(line: string, lang: 'css' | 'ts'): Hit[] {
   return hits
 }
 
+// no-raw-typography (warning): escala de TAMANHO crua do Tailwind, que fura a
+// escala semântica (--text-body/--text-heading/…). text-[Npx] já é pego por
+// no-literal-dimension. PESO fica de fora de propósito: font-* é token-backed
+// (--font-weight-*) e é escape legítimo (ver docs/DESIGN-SYSTEM.md).
+const TW_RAW_TEXT_SIZE = /\btext-(?:xs|sm|base|lg|[2-9]?xl)(?![\w-])/g
+
+function findRawTypography(line: string, lang: 'css' | 'ts'): Hit[] {
+  if (lang !== 'ts') return []
+  const hits: Hit[] = []
+  for (const m of line.matchAll(TW_RAW_TEXT_SIZE)) hits.push({ index: m.index ?? 0, match: m[0] })
+  return hits
+}
+
+// no-raw-color (warning): classes de PALETA crua do Tailwind (text-white,
+// bg-gray-500…). Mira só os nomes nativos da paleta — os tokens semânticos
+// (foreground/card/primary/on-dark*/background-inverse/border/ring…) NÃO estão
+// nessa lista, então não casam. A sombra opcional cobre 50/100–900/950.
+const TW_PALETTE =
+  'white|black|gray|grey|zinc|slate|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose'
+const TW_RAW_COLOR = new RegExp(
+  `\\b(?:text|bg|border|ring|outline|fill|stroke|from|via|to|divide|placeholder)-(?:${TW_PALETTE})(?:-(?:950|[1-9]00|50))?(?![\\w-])`,
+  'g',
+)
+
+function findRawColor(line: string, lang: 'css' | 'ts'): Hit[] {
+  if (lang !== 'ts') return []
+  const hits: Hit[] = []
+  for (const m of line.matchAll(TW_RAW_COLOR)) hits.push({ index: m.index ?? 0, match: m[0] })
+  return hits
+}
+
 const MESSAGES: Record<string, (match: string) => string> = {
   'no-literal-color': (m) =>
     `cor literal "${m}" — use um token de cor (var(--…) ou classe Tailwind como text-foreground/bg-primary).`,
@@ -135,12 +166,18 @@ const MESSAGES: Record<string, (match: string) => string> = {
     `bezier literal "${m}" — importe easing.* de @/design-system/tokens/motion ou use a CSS var --ease-*.`,
   'no-literal-dimension': (m) =>
     `dimensão literal "${m}" — use a escala (rounded-sm/var(--radius-*), text-body/var(--text-*), var(--letter-spacing-*)).`,
+  'no-raw-typography': (m) =>
+    `tipografia crua "${m}" — use uma receita type-* ou um utilitário semântico de tamanho (text-body/text-heading/…).`,
+  'no-raw-color': (m) =>
+    `cor crua "${m}" — use um token semântico (text-foreground/bg-card/…), de contraste (text-on-dark*) ou superfície invertida (bg-background-inverse).`,
 }
 
 const RULE_SEVERITY: Record<string, Severity> = {
   'no-literal-color': 'error',
   'no-literal-bezier': 'error',
   'no-literal-dimension': 'error',
+  'no-raw-typography': 'warning',
+  'no-raw-color': 'warning',
 }
 
 /**
@@ -179,6 +216,8 @@ export function lintContent(filePath: string, content: string): Violation[] {
     for (const hit of findColors(line)) push('no-literal-color', hit)
     for (const hit of findBeziers(line, lang)) push('no-literal-bezier', hit)
     for (const hit of findDimensions(line, lang)) push('no-literal-dimension', hit)
+    for (const hit of findRawTypography(line, lang)) push('no-raw-typography', hit)
+    for (const hit of findRawColor(line, lang)) push('no-raw-color', hit)
   })
 
   return violations

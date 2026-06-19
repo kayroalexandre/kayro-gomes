@@ -133,6 +133,101 @@ describe('lintContent — dimensão literal (error)', () => {
   })
 })
 
+describe('lintContent — tipografia crua (warning, só tamanho)', () => {
+  it('sinaliza text-5xl como warning', () => {
+    const vs = lintContent('src/heros/Foo.tsx', `<h1 className="text-5xl font-bold">`)
+    expect(rules(vs)).toContain('no-raw-typography')
+    expect(bySeverity(vs, 'warning').map((v) => v.rule)).toContain('no-raw-typography')
+    expect(bySeverity(vs, 'error')).toHaveLength(0)
+  })
+
+  it('sinaliza text-sm e text-2xl', () => {
+    const vs = lintContent('src/components/Foo.tsx', `className="text-sm"`)
+    expect(rules(vs)).toContain('no-raw-typography')
+    const vs2 = lintContent('src/components/Foo.tsx', `className="text-2xl"`)
+    expect(rules(vs2)).toContain('no-raw-typography')
+  })
+
+  it('NÃO sinaliza peso (font-bold/font-medium são token-backed)', () => {
+    const vs = lintContent('src/components/Foo.tsx', `className="font-bold font-medium font-extra-bold"`)
+    expect(rules(vs)).not.toContain('no-raw-typography')
+  })
+
+  it('NÃO sinaliza tamanhos semânticos (text-body/text-heading-lg/text-title-hero)', () => {
+    const vs = lintContent(
+      'src/components/Foo.tsx',
+      `className="text-body text-heading-lg text-title-hero text-subheading-sm text-code"`,
+    )
+    expect(rules(vs)).not.toContain('no-raw-typography')
+  })
+
+  it('NÃO sinaliza utilitário de cor text-foreground', () => {
+    const vs = lintContent('src/components/Foo.tsx', `className="text-foreground"`)
+    expect(rules(vs)).not.toContain('no-raw-typography')
+  })
+
+  it('respeita o disable inline', () => {
+    const vs = lintContent(
+      'src/heros/Foo.tsx',
+      `className="text-5xl" // design-lint-disable-line hero calibrado`,
+    )
+    expect(vs).toHaveLength(0)
+  })
+
+  it('não roda em .css (escala de tamanho é conceito de classe tsx)', () => {
+    const vs = lintContent('src/app/(frontend)/globals.css', `.x { content: "text-5xl"; }`)
+    expect(rules(vs)).not.toContain('no-raw-typography')
+  })
+})
+
+describe('lintContent — cor crua (warning)', () => {
+  it('sinaliza text-white como warning', () => {
+    const vs = lintContent('src/components/Foo.tsx', `className="text-white"`)
+    expect(rules(vs)).toContain('no-raw-color')
+    expect(bySeverity(vs, 'warning').map((v) => v.rule)).toContain('no-raw-color')
+    expect(bySeverity(vs, 'error')).toHaveLength(0)
+  })
+
+  it('sinaliza bg-gray-500, text-red-500, border-zinc-200', () => {
+    for (const cls of ['bg-gray-500', 'text-red-500', 'border-zinc-200']) {
+      const vs = lintContent('src/components/Foo.tsx', `className="${cls}"`)
+      expect(rules(vs), cls).toContain('no-raw-color')
+    }
+  })
+
+  it('sinaliza text-white/60 (com opacidade)', () => {
+    const vs = lintContent('src/components/ui/scroll-indicator.tsx', `className="text-white/60"`)
+    expect(rules(vs)).toContain('no-raw-color')
+    expect(vs.find((v) => v.rule === 'no-raw-color')?.match).toBe('text-white')
+  })
+
+  it('NÃO sinaliza tokens semânticos (foreground/card/muted/on-dark/inverse/border/ring)', () => {
+    const vs = lintContent(
+      'src/components/Foo.tsx',
+      `className="text-foreground bg-card text-muted-foreground text-on-dark-subtle bg-background-inverse border-border ring-ring"`,
+    )
+    expect(rules(vs)).not.toContain('no-raw-color')
+  })
+
+  it('NÃO confunde prefixo to/from semânticos nem palavras (auto-rows, from-background)', () => {
+    const vs = lintContent('src/components/Foo.tsx', `className="auto-rows-min from-background to-card"`)
+    expect(rules(vs)).not.toContain('no-raw-color')
+  })
+
+  it('respeita o disable inline (caso intencional sobre mídia)', () => {
+    const vs = lintContent(
+      'src/components/AdminBar/index.tsx',
+      `className="bg-black text-white" // design-lint-disable-line chrome fixo do admin`,
+    )
+    expect(vs).toHaveLength(0)
+  })
+
+  it('não roda em .css (paleta crua em css já é pega por no-literal-color)', () => {
+    const vs = lintContent('src/app/(frontend)/globals.css', `.x { content: "bg-red-500"; }`)
+    expect(rules(vs)).not.toContain('no-raw-color')
+  })
+})
+
 describe('lintContent — severidade e localização', () => {
   it('reporta o número de linha correto (1-based)', () => {
     const vs = lintContent('src/components/Foo.tsx', `const a = 1\nconst b = 2\nconst c = '#fff'`)
