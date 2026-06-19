@@ -20,9 +20,13 @@ export const ThemeToggle: React.FC = () => {
 
   return (
     <Button
-      variant="ghost"
+      // `variant="link"` é o único sem background no hover — evita o `hover:bg-accent`
+      // (verde) do `ghost`. O círculo (40px, size-10) tem o efeito `glass` do Header
+      // como estado DEFAULT (sempre visível); o hover afeta APENAS o ícone, que fica
+      // branco (`group-hover:text-foreground`).
+      variant="link"
       size="icon"
-      className="relative h-9 w-9 cursor-pointer"
+      className="group relative cursor-pointer rounded-full glass border border-border/20"
       aria-label={
         mounted ? (theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro') : 'Alternar tema'
       }
@@ -30,13 +34,13 @@ export const ThemeToggle: React.FC = () => {
     >
       <Icon
         icon={Sun}
-        size="lg"
-        className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground hover:text-foreground"
+        size="md"
+        className="rotate-0 scale-100 text-muted-foreground transition-all group-hover:text-foreground dark:-rotate-90 dark:scale-0"
       />
       <Icon
         icon={Moon}
-        size="lg"
-        className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground hover:text-foreground"
+        size="md"
+        className="absolute rotate-90 scale-0 text-muted-foreground transition-all group-hover:text-foreground dark:rotate-0 dark:scale-100"
       />
       <span className="sr-only">Alternar tema</span>
     </Button>
