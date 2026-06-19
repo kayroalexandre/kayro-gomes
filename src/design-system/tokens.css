@@ -286,9 +286,9 @@
   --background-accent: oklch(65% 0.18 145deg);
   --background-accent-active: oklch(46% 0.14 145deg);
   --background-accent-hover: oklch(55% 0.16 145deg);
-  --background-brand: oklch(74% 0.18 240deg);
-  --background-brand-active: oklch(89% 0.09 240deg);
-  --background-brand-hover: oklch(82% 0.14 240deg);
+  --background-brand: oklch(55% 0.20 240deg);
+  --background-brand-active: oklch(82% 0.14 240deg);
+  --background-brand-hover: oklch(74% 0.18 240deg);
   --background-destructive: oklch(46% 0.19 25deg);
   --background-destructive-active: oklch(65% 0.24 25deg);
   --background-destructive-hover: oklch(55% 0.22 25deg);

@@ -61,7 +61,7 @@
       "950": { "$value": "oklch(20% 0.08 240deg)" }
     },
     "brand": {
-      "$description": "Rampa de marca. Atualmente derivada do azul, mas mantida como rampa independente para poder evoluir sem migração estrutural.",
+      "$description": "Rampa OFICIAL e definitiva da marca (paleta/escala do brand — NÃO é provisória). Derivada da família azul porém uma rampa INDEPENDENTE: os passos 50–400 coincidem com `blue`, mas de 500 em diante é deliberadamente mais profunda (≈ um passo abaixo do azul; ex.: brand.500 ≈ blue.600), então `blue` e `brand` NÃO são idênticas. brand.500 é a cor BASE da marca (token primary, em ambos os temas). Mantida como rampa própria para evoluir sem migração estrutural.",
       "50": { "$value": "oklch(97% 0.015 240deg)" },
       "100": { "$value": "oklch(94% 0.04 240deg)" },
       "200": { "$value": "oklch(89% 0.09 240deg)" },
@@ -158,9 +158,9 @@
         "accent": { "$value": "{primitive.green.500}" },
         "accent-hover": { "$value": "{primitive.green.600}" },
         "accent-active": { "$value": "{primitive.green.700}" },
-        "brand": { "$value": "{primitive.brand.400}" },
-        "brand-hover": { "$value": "{primitive.brand.300}" },
-        "brand-active": { "$value": "{primitive.brand.200}" },
+        "brand": { "$value": "{primitive.brand.500}" },
+        "brand-hover": { "$value": "{primitive.brand.400}" },
+        "brand-active": { "$value": "{primitive.brand.300}" },
         "destructive": { "$value": "{primitive.red.700}" },
         "destructive-hover": { "$value": "{primitive.red.600}" },
         "destructive-active": { "$value": "{primitive.red.500}" },
