@@ -40,6 +40,7 @@ contribuidor humano deve seguir estas convenções.
 
 > **Consulte também:**
 >
+> - [`docs/DESIGN-SYSTEM-GOVERNANCE.md`](docs/DESIGN-SYSTEM-GOVERNANCE.md) — Governança do design system (leia antes de mexer em tokens/componentes/estilo)
 > - [`docs/MIGRATIONS.md`](docs/MIGRATIONS.md) — Fluxo completo de migrations e arquitetura de bancos
 > - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — Catálogo de erros comuns e soluções
 > - [`docs/workflow_guide.md`](docs/workflow_guide.md) — Guia legado (consulte AGENTS.md para o estado atual)

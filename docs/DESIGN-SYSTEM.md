@@ -5,7 +5,9 @@
 > trava anti-hardcode (`bun run lint:tokens`) cobra. Ao criar/refatorar componentes,
 > blocos, heros e seções, siga este contrato.
 >
-> **Trilogia do design system:** este documento é o **vocabulário**; veja também
+> **Docs do design system:** comece por
+> [`DESIGN-SYSTEM-GOVERNANCE.md`](./DESIGN-SYSTEM-GOVERNANCE.md) (processo: analise antes de
+> mudar). Este documento é o **vocabulário**; veja também
 > [`DESIGN-SYSTEM-COMPONENTS.md`](./DESIGN-SYSTEM-COMPONENTS.md) (uso de componentes +
 > receitas por contexto) e [`DESIGN-SYSTEM-LAYOUT.md`](./DESIGN-SYSTEM-LAYOUT.md)
 > (estrutura/espaçamento + auditoria por componente).

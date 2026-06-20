@@ -137,8 +137,6 @@ O eixo horizontal vem das 3 colunas do grid: `justify-self-center` na nav (centr
 absoluto) e `justify-self-end` nas ações. **Regra:** não usar margens manuais para
 posicionar; o alinhamento é responsabilidade do grid + `items-center`.
 
-**Pendências:** `useHeaderContrast.ts` parece órfão (ver auditoria geral).
-
 ### Footer — 🟡 parcial (tipografia ✅ 2026-06-19)
 
 Arquivo: [Component.tsx](../src/Footer/Component.tsx). Tipografia já tokenizada; ajustes
