@@ -50,9 +50,10 @@ public/sitemap*.xml
 tokens.figma-plan.json
 tokens.figma-dump.json
 
-# Agent tooling / skills (NÃO commit)
+# Agent tooling / skills (NÃO commit) — exceto skills versionadas do projeto
 .agents/
 .kilo/
-.claude/
+.claude/*
+!.claude/skills/
 .neon
 skills-lock.json
