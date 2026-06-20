@@ -53,5 +53,6 @@ tokens.figma-dump.json
 # Agent tooling / skills (NÃO commit)
 .agents/
 .kilo/
+.claude/
 .neon
 skills-lock.json
