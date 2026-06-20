@@ -46,6 +46,10 @@ public/sitemap*.xml
 .env.local.backup*
 .env.*.backup*
 
+# Figma token-sync artifacts (gerados sob demanda; NÃO commit)
+tokens.figma-plan.json
+tokens.figma-dump.json
+
 # Agent tooling / skills (NÃO commit)
 .agents/
 .kilo/
