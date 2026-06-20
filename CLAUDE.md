@@ -6,7 +6,7 @@ Personal portfolio of Kayro Gomes — **Next.js 16 (App Router) + React 19 + Pay
 
 ## Read these first
 
-- **`AGENTS.md`** — authoritative git/deploy workflow, environment matrix, and the **AI safety rules** (warn before migrations, direct commits to `main`, destructive ops, seed in prod). It also documents the **HighImpact hero layout geometry**, whose CSS is deliberately calibrated — do not change classes in `src/heros/HighImpact/index.tsx` without reading that section.
+- **`AGENTS.md`** — authoritative git/deploy workflow, environment matrix, and the **AI safety rules** (warn before migrations, direct commits to `main`, destructive ops, seed in prod). It also holds the **Figma → code fidelity rule** (when implementing a Figma design, apply only what Figma confirms; never invent missing parts, don't rewrite what already matches, and always report Implemented / Kept / Not-implemented) and documents the **HighImpact hero layout geometry**, whose CSS is deliberately calibrated — do not change classes in `src/heros/HighImpact/index.tsx` without reading that section.
 - `docs/MIGRATIONS.md` — migration flow and DB architecture.
 - `docs/TROUBLESHOOTING.md` — catalog of common errors.
 

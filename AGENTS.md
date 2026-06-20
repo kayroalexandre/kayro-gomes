@@ -38,6 +38,22 @@ contribuidor humano deve seguir estas convenções.
 
 ---
 
+### Fidelidade Figma → código (design-to-code)
+
+Ao implementar um design do Figma no código, **aplique só o que o Figma confirma**. O nó do Figma quase sempre cobre só parte do componente (uma variante, um tamanho, alguns estados), enquanto o código tem um sistema mais rico (cva, múltiplas variantes/tamanhos, `asChild`, foco, ícones). Isso é esperado — não é motivo para preencher as lacunas por conta própria.
+
+- **NÃO invente.** O que o Figma não informa, ou que pareça quebrar o componente, **não implemente** — mantenha o que já existe no código.
+- **NÃO reescreva o que já corresponde.** Se um token/classe do código já resolve para o valor do Figma (ex.: `--primary` = `--background-brand`), use o que existe; não troque por um sinônimo de mesmo valor.
+- **Confirme antes de aplicar.** Verifique que o token/classe do Figma realmente existe no código (`src/design-system/tokens.css` / os JSON DTCG) — nunca assuma.
+- **Relate sempre, em 3 grupos:**
+  1. **Implementado** — o que o Figma confirmou e divergia do código.
+  2. **Mantido / já correspondia** — não reescrito.
+  3. **Não implementado por falta de correspondência** — variantes, tamanhos, estados, foco, ícones, animação que o Figma não informa (para o usuário evoluir conforme a necessidade).
+
+> Vale para qualquer fluxo design→código (MCP `get_design_context`/`use_figma`, "Implement this design", etc.). Sobre a ponte de tokens DTCG↔Figma em si, ver [`scripts/figma/README.md`](scripts/figma/README.md).
+
+---
+
 > **Consulte também:**
 >
 > - [`docs/DESIGN-SYSTEM-GOVERNANCE.md`](docs/DESIGN-SYSTEM-GOVERNANCE.md) — Governança do design system (leia antes de mexer em tokens/componentes/estilo)
