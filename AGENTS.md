@@ -6,8 +6,10 @@
 > worktree `glorious-scribe`) foram removidas. `.env.local` agora aponta
 > para **Postgres via Docker Compose** (porta 54320) para evitar push
 > acidental no Neon de produção. Backup completo salvo em
-> `.env.local.backup-neon-prod`. Consulte o histórico de commits e
-> `backup/docker-standalone-build` se precisar recuperar algo.
+> `.env.local.backup-neon-prod`. A branch de backup `backup/docker-standalone-build`
+> também já foi removida (2026-06-20) na limpeza para o fluxo de 3 branches
+> permanentes — consulte o histórico de commits / `git reflog` se precisar
+> recuperar algo.
 
 Este arquivo documenta o **workflow oficial** de desenvolvimento, deploy
 e operações do projeto. Toda IA (Kilo, GitHub Copilot, etc.) e todo
