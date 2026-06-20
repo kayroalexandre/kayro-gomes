@@ -263,6 +263,14 @@ function classifyLayout(path: string, value: string | number): Classification {
   if (group === 'container') {
     return mkVar('Layout', `container/${key}`, 'FLOAT', ['GAP'], `var(--container-${key})`, floatPx(value))
   }
+  if (group === 'control') {
+    // alturas → WIDTH_HEIGHT; paddings/gap → GAP. CSS var: --control-<key>.
+    const scopes: string[] = key.startsWith('height') ? ['WIDTH_HEIGHT'] : ['GAP']
+    return mkVar('Layout', `control/${key}`, 'FLOAT', scopes, `var(--control-${key})`, floatPx(value))
+  }
+  if (group === 'space') {
+    return mkVar('Layout', `space/${key}`, 'FLOAT', ['GAP'], `var(--space-${key})`, floatPx(value))
+  }
   if (group === 'z-index') {
     return mkVar('Layout', `z/${key}`, 'FLOAT', [], `var(--z-${key})`, {
       kind: 'float',
@@ -336,6 +344,8 @@ export function reverseLookup(collection: string, name: string): { file: TokenFi
     const [g, k] = name.split('/')
     if (g === 'structure') return { file: 'layout.json', path: `structure.${k}` }
     if (g === 'container') return { file: 'layout.json', path: `container.${k}` }
+    if (g === 'control') return { file: 'layout.json', path: `control.${k}` }
+    if (g === 'space') return { file: 'layout.json', path: `space.${k}` }
     if (g === 'z') return { file: 'layout.json', path: `z-index.${k}` }
   }
   if (collection === 'Effects') return { file: 'effects.json', path: kebabReverse(name) }

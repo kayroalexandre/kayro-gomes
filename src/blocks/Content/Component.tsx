@@ -21,7 +21,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   }
 
   return (
-    <section className="container py-16 md:py-24">
+    <section className="container py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]">
       <div className="grid grid-cols-4 lg:grid-cols-12 gap-y-16 gap-x-12">
         {columns &&
           columns.length > 0 &&

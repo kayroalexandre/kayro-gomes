@@ -201,6 +201,8 @@ async function main() {
 
   const layoutStructure = group(layout.structure, '') // --header-h / --sidebar-w / --sheet-w
   const containerEntries = group(layout.container, 'container-') // --container-padding*
+  const controlEntries = group(layout.control, 'control-') // --control-height-* / --control-padding-* / --control-gap
+  const spaceEntries = group(layout.space, 'space-') // --space-section-y / --space-block-gap
   const breakpointEntries = group(layout.breakpoint, 'breakpoint-')
   const iconEntries = group(size.icon, 'icon-')
   const strokeEntries = group(size.stroke, 'stroke-')
@@ -341,6 +343,8 @@ async function main() {
     section('Radius (base shadcn)', [{ name: 'radius', value: radiusBase }]),
     section('Layout — Chrome', layoutStructure),
     section('Layout — Container', containerEntries),
+    section('Layout — Control (button/input/select…)', controlEntries),
+    section('Layout — Spacing rhythm (section/block)', spaceEntries),
     section('Breakpoints', breakpointEntries),
     section('Icon Sizes', iconEntries),
     section('Stroke Widths', strokeEntries),

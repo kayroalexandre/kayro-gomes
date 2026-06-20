@@ -63,7 +63,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   })
 
   return (
-    <div className="py-16 md:py-24">
+    <div className="py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]">
       <PageHeaderTheme theme="light" />
       <div className="container mb-12">
         <div className="max-w-none text-center">

@@ -85,6 +85,10 @@ anote `// design-lint-disable-line <motivo>`.
 - **Radius:** `rounded-sm/md/lg/xl/…` ou `var(--radius-card)`/`var(--radius-panel)`.
   Nada de `rounded-[12px]`.
 - **Ícone:** `size-*` (ex.: `size-4`) ou `var(--icon-md)`.
+- **Controles (button/input/select…):** altura/padding/gap canônicos via
+  `var(--control-height-*)` / `var(--control-padding-*)` / `var(--control-gap)`.
+- **Ritmo de seção/bloco:** `var(--space-section-y)` / `--space-section-y-lg` /
+  `--space-block-gap` (detalhes em `DESIGN-SYSTEM-LAYOUT.md`).
 - **Motion:** importe `easing`/`duration` de `@/design-system/tokens/motion` (Framer Motion)
   ou use `var(--ease-*)`/`var(--duration-*)` em CSS. Nada de `cubic-bezier(...)` literal.
 - **Foco:** aplique `focus-visible:focus-ring` em elementos interativos custom (os

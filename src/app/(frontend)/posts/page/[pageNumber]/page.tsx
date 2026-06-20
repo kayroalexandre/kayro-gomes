@@ -40,7 +40,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   if (posts.totalPages > 0 && sanitizedPageNumber > posts.totalPages) notFound()
 
   return (
-    <div className="py-16 md:py-24">
+    <div className="py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]">
       <PageHeaderTheme theme="light" />
       <div className="container mb-12">
         <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-4 text-foreground">Blog</h1>

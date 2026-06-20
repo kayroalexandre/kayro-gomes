@@ -79,6 +79,38 @@ describe('tokens.css — saída é CSS sintaticamente válido', () => {
   })
 })
 
+describe('tokens.css — tokens de layout de componente/seção emitidos', () => {
+  // Guard de órfãos para o vocabulário consumido via var() em controles
+  // (button/input/select/textarea) e ritmo de seção (blocos/heros). Se o build
+  // parar de emitir qualquer um, esses componentes perdem altura/padding/ritmo.
+  const LAYOUT_VARS = [
+    '--control-height-sm',
+    '--control-height-md',
+    '--control-height-lg',
+    '--control-padding-x-compact',
+    '--control-padding-x-sm',
+    '--control-padding-x-md',
+    '--control-padding-x-lg',
+    '--control-padding-y',
+    '--control-gap',
+    '--space-section-y',
+    '--space-section-y-lg',
+    '--space-block-gap',
+  ] as const
+
+  for (const v of LAYOUT_VARS) {
+    it(`emite ${v} em :root`, () => {
+      expect(tokensCss).toMatch(new RegExp(`${v}:\\s`))
+    })
+  }
+
+  it('mantém a calibração shadcn (alturas 2.25/2.5/3rem)', () => {
+    expect(tokensCss).toContain('--control-height-sm: 2.25rem;')
+    expect(tokensCss).toContain('--control-height-md: 2.5rem;')
+    expect(tokensCss).toContain('--control-height-lg: 3rem;')
+  })
+})
+
 describe('tokens.css — @utility focus-ring tokenizado', () => {
   const block = tokensCss.match(/@utility focus-ring \{[^}]*\}/)?.[0] ?? ''
 

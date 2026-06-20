@@ -47,7 +47,7 @@ export const ArchiveBlock: React.FC<
     })
 
     return (
-      <div className="py-16 md:py-24" id={`block-${id}`}>
+      <div className="py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]" id={`block-${id}`}>
         {introContent && (
           <div className="container mb-16">
             <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
@@ -95,7 +95,7 @@ export const ArchiveBlock: React.FC<
   }
 
   return (
-    <div className="py-16 md:py-24" id={`block-${id}`}>
+    <div className="py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]" id={`block-${id}`}>
       {introContent && (
         <div className="container mb-16">
           <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />

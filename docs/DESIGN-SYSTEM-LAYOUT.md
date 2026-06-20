@@ -52,6 +52,13 @@ canônico; o que **não** se admite é `gap-[13px]`, `p-[7px]` ou `m-[0.9rem]` (
 | `10` | 2.5rem (40px) | gap entre grandes blocos (footer) |
 | `16` | 4rem (64px) | padding vertical de seções (footer) |
 
+**Quando promover a token semântico:** a escala numérica do Tailwind é o
+default para espaçamento pontual. Mas quando um valor representa uma **intenção
+de layout compartilhada** por vários componentes (altura de controle, ritmo de
+seção), ele vira um **token semântico nomeado** em `layout.json` (`--control-*`,
+`--space-*`) — fonte única + exportável para o Figma. Ver "Dimensões de
+controle" e "Ritmo de seção e bloco" abaixo.
+
 ### Base `rem` e tamanho de fonte do navegador
 
 A escala tipográfica é **`rem`-based** (1rem = `--text-scale-03`). **Não** fixamos
@@ -82,6 +89,72 @@ lateral manualmente (`px-4 md:px-8`) — usar `.container`.
 ### Altura de chrome
 
 - Header: `--header-h` = **5rem** (80px), aplicado como `h-[var(--header-h)]`.
+
+### Dimensões de controle (button, input, select, textarea)
+
+Os controles interativos têm **dimensões canônicas tokenizadas** em
+`layout.json` → grupo `control` → `--control-*`. Antes eram literais Tailwind
+espalhados (`h-9`/`h-10`/`h-12`, `px-3`/`4`/`6`/`8`, `py-2`, `gap-2`); agora a
+fonte é única e exportável para o Figma. Consumidos no **mesmo idioma `var()`
+do `--header-h`** (ex.: `h-[var(--control-height-md)]`). Os valores **espelham
+exatamente** a calibração shadcn anterior — tokenizar foi **zero mudança visual**.
+
+| Token | Valor | px | Equiv. Tailwind | Uso |
+|-------|-------|----|-----------------|-----|
+| `--control-height-sm` | 2.25rem | 36 | `h-9` | input, select, textarea, button `sm` |
+| `--control-height-md` | 2.5rem | 40 | `h-10` / `size-10` | button `default`, button `icon` |
+| `--control-height-lg` | 3rem | 48 | `h-12` | button `lg` |
+| `--control-padding-x-compact` | 0.75rem | 12 | `px-3` | campos de texto (input/select/textarea) |
+| `--control-padding-x-sm` | 1rem | 16 | `px-4` | button `sm`; padding reduzido c/ ícone |
+| `--control-padding-x-md` | 1.5rem | 24 | `px-6` | button `default` |
+| `--control-padding-x-lg` | 2rem | 32 | `px-8` | button `lg` |
+| `--control-padding-y` | 0.5rem | 8 | `py-2` | padding vertical padrão de controle |
+| `--control-gap` | 0.5rem | 8 | `gap-2` | gap ícone↔label dentro do controle |
+
+**Registro por componente:**
+
+| Componente | Altura | Padding-x | Padding-y | Raio | Tipografia |
+|------------|--------|-----------|-----------|------|------------|
+| `Button` default | `--control-height-md` | `--control-padding-x-md` | `--control-padding-y` | `rounded-full` | `text-body-sm` |
+| `Button` sm | `--control-height-sm` | `--control-padding-x-sm` | — | `rounded-full` | `text-body-sm` |
+| `Button` lg | `--control-height-lg` | `--control-padding-x-lg` | — | `rounded-full` | `text-body` |
+| `Button` icon | `--control-height-md` (quadrado) | — | — | `rounded-full` | — |
+| `Input` | `--control-height-sm` | `--control-padding-x-compact` | `py-1` | `rounded-md` | `text-body` → `md:text-body-sm` |
+| `Textarea` | `min-h-16` (multi-linha) | `--control-padding-x-compact` | `--control-padding-y` | `rounded-md` | `text-body` → `md:text-body-sm` |
+| `SelectTrigger` | `--control-height-sm` | `--control-padding-x-compact` | `--control-padding-y` | `rounded-md` | `text-body-sm` |
+| `Checkbox` | `size-4` (16px) | — | — | `rounded-sm` | indicador `size-3.5` |
+
+> **Nota (Checkbox):** controle pequeno (16px); o alvo de clique efetivo é
+> ampliado pelo `Label` associado, não por padding do próprio box. Indicador
+> interno (✓) usa `size-3.5` (ícone `lucide`).
+
+### Ritmo de seção e bloco
+
+O **padding vertical de seção** e a **margem entre blocos** são tokenizados em
+`layout.json` → grupo `space` → `--space-*`. O padrão `py-16 md:py-24` antes
+estava **repetido literalmente em 12+ lugares** (blocos, heros, páginas de
+listagem); agora é um par de tokens responsivos consumidos via
+`py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]`. Centraliza o
+ritmo da página numa única fonte (e exporta para o Figma).
+
+| Token | Valor | px | Equiv. Tailwind | Uso |
+|-------|-------|----|-----------------|-----|
+| `--space-section-y` | 4rem | 64 | `py-16` | padding vertical de seção, base (mobile) |
+| `--space-section-y-lg` | 6rem | 96 | `py-24` | padding vertical de seção em `md+` |
+| `--space-block-gap` | 4rem | 64 | `my-16` | margem vertical entre blocos no `RenderBlocks` |
+
+**Consumidores do ritmo de seção:** `Content`, `CallToAction`, `ArchiveBlock`
+(×2), `Form`, `MediumImpact`, `LowImpact`, `search/page`, `posts/page/[n]`.
+**Exceção deliberada:** o `HighImpact` mantém seu `py-16` **literal** — sua
+geometria é calibrada (full-bleed + offset de header); ver `AGENTS.md`. O
+empty-state da busca (`py-16 px-4`) também fica literal (é um card, não o ritmo
+de seção responsivo).
+
+**Espaçamentos ainda literais (Tailwind canônico, documentados — não migrados):**
+painel do CTA (`p-10 md:p-16`), `Pagination`/`Form Message` (`my-12`), `Banner`
+(`my-8`). São casos pontuais; usar a escala numérica do Tailwind aqui é
+canônico (ver "Escala de espaçamento" acima) — só viram token se o valor passar
+a ser compartilhado por vários componentes.
 
 ---
 
@@ -156,4 +229,5 @@ estruturais/cor ainda pendentes.
 - ✅ `text-sm` cru (parágrafo e nav) → `text-body-sm` (tokenizado em 2026-06-19).
 - ✅ Logo: tokenizada (componente compartilhado com o Header).
 - ⏳ Opacidades de cor (`border-border/10`) — avaliar token de borda dedicado.
-- ⏳ Confirmar escala de espaçamento (`py-16`, `gap-10`) vs hierarquia de seções.
+- ⏳ Confirmar `gap-10` vs hierarquia de seções (o `py-16`/`py-24` de seção já
+  foi promovido a `--space-section-y*` — ver "Ritmo de seção e bloco").
