@@ -1,5 +1,11 @@
 {
-  "$description": "Tokens estruturais de layout: dimensões do chrome da aplicação, padding de container, dimensões de controles interativos (button/input/select…), ritmo de espaçamento de seção/bloco, breakpoints responsivos e escala de empilhamento (z-index). Formato DTCG. Dimensões em string rem/px (desvio documentado).",
+  "$description": "Tokens estruturais de layout: base de espaçamento do Tailwind v4, dimensões do chrome da aplicação, padding de container, dimensões de controles interativos (button/input/select…), ritmo de espaçamento de seção/bloco, breakpoints responsivos e escala de empilhamento (z-index). Formato DTCG. Dimensões em string rem/px (desvio documentado).",
+
+  "base": {
+    "$type": "dimension",
+    "$description": "Multiplicador-base do espaçamento do Tailwind v4. Emitido como --spacing; toda a escala numérica (gap-*, p-*, m-*, py-16…) deriva dele via calc(var(--spacing) * n). Antes vivia em spacing.json (removido em 2026-06-20 — arquivo de um token só); realocado aqui por ser a dimensão fundamental de layout.",
+    "spacing": { "$value": "0.25rem" }
+  },
 
   "structure": {
     "$type": "dimension",

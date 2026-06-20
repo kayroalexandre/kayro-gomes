@@ -60,13 +60,12 @@ async function main() {
   const colors = await loadJSON('colors.json')
   const typography = await loadJSON('typography.json')
   const motion = await loadJSON('motion.json')
-  const spacing = await loadJSON('spacing.json')
   const size = await loadJSON('size.json')
   const layout = await loadJSON('layout.json')
   const effects = await loadJSON('effects.json')
 
   // Categorias para resolver referências {categoria.path.to.token}.
-  const allTokens: Record<string, any> = { colors, typography, motion, spacing, size, layout, effects }
+  const allTokens: Record<string, any> = { colors, typography, motion, size, layout, effects }
 
   // ---------------------------------------------------------------------
   // Resolução de referências {category.path.to.token} (contra $value), com
@@ -196,7 +195,7 @@ async function main() {
   // ---------------------------------------------------------------------
   // Dimensões / escalas estruturais
   // ---------------------------------------------------------------------
-  const spacingBase = resolveValue(spacing.spacing.base.$value)
+  const spacingBase = resolveValue(layout.base.spacing.$value)
   const radiusBase = resolveValue(size.radius.base.$value)
 
   const layoutStructure = group(layout.structure, '') // --header-h / --sidebar-w / --sheet-w

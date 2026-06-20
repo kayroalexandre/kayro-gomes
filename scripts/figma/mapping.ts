@@ -35,7 +35,6 @@ export const COLLECTION_ORDER = [
   'Color',
   'Contrast',
   'Typography',
-  'Spacing',
   'Size',
   'Layout',
   'Effects',
@@ -105,7 +104,6 @@ export function classifyToken(file: TokenFile, path: string, leaf: Leaf): Classi
   if (file === 'colors.json') return classifyColor(path, value)
   if (file === 'typography.json') return classifyTypography(path, value)
   if (file === 'motion.json') return classifyMotion(path, value)
-  if (file === 'spacing.json') return classifySpacing(path, value)
   if (file === 'size.json') return classifySize(path, value)
   if (file === 'layout.json') return classifyLayout(path, value)
   if (file === 'effects.json') return classifyEffects(path, value)
@@ -228,13 +226,6 @@ function classifyMotion(path: string, value: string | number): Classification {
   return { kind: 'excluded', reason: `motion: caminho não mapeado: ${path}` }
 }
 
-function classifySpacing(path: string, value: string | number): Classification {
-  if (path === 'spacing.base') {
-    return mkVar('Spacing', 'base', 'FLOAT', ['GAP', 'WIDTH_HEIGHT'], 'var(--spacing)', floatPx(value))
-  }
-  return { kind: 'excluded', reason: `spacing: caminho não mapeado: ${path}` }
-}
-
 function classifySize(path: string, value: string | number): Classification {
   const [group, key] = path.split('.')
   if (group === 'radius') {
@@ -257,6 +248,10 @@ function classifySize(path: string, value: string | number): Classification {
 
 function classifyLayout(path: string, value: string | number): Classification {
   const [group, key] = path.split('.')
+  if (group === 'base') {
+    // Multiplicador-base do Tailwind v4 (realocado de spacing.json). CSS var: --spacing.
+    return mkVar('Layout', `base/${key}`, 'FLOAT', ['GAP', 'WIDTH_HEIGHT'], 'var(--spacing)', floatPx(value))
+  }
   if (group === 'structure') {
     return mkVar('Layout', `structure/${key}`, 'FLOAT', ['WIDTH_HEIGHT'], `var(--${key})`, floatPx(value))
   }
@@ -338,10 +333,10 @@ export function reverseLookup(collection: string, name: string): { file: TokenFi
   }
   if (collection === 'Typography') return { file: 'typography.json', path: kebabReverse(name) }
   if (collection === 'Motion') return { file: 'motion.json', path: kebabReverse(name) }
-  if (collection === 'Spacing') return { file: 'spacing.json', path: `spacing.${name}` }
   if (collection === 'Size') return { file: 'size.json', path: kebabReverse(name) }
   if (collection === 'Layout') {
     const [g, k] = name.split('/')
+    if (g === 'base') return { file: 'layout.json', path: `base.${k}` }
     if (g === 'structure') return { file: 'layout.json', path: `structure.${k}` }
     if (g === 'container') return { file: 'layout.json', path: `container.${k}` }
     if (g === 'control') return { file: 'layout.json', path: `control.${k}` }

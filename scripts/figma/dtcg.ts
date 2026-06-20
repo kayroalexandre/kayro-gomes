@@ -19,7 +19,6 @@ export const TOKEN_FILES = [
   'colors.json',
   'typography.json',
   'motion.json',
-  'spacing.json',
   'size.json',
   'layout.json',
   'effects.json',

@@ -38,7 +38,9 @@ para o degrau existente (a maioria já é match exato: sm, base, xl, 2xl, 5xl).
 
 ### Escala de espaçamento
 
-A escala do Tailwind v4 é ancorada no token **`--spacing: 0.25rem`** (4px). Logo,
+A escala do Tailwind v4 é ancorada no token **`--spacing: 0.25rem`** (4px),
+definido em `layout.json` → grupo `base` (antes vivia no `spacing.json`, removido
+em 2026-06-20 por ser um arquivo de um token só). Logo,
 **`gap-6`, `py-16`, `px-4`… NÃO são valores crus** — são múltiplos do token
 (`gap-6` = 6 × 0.25rem = 1.5rem). Usar a escala numérica do Tailwind é o caminho
 canônico; o que **não** se admite é `gap-[13px]`, `p-[7px]` ou `m-[0.9rem]` (fora da grade de 4px).

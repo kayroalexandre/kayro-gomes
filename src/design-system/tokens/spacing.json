@@ -1,9 +1,0 @@
-{
-  "$description": "Sistema de espaçamento. No Tailwind v4 toda a escala (p-1 … p-96, gaps, margins, insets) é derivada de UM único multiplicador --spacing via calc(var(--spacing) * n). Por isso não há tokens numéricos individuais aqui — seriam mortos (o Tailwind os gera sob demanda). Dimensões de layout (header, container, breakpoints) vivem em layout.json; raio/ícone/traço em size.json.",
-
-  "spacing": {
-    "$type": "dimension",
-    "$description": "Base multiplicadora do espaçamento. Emitida como --spacing; o Tailwind v4 deriva toda a escala a partir dela.",
-    "base": { "$value": "0.25rem" }
-  }
-}
