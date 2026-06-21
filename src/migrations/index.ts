@@ -4,6 +4,7 @@ import * as migration_20260607_204115 from './20260607_204115';
 import * as migration_20260612_172100_fix_empty_lexical_state from './20260612_172100_fix_empty_lexical_state';
 import * as migration_20260612_183426_add_hero_overlay_fields from './20260612_183426_add_hero_overlay_fields';
 import * as migration_20260612_195126_add_hero_image_fit_and_search_enabled from './20260612_195126_add_hero_image_fit_and_search_enabled';
+import * as migration_20260621_143929_add_hero_scroll_indicator_fields from './20260621_143929_add_hero_scroll_indicator_fields';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260612_195126_add_hero_image_fit_and_search_enabled.up,
     down: migration_20260612_195126_add_hero_image_fit_and_search_enabled.down,
-    name: '20260612_195126_add_hero_image_fit_and_search_enabled'
+    name: '20260612_195126_add_hero_image_fit_and_search_enabled',
+  },
+  {
+    up: migration_20260621_143929_add_hero_scroll_indicator_fields.up,
+    down: migration_20260621_143929_add_hero_scroll_indicator_fields.down,
+    name: '20260621_143929_add_hero_scroll_indicator_fields'
   },
 ];
