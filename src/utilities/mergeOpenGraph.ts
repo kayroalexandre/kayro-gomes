@@ -9,6 +9,7 @@ const defaultOpenGraph: Metadata['openGraph'] = {
       url: `${getServerSideURL()}/website-template-OG.webp`,
     },
   ],
+  locale: 'pt-BR',
   siteName: 'Kayro Gomes',
   title: 'Kayro Gomes — Desenvolvedor Full-Stack',
 }

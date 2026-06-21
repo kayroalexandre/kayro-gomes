@@ -4,5 +4,12 @@
       "path": "/api/payload-jobs/run",
       "schedule": "0 0 * * *"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "preview": true,
+      "develop": false
+    }
+  }
 }

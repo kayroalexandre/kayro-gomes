@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noUncheckedSideEffectImports": false,
     "esModuleInterop": true,
     "target": "ES2022",

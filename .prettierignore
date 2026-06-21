@@ -9,6 +9,8 @@
 **/dist/**
 **/node_modules
 **/temp
-**/docs/**
-tsconfig.json
+**/.next
+coverage/
+playwright-report/
+test-results/
 

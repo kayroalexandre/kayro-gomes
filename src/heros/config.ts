@@ -67,6 +67,81 @@ export const hero: Field = {
       relationTo: 'media',
       required: true,
     },
+    {
+      name: 'overlayEnabled',
+      type: 'checkbox',
+      admin: {
+        hidden: true, // Desativado — overlay não deve aparecer sobre a imagem do hero
+      },
+      defaultValue: false,
+      label: 'Enable Background Overlay',
+    },
+    {
+      name: 'overlayOpacity',
+      type: 'number',
+      admin: {
+        hidden: true, // Desativado — overlay não deve aparecer sobre a imagem do hero
+      },
+      defaultValue: 60,
+      label: 'Overlay Opacity (%)',
+      max: 100,
+      min: 0,
+    },
+    {
+      name: 'heroImageFit',
+      type: 'select',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+        description: 'Controls how the background image fits the hero area.',
+      },
+      defaultValue: 'cover',
+      label: 'Image Fit Mode',
+      options: [
+        {
+          label: 'Cover — Fills the area, cropping if necessary',
+          value: 'cover',
+        },
+        {
+          label: 'Contain — Shows full image without cropping',
+          value: 'contain',
+        },
+      ],
+    },
+    {
+      name: 'scrollIndicator',
+      type: 'group',
+      admin: {
+        condition: (_, { type } = {}) => type === 'highImpact',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: true,
+          label: 'Show scroll indicator',
+        },
+        {
+          name: 'position',
+          type: 'select',
+          admin: {
+            condition: (_, siblingData) => siblingData?.enabled !== false,
+          },
+          defaultValue: 'bottom',
+          label: 'Position',
+          options: [
+            {
+              label: 'Always at bottom of hero',
+              value: 'bottom',
+            },
+            {
+              label: 'Inline with content (distributed evenly)',
+              value: 'inline',
+            },
+          ],
+        },
+      ],
+      label: 'Scroll Indicator',
+    },
   ],
   label: false,
 }

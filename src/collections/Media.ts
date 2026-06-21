@@ -44,6 +44,10 @@ export const Media: CollectionConfig = {
     staticDir: process.env.VERCEL ? '/tmp' : path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
+    // Restringe mime types a imagens; o limite de tamanho é imposto pelo
+    // runtime (Vercel: 4.5MB serverless / 100MB fluid compute) e pelo
+    // body size configurado no `serverActions` do Next.
+    mimeTypes: ['image/*'],
     imageSizes: [
       {
         name: 'thumbnail',

@@ -1,18 +1,24 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDebounce } from '@/utilities/useDebounce'
 import { useRouter } from 'next/navigation'
 
 export const Search: React.FC = () => {
   const [value, setValue] = useState('')
   const router = useRouter()
-
-  const debouncedValue = useDebounce(value)
+  // Pula o primeiro efeito (mount) para evitar `router.push('/search')` redundante
+  // na primeira renderização quando o valor está vazio.
+  const isFirstRender = useRef(true)
+  const debouncedValue = useDebounce(value, 300)
 
   useEffect(() => {
-    router.push(`/search${debouncedValue ? `?q=${debouncedValue}` : ''}`)
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    router.push(`/search${debouncedValue ? `?q=${encodeURIComponent(debouncedValue)}` : ''}`)
   }, [debouncedValue, router])
 
   return (
@@ -23,17 +29,17 @@ export const Search: React.FC = () => {
         }}
       >
         <Label htmlFor="search" className="sr-only">
-          Search
+          Buscar
         </Label>
         <Input
           id="search"
           onChange={(event) => {
             setValue(event.target.value)
           }}
-          placeholder="Search"
+          placeholder="Buscar..."
         />
         <button type="submit" className="sr-only">
-          submit
+          Buscar
         </button>
       </form>
     </div>

@@ -38,5 +38,8 @@
       "source.fixAll.eslint": "explicit"
     }
   },
-  "python-envs.defaultEnvManager": "ms-python.python:system"
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "claudeCode.environmentVariables": [],
+  "remote.autoForwardPortsFallback": 0,
+  "claudeCode.useTerminal": true
 }

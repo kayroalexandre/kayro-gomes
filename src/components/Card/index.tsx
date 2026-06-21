@@ -2,11 +2,12 @@
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { Card as ShadcnCard } from '@/components/ui/card'
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
 
@@ -30,33 +31,36 @@ export const Card: React.FC<{
   const href = `/${relationTo}/${slug}`
 
   return (
-    <article
+    <ShadcnCard
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        'group overflow-hidden hover:cursor-pointer flex flex-col h-full border border-border bg-card rounded-card transition-colors hover:border-border/80',
         className,
       )}
-      ref={card.ref}
+      ref={card.ref as React.Ref<HTMLDivElement>}
     >
-      <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+      <div className="relative w-full aspect-video bg-muted/5 overflow-hidden border-b border-border/10">
+        {metaImage && typeof metaImage !== 'string' && (
+          <div className="transition-transform duration-500 group-hover:scale-105 h-full w-full">
+            <Media resource={metaImage} size="33vw" />
+          </div>
+        )}
       </div>
-      <div className="p-4">
+      <div className="p-5 flex flex-col gap-3 flex-1">
         {showCategories && hasCategories && (
-          <div className="uppercase text-sm mb-4">
+          <div className="flex flex-wrap gap-1.5 mb-1">
             {categories?.map((category, index) => {
               if (typeof category === 'object') {
                 const { title: titleFromCategory } = category
 
-                const categoryTitle = titleFromCategory || 'Untitled category'
-
-                const isLast = index === categories.length - 1
+                const categoryTitle = titleFromCategory || 'Sem categoria'
 
                 return (
-                  <Fragment key={index}>
+                  <span
+                    key={index}
+                    className="text-scale-01 font-semibold text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full"
+                  >
                     {categoryTitle}
-                    {!isLast && <Fragment>, &nbsp;</Fragment>}
-                  </Fragment>
+                  </span>
                 )
               }
 
@@ -65,16 +69,18 @@ export const Card: React.FC<{
           </div>
         )}
         {titleToUse && (
-          <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-          </div>
+          <h3 className="text-body-lg font-bold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors">
+            <Link className="hover:no-underline" href={href} ref={link.ref}>
+              {titleToUse}
+            </Link>
+          </h3>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && (
+          <p className="text-body-sm text-muted-foreground leading-relaxed line-clamp-3 mt-1">
+            {sanitizedDescription}
+          </p>
+        )}
       </div>
-    </article>
+    </ShadcnCard>
   )
 }

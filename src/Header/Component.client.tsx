@@ -30,12 +30,24 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+    <header
+      // `top-[var(--adminbar-h,0px)]` faz o Header descer quando o
+      // AdminBar aparece (logado), em vez de ficar coberto por ele.
+      // Efeito vidro via utility aberta `glass` (tokens effects.glass),
+      // compartilhada com o Footer e qualquer outro componente.
+      className="fixed top-[var(--adminbar-h,0px)] left-0 right-0 z-50 w-full glass transition-[top] duration-[var(--duration-normal)]"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="container grid h-[var(--header-h)] grid-cols-[auto_1fr_auto] items-center">
+        {/* Left: Logo */}
+        <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+          <Logo className="text-foreground" />
         </Link>
+
+        {/* Center: Navigation links (absolute center) */}
         <HeaderNav data={data} />
+
+        {/* Right: Action icons (search + theme) rendered inside HeaderNav */}
       </div>
     </header>
   )

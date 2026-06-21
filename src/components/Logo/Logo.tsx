@@ -1,10 +1,8 @@
-import clsx from 'clsx'
+import { cn } from '@/utilities/ui'
 import React from 'react'
 
 interface Props {
   className?: string
-  loading?: 'lazy' | 'eager'
-  priority?: 'auto' | 'high' | 'low'
 }
 
 /**
@@ -12,21 +10,15 @@ interface Props {
  * Substitui o logo da Payload (que era hardcoded) por uma marca de texto
  * adequada a um portfólio pessoal. Sem dependência externa.
  */
-export const Logo = (props: Props) => {
-  const { className } = props
-
+export const Logo = ({ className }: Props) => {
   return (
     <span
-      className={clsx(
-        'inline-flex items-center gap-2 font-semibold text-lg tracking-tight',
+      className={cn(
+        'inline-flex items-center font-semibold text-heading tracking-tight whitespace-nowrap',
         className,
       )}
       aria-label="Kayro Gomes — Início"
     >
-      <span
-        aria-hidden
-        className="inline-block h-2 w-2 rounded-full bg-primary"
-      />
       Kayro Gomes
     </span>
   )

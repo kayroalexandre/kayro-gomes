@@ -1,12 +1,12 @@
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import { Search } from '@/search/Component'
-import PageClient from './page.client'
-import { CardPostData } from '@/components/Card'
+import type { CardPostData } from '@/components/Card'
 
 type Args = {
   searchParams: Promise<{
@@ -14,7 +14,10 @@ type Args = {
   }>
 }
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
-  const { q: query } = await searchParamsPromise
+  const { q: rawQuery } = await searchParamsPromise
+  // Decodifica o termo buscado (caso venha URL-encoded do componente de Search)
+  // e limita tamanho para evitar queries absurdas.
+  const query = rawQuery ? decodeURIComponent(rawQuery).slice(0, 100) : ''
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
@@ -60,11 +63,11 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   })
 
   return (
-    <div className="pt-24 pb-24">
-      <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Busca</h1>
+    <div className="py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]">
+      <PageHeaderTheme theme="light" />
+      <div className="container mb-12">
+        <div className="max-w-none text-center">
+          <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-8 text-foreground">Busca</h1>
 
           <div className="max-w-[50rem] mx-auto">
             <Search />
@@ -72,17 +75,31 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
         </div>
       </div>
 
-      {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+      {posts.docs.length > 0 ? (
+        <CollectionArchive posts={posts.docs as unknown as CardPostData[]} />
       ) : (
-        <div className="container">Nenhum resultado encontrado.</div>
+        <div className="container">
+          <div className="text-center py-16 px-4 border border-dashed rounded-lg bg-card/20 max-w-[50rem] mx-auto">
+            <p className="text-muted-foreground text-body-lg">
+              {query
+                ? `Nenhum resultado encontrado para "${query}".`
+                : 'Nenhum resultado encontrado.'}
+            </p>
+            <p className="text-body-sm text-muted-foreground/60 mt-1">
+              Tente pesquisar com outros termos ou palavras-chave.
+            </p>
+          </div>
+        </div>
       )}
     </div>
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({ searchParams: searchParamsPromise }: Args): Promise<Metadata> {
+  const { q } = await searchParamsPromise
+  const query = q ? decodeURIComponent(q) : ''
   return {
-    title: `Busca — Kayro Gomes`,
+    alternates: { canonical: '/search' },
+    title: query ? `Busca por "${query}" — Kayro Gomes` : 'Busca — Kayro Gomes',
   }
 }

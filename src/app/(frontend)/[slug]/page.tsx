@@ -4,13 +4,13 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
+import React from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
+import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
+import { queryDocBySlug } from '@/utilities/queryDocBySlug'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
@@ -44,31 +44,31 @@ type Args = {
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const [{ isEnabled: draft }, { slug = 'home' }] = await Promise.all([draftMode(), paramsPromise])
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
   let page: RequiredDataFromCollectionSlug<'pages'> | null
 
-  page = await queryPageBySlug({
+  page = (await queryDocBySlug({
+    collection: 'pages',
     slug: decodedSlug,
-  })
-
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
-  }
+  })) as RequiredDataFromCollectionSlug<'pages'> | null
 
   if (!page) {
     return <PayloadRedirects url={url} />
   }
 
   const { hero, layout } = page
+  const hasHero = hero && hero.type && hero.type !== 'none'
 
   return (
-    <article className="pt-16 pb-24">
-      <PageClient />
+    <article className={`${hasHero ? 'pt-0' : 'pt-24'} pb-24`}>
+      {/* O hero highImpact tem imagem de fundo escura full-bleed: força o header em
+          tema dark para o contraste do logo/nav (mesmo mecanismo de posts/projetos).
+          Os demais heros (medium/low/none) mantêm o tema padrão. */}
+      {hero?.type === 'highImpact' && <PageHeaderTheme theme="dark" />}
+
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
@@ -84,30 +84,10 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = 'home' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const page = await queryPageBySlug({
+  const page = (await queryDocBySlug({
+    collection: 'pages',
     slug: decodedSlug,
-  })
+  })) as RequiredDataFromCollectionSlug<'pages'> | null
 
   return generateMeta({ doc: page })
 }
-
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'pages',
-    draft,
-    limit: 1,
-    pagination: false,
-    overrideAccess: draft,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return result.docs?.[0] || null
-})

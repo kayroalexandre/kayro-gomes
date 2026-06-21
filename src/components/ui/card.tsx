@@ -1,15 +1,19 @@
 import { cn } from '@/utilities/ui'
 import * as React from 'react'
 
-const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
-  return (
-    <div
-      data-slot="card"
-      className={cn('bg-card text-card-foreground rounded-lg border shadow-sm', className)}
-      {...props}
-    />
-  )
-}
+const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        data-slot="card"
+        className={cn('bg-card text-card-foreground rounded-lg border shadow-sm', className)}
+        {...props}
+      />
+    )
+  }
+)
+Card.displayName = 'Card'
 
 const CardHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
   return (
@@ -25,7 +29,7 @@ const CardTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ classNa
   return (
     <h3
       data-slot="card-title"
-      className={cn('text-2xl leading-none font-semibold tracking-tight', className)}
+      className={cn('text-heading leading-none font-semibold tracking-tight', className)}
       {...props}
     />
   )
@@ -38,7 +42,7 @@ const CardDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
   return (
     <p
       data-slot="card-description"
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-muted-foreground text-body-sm', className)}
       {...props}
     />
   )
