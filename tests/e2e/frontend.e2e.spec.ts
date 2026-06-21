@@ -71,7 +71,7 @@ test.describe('HighImpactHero Layout (AGENTS.md rules)', () => {
   test('hero container respects header height and py-16 padding', async ({ page }) => {
     await page.goto('http://localhost:3000')
 
-    const container = page.locator('.container').first()
+    const container = page.locator('section > div.container').first()
     await expect(container).toBeVisible()
 
     const classList = await container.getAttribute('class')

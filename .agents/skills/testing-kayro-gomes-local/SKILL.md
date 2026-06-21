@@ -10,14 +10,14 @@ description: Test the Kayro Gomes Next.js/Payload app locally, including debug l
 
 ## Local setup
 
-1. Use Node 24 and pnpm 10.33.0.
-2. Install dependencies with `pnpm install --frozen-lockfile`.
+1. Use Node 24 and Bun 1.3.x.
+2. Install dependencies with `bun install --frozen-lockfile`.
 3. For local app testing, create local-only `.env.local`/`.env.docker` values and start Postgres with `docker compose up -d`. Do not commit these env files.
 4. If Payload regenerates `src/app/(payload)/admin/importMap.js` during a dev-server run, inspect the diff before committing; it might be a generated local side effect unrelated to the test.
 
 ## Runtime checks
 
-- Normal development: `pnpm dev`.
+- Normal development: `bun dev`.
 - VS Code full-stack debug source-map checks: run the launch-equivalent command from repo root, `node --inspect node_modules/next/dist/bin/next dev --webpack`.
 - A successful webpack debug launch should print `Next.js 16.2.7 (webpack)`, `Debugger port:`, and `✓ Ready`.
 - To confirm the Turbopack HMR source-map path is bypassed, clean `.next`, load `/`, then check that `.next/dev` contains no files matching `*turbopack*` or `*hmr-client*`.

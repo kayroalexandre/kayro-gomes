@@ -43,13 +43,9 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
           ignoraria a margem e overflowaria).
         - `py-16` → padding superior E inferior iguais (4rem cada,
           classe `p-16` do design system).
-        - Layout interno: wrapper `flex-1 justify-center` centraliza
-          o conteúdo (título + CTAs opcionais) vertical e horizontalmente.
-          O scroll indicator fica fora do wrapper, no rodapé,
-          sem afetar a centralização do conteúdo. Funciona independentemente
-          de quais campos estão habilitados/desabilitados no CMS.
+        - Layout interno: `justify-between` distribui conteúdo e indicador.
       */}
-      <div className="container relative z-10 px-4 text-center mt-[var(--header-h)] flex h-[calc(100%-var(--header-h))] flex-col items-center py-16">
+      <div className="container relative z-10 px-4 text-center mt-[var(--header-h)] flex h-[calc(100%-var(--header-h))] flex-col items-center justify-between py-16">
         <DynamicHighImpactContent
           richText={richText}
           links={links}

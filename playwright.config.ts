@@ -1,10 +1,9 @@
+import nextEnv from '@next/env'
 import { defineConfig, devices } from '@playwright/test'
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-import 'dotenv/config'
+const { loadEnvConfig } = nextEnv
+
+loadEnvConfig(process.cwd())
 
 /**
  * See https://playwright.dev/docs/test-configuration.
