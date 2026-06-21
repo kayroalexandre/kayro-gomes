@@ -1,0 +1,68 @@
+{
+  "$description": "Tokens estruturais de layout: base de espaçamento do Tailwind v4, dimensões do chrome da aplicação, padding de container, dimensões de controles interativos (button/input/select…), ritmo de espaçamento de seção/bloco, breakpoints responsivos e escala de empilhamento (z-index). Formato DTCG. Dimensões em string rem/px (desvio documentado).",
+
+  "base": {
+    "$type": "dimension",
+    "$description": "Multiplicador-base do espaçamento do Tailwind v4. Emitido como --spacing; toda a escala numérica (gap-*, p-*, m-*, py-16…) deriva dele via calc(var(--spacing) * n). Antes vivia em spacing.json (removido em 2026-06-20 — arquivo de um token só); realocado aqui por ser a dimensão fundamental de layout.",
+    "spacing": { "$value": "0.25rem" }
+  },
+
+  "structure": {
+    "$type": "dimension",
+    "$description": "Dimensões fixas do chrome da aplicação. --header-h é consumido pelos heros (offset do conteúdo abaixo do header).",
+    "header-h": { "$value": "5rem" },
+    "sidebar-w": { "$value": "16rem" },
+    "sheet-w": { "$value": "20rem" }
+  },
+
+  "control": {
+    "$type": "dimension",
+    "$description": "Dimensões canônicas de controles interativos (button, input, select, textarea). Altura, padding horizontal/vertical e gap interno por tamanho. Emitidos como --control-* e consumidos via h-[var(--control-height-md)] / px-[var(--control-padding-x-md)] (mesmo idioma var() do --header-h). Os valores espelham EXATAMENTE a calibração shadcn atual (h-9/h-10/h-12, px-3/4/6/8, py-2, gap-2) — tokenizar é zero mudança visual; centraliza a fonte e exporta as medidas para o Figma.",
+    "height-sm": { "$value": "2.25rem", "$description": "h-9 (36px): input, select, textarea, button sm." },
+    "height-md": { "$value": "2.5rem", "$description": "h-10 (40px): button default e botão de ícone (size-10)." },
+    "height-lg": { "$value": "3rem", "$description": "h-12 (48px): button lg." },
+    "padding-x-compact": { "$value": "0.75rem", "$description": "px-3: campos de texto (input/select/textarea)." },
+    "padding-x-sm": { "$value": "1rem", "$description": "px-4: button sm e padding reduzido com ícone." },
+    "padding-x-md": { "$value": "1.5rem", "$description": "px-6: button default." },
+    "padding-x-lg": { "$value": "2rem", "$description": "px-8: button lg." },
+    "padding-y": { "$value": "0.5rem", "$description": "py-2: padding vertical padrão de controles." },
+    "gap": { "$value": "0.5rem", "$description": "gap-2: gap entre ícone e label dentro de um controle." }
+  },
+
+  "space": {
+    "$type": "dimension",
+    "$description": "Ritmo de espaçamento semântico do layout de página: padding vertical de seção (responsivo) e gap entre blocos. Emitidos como --space-* e consumidos via py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)] / my-[var(--space-block-gap)]. Espelham a escala Tailwind atual (py-16/py-24, my-16) — centralizam o ritmo de seção numa única fonte (antes repetido literalmente em 12+ lugares). O hero HighImpact mantém seu py-16 literal de propósito (geometria calibrada, ver AGENTS.md).",
+    "section-y": { "$value": "4rem", "$description": "py-16 (64px): padding vertical de seção, base (mobile)." },
+    "section-y-lg": { "$value": "6rem", "$description": "py-24 (96px): padding vertical de seção em md+." },
+    "block-gap": { "$value": "4rem", "$description": "my-16 (64px): margem vertical entre blocos consecutivos no RenderBlocks." }
+  },
+
+  "container": {
+    "$type": "dimension",
+    "$description": "Padding horizontal do utilitário .container (globals.css). base no mobile, md a partir do breakpoint md.",
+    "padding": { "$value": "1rem" },
+    "padding-md": { "$value": "2rem" }
+  },
+
+  "breakpoint": {
+    "$type": "dimension",
+    "$description": "Breakpoints responsivos. Mapeados para o namespace --breakpoint-* do Tailwind v4 (usados em @custom-variant e no max-width do .container).",
+    "sm": { "$value": "40rem" },
+    "md": { "$value": "48rem" },
+    "lg": { "$value": "64rem" },
+    "xl": { "$value": "80rem" },
+    "2xl": { "$value": "96rem" }
+  },
+
+  "z-index": {
+    "$type": "number",
+    "$description": "Escala semântica de empilhamento para camadas flutuantes (overlays, popovers, toasts). Emitida como --z-* para uso direto via var() em CSS de componentes.",
+    "dropdown": { "$value": "1000" },
+    "sticky": { "$value": "1100" },
+    "modal-backdrop": { "$value": "1200" },
+    "modal": { "$value": "1300" },
+    "popover": { "$value": "1400" },
+    "tooltip": { "$value": "1500" },
+    "toast": { "$value": "1600" }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "$description": "Tipografia em formato DTCG, estrutura/escala/nomenclatura do Simple Design System (github.com/figma/sds), em rem. Grafo de duas camadas: primitivos (family/scale/weight/line-height/letter-spacing) → semânticos (body, heading, …) que referenciam os primitivos via var(). Famílias mapeiam para as fontes do projeto (Google Sans Flex/Code via next/font). Refs internas usam var() (não {}) de propósito: --font-sans/--font-mono são de propriedade do next/font, e os semânticos apontam para os vars de runtime emitidos (--text-scale-*, --weight-*) para manter indireção única.",
+
+  "family": {
+    "$type": "fontFamily",
+    "sans": { "$value": "\"Google Sans Flex\", system-ui, sans-serif" },
+    "serif": { "$value": "ui-serif, Georgia, \"Times New Roman\", serif" },
+    "mono": { "$value": "\"Google Sans Code\", ui-monospace, SFMono-Regular, Menlo, monospace" }
+  },
+
+  "scale": {
+    "$type": "dimension",
+    "$description": "Escala de tamanho de fonte (rem). Desvio documentado: $value em string rem, não objeto {value,unit}.",
+    "01": { "$value": "0.75rem" },
+    "02": { "$value": "0.875rem" },
+    "03": { "$value": "1rem" },
+    "04": { "$value": "1.25rem" },
+    "05": { "$value": "1.5rem" },
+    "06": { "$value": "2rem" },
+    "07": { "$value": "2.5rem" },
+    "08": { "$value": "3rem" },
+    "09": { "$value": "4rem" },
+    "10": { "$value": "4.5rem" }
+  },
+
+  "weight": {
+    "$type": "fontWeight",
+    "thin": { "$value": "100" },
+    "extra-light": { "$value": "200" },
+    "light": { "$value": "300" },
+    "regular": { "$value": "400" },
+    "medium": { "$value": "500" },
+    "semibold": { "$value": "600" },
+    "bold": { "$value": "700" },
+    "extra-bold": { "$value": "800" },
+    "black": { "$value": "900" }
+  },
+
+  "line-height": {
+    "$type": "number",
+    "none": { "$value": "1" },
+    "tight": { "$value": "1.25" },
+    "snug": { "$value": "1.375" },
+    "normal": { "$value": "1.5" },
+    "relaxed": { "$value": "1.625" },
+    "loose": { "$value": "2" }
+  },
+
+  "letter-spacing": {
+    "$type": "dimension",
+    "tighter": { "$value": "-0.05em" },
+    "tight": { "$value": "-0.025em" },
+    "normal": { "$value": "0" },
+    "wide": { "$value": "0.025em" },
+    "wider": { "$value": "0.05em" },
+    "widest": { "$value": "0.1em" }
+  },
+
+  "body": {
+    "$description": "Texto corrido. Pesos canônicos SDS: regular 400 / strong 600.",
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-weight-regular": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
+    "font-weight-strong": { "$type": "fontWeight", "$value": "var(--weight-semibold)" },
+    "size-small": { "$type": "dimension", "$value": "var(--text-scale-02)" },
+    "size-medium": { "$type": "dimension", "$value": "var(--text-scale-03)" },
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-04)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-normal)" },
+    "line-height-relaxed": { "$type": "number", "$value": "var(--line-height-relaxed)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
+  },
+
+  "code": {
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-mono)" },
+    "font-weight": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
+    "size-small": { "$type": "dimension", "$value": "var(--text-scale-02)" },
+    "size-base": { "$type": "dimension", "$value": "var(--text-scale-03)" },
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-04)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-normal)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
+  },
+
+  "heading": {
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-weight": { "$type": "fontWeight", "$value": "var(--weight-semibold)" },
+    "size-small": { "$type": "dimension", "$value": "var(--text-scale-04)" },
+    "size-base": { "$type": "dimension", "$value": "var(--text-scale-05)" },
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-06)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-snug)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-tight)" }
+  },
+
+  "subheading": {
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-weight": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
+    "size-small": { "$type": "dimension", "$value": "var(--text-scale-03)" },
+    "size-medium": { "$type": "dimension", "$value": "var(--text-scale-04)" },
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-05)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-snug)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
+  },
+
+  "subtitle": {
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-weight": { "$type": "fontWeight", "$value": "var(--weight-regular)" },
+    "size-small": { "$type": "dimension", "$value": "var(--text-scale-05)" },
+    "size-base": { "$type": "dimension", "$value": "var(--text-scale-06)" },
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-07)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-snug)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-normal)" }
+  },
+
+  "title-page": {
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-weight": { "$type": "fontWeight", "$value": "var(--weight-bold)" },
+    "size-small": { "$type": "dimension", "$value": "var(--text-scale-07)" },
+    "size-base": { "$type": "dimension", "$value": "var(--text-scale-08)" },
+    "size-large": { "$type": "dimension", "$value": "var(--text-scale-09)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-tight)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-tight)" }
+  },
+
+  "title-hero": {
+    "font-family": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-weight": { "$type": "fontWeight", "$value": "var(--weight-bold)" },
+    "size": { "$type": "dimension", "$value": "var(--text-scale-10)" },
+    "line-height": { "$type": "number", "$value": "var(--line-height-tight)" },
+    "letter-spacing": { "$type": "dimension", "$value": "var(--letter-spacing-tight)" }
+  }
+}

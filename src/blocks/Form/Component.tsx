@@ -6,7 +6,9 @@ import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
+import { Icon } from '@/components/ui/icon'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
+import { Loader2 } from 'lucide-react'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
@@ -114,17 +116,26 @@ export const FormBlock: React.FC<
   )
 
   return (
-    <div className="container lg:max-w-[48rem]">
+    <div className="container lg:max-w-[48rem] py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]">
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
-      <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
+      <div className="p-6 lg:p-8 border border-border rounded-card bg-card shadow-sm">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <RichText data={confirmationMessage} />
           )}
-          {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
-          {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
+          {isLoading && !hasSubmitted && (
+            <div className="flex items-center gap-2 py-4 text-muted-foreground justify-center">
+              <Icon icon={Loader2} size="sm" className="animate-spin" />
+              <span>Enviando dados, por favor aguarde...</span>
+            </div>
+          )}
+          {error && (
+            <div className="p-3 mb-6 text-body-sm rounded-md border border-destructive bg-destructive/10 text-destructive">
+              {`${error.status || 'Erro'}: ${error.message || 'Ocorreu um problema ao enviar o formulário.'}`}
+            </div>
+          )}
           {!hasSubmitted && (
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-4 last:mb-0">

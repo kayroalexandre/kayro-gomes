@@ -1,59 +1,80 @@
-# Payload Website Template
+# kayro-gomes — Portfólio Pessoal
 
-This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
+Site oficial e portfólio de **Kayro Gomes** (kayroalexandre), construído com **Next.js 16 + Payload CMS 3**.
 
-You can deploy to Vercel, using Neon and Vercel Blob Storage with one click:
+🌐 **Produção:** [www.kayrogomes.com](https://www.kayrogomes.com)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?build-command=pnpm%20run%20ci&demo-description=A%20production-ready%20website%20built%20with%20Payload%2C%20the%20only%20Next.js-native%20CMS.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F1EyBgbstPv4d6NMwzldDyY%2F58d07399ce2a2bb51341125fe4f51572%2Fpayloadwebsitetempate_vercel_thumbnail.jpg&demo-title=Payload%20Website%20Starter&demo-url=https%3A%2F%2Fpayload-vercel-website-demo.vercel.app%2F&env=PAYLOAD_SECRET%2CCRON_SECRET%2CPREVIEW_SECRET&from=templates&project-name=Payload%20Website%20Starter&repository-name=payload-website-starter&repository-url=https%3A%2F%2Fgithub.com%2Fpayloadcms%2Fpayload%2Ftree%2Fmain%2Ftemplates%2Fwith-vercel-website&skippable-integrations=1&stores=%255B%257B%2522type%2522%253A%2522integration%2522%252C%2522productSlug%2522%253A%2522neon%2522%252C%2522integrationSlug%2522%253A%2522neon%2522%257D%252C%257B%2522type%2522%253A%2522blob%2522%257D%255D)
+---
 
-This template is right for you if you are working on:
+## Stack
 
-- A personal or enterprise-grade website, blog, or portfolio
-- A content publishing platform with a fully featured publication workflow
-- Exploring the capabilities of Payload
+- **Next.js 16** (App Router) + **React 19**
+- **Payload CMS 3** (rodando no mesmo processo Next)
+- **Postgres** (Docker local para dev; Neon em produção)
+- **Vercel Blob Storage** para mídia
+- **Vercel** para deploy (Production + Preview)
 
-Core features:
+## Desenvolvimento Local
 
-- [Pre-configured Payload Config](#how-it-works)
-- [Authentication](#users-authentication)
-- [Access Control](#access-control)
-- [Layout Builder](#layout-builder)
-- [Draft Preview](#draft-preview)
-- [Live Preview](#live-preview)
-- [On-demand Revalidation](#on-demand-revalidation)
-- [SEO](#seo)
-- [Search](#search)
-- [Redirects](#redirects)
-- [Jobs and Scheduled Publishing](#jobs-and-scheduled-publish)
-- [Website](#website)
+### Pré-requisitos
 
-## Quick start – Deploying to Vercel
+- Bun 1.3.x
+- Docker Desktop (para Postgres local)
+- Vercel CLI (`npm i -g vercel`)
 
-Click the 'Deploy' button to spin up this template directly into Vercel hosting. It will first prompt you save this template into your own Github repo so that you own the code and can make any changes you want to it. You will be prompted to set up the required services and secrets. Once the app is built and deployed, you can visit your site using the generated URL.
+### Setup
 
-Set up the following services and secrets and then once the app has been built and deployed you will be able to visit your site at the generated URL.
+```bash
+# 1. Clone e instale dependências
+git clone https://github.com/kayroalexandre/kayro-gomes.git
+cd kayro-gomes
+bun install
 
-From this point on you can access your admin panel at `/admin` of your app URL, create an admin user and then click the 'Seed the database' button in the dashboard to add content into your app.
+# 2. Inicie o Postgres local via Docker
+bun run predev   # ou: docker compose up -d
 
-### Services
+# 3. Rode o servidor de desenvolvimento
+bun dev
 
-This project uses the following services integrated into Vercel which you will need to click "Add" and "Connect" for:
+# 4. Acesse http://localhost:3000
+```
 
-Neon Database - Postgres-based cloud database used to host your data
+### Comandos Úteis
 
-Vercel Blob Storage - object storage used to host your files such as images and videos
+```bash
+bun run lint                 # ESLint
+bunx tsc --noEmit            # Typecheck
+bun run build                # Build de produção
+bun payload migrate          # Aplicar migrations
+bun generate:types           # Regerar tipos Payload
+bun db:seed                  # Popular banco (destrutivo!)
+```
 
-The connection variables will automatically be setup for you on Vercel when these services are connected.
+## Workflow de Desenvolvimento
 
-#### Secrets
+Consulte [`AGENTS.md`](AGENTS.md) para o workflow oficial consolidado:
 
-You will be prompted to add the following secret values to your project. These should be long unguessable strong passwords, you can also use a password manager to generate one for these.
+- Branches permanentes: `main` (produção), `develop` (trabalho), `preview` (testes)
+- Commits diretos permitidos em `develop` e `preview`
+- PRs para `main` exigem aprovação + CI verde
+- Migrations: `bun payload migrate:create` (nunca edite migrations aplicadas)
 
-CRON_SECRET - used for running cron on Vercel
+## Documentação
 
-PAYLOAD_SECRET - used by Payload to sign secrets like JWT tokens
+- [`docs/MIGRATIONS.md`](docs/MIGRATIONS.md) — Fluxo de migrations e arquitetura de bancos
+- [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — Catálogo de erros comuns
+- [`docs/workflow_guide.md`](docs/workflow_guide.md) — Guia legado (consulte AGENTS.md)
 
-PREVIEW_SECRET - used by Payload for secured live previews of your content
+## Segurança
+
+- **NUNCA** commite `.env.local`, `.env.docker`, ou qualquer arquivo com secrets
+- Use `vercel env pull` para gerar `.env.local` em qualquer máquina
+- Para Postgres local, use **apenas** `.env.docker`
+- O seed (`bun db:seed`) é **destrutivo** — nunca rode em produção sem backup
+
+## Licença
+
+MIT
 
 ## Quick Start - local setup
 
@@ -70,7 +91,7 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 
    > _NOTE: If the connection string value includes `localhost` or `127.0.0.1`, the code will automatically use a normal postgres adapter instead of Vercel._. You can override this functionality by setting `forceUseVercelPostgres: true` if desired.
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
+3. `bun install && bun dev` para instalar dependências e iniciar o servidor de desenvolvimento
 4. open `http://localhost:3000` to open the app in your browser
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
@@ -234,15 +255,15 @@ If your database is pointed to production you will want to set `push: false` oth
 Locally create a migration
 
 ```bash
-pnpm payload migrate:create
+bun payload migrate:create
 ```
 
 This creates the migration files you will need to push alongside with your new configuration.
 
-On the server after building and before running `pnpm start` you will want to run your migrations
+On the server after building and before running `bun start` you will want to run your migrations
 
 ```bash
-pnpm payload migrate
+bun payload migrate
 ```
 
 This command will check for any migrations that have not yet been run and try to run them and it will keep a record of migrations that have been run in the database.

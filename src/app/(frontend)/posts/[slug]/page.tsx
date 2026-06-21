@@ -1,18 +1,19 @@
 import type { Metadata } from 'next'
 
-import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
+import { RelatedPosts } from '@/components/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
+import React from 'react'
 import RichText from '@/components/RichText'
 
 import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
+import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
+import { queryDocBySlug } from '@/utilities/queryDocBySlug'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
@@ -42,18 +43,20 @@ type Args = {
 }
 
 export default async function Post({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+  const [{ isEnabled: draft }, { slug = '' }] = await Promise.all([
+    draftMode(),
+    paramsPromise,
+  ])
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const post = (await queryDocBySlug({ collection: 'posts', slug: decodedSlug })) as Post | null
 
   if (!post) return <PayloadRedirects url={url} />
 
   return (
-    <article className="pt-16 pb-16">
-      <PageClient />
+    <article className="pt-0 pb-16">
+      <PageHeaderTheme theme="dark" />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -62,7 +65,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       <PostHero post={post} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
+      <div className="flex flex-col items-center pt-16">
         <div className="container">
           <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
           {post.relatedPosts && post.relatedPosts.length > 0 && (
@@ -81,28 +84,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const post = (await queryDocBySlug({ collection: 'posts', slug: decodedSlug })) as Post | null
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: post, pathOverride: `/posts/${decodedSlug}` })
 }
-
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
-    collection: 'posts',
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return result.docs?.[0] || null
-})

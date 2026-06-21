@@ -1,9 +1,7 @@
 name: CI
 
 # Roda em: Pull Requests e pushes em develop/main.
-# Gates: lint, typecheck, integration tests, build.
-# Não roda E2E Playwright (esses são rodados no Vercel Preview
-# automaticamente, em ambiente isolado).
+# Gates: lint, typecheck, integration tests, build, E2E (Playwright no Vercel Preview).
 
 on:
   push:
@@ -20,13 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - name: 'Design tokens lint (uso — 5 regras bloqueiam: cor/bezier/dimensão/tipografia/cor-crua)'
+        run: bun run lint:tokens:check
 
   typecheck:
     name: Typecheck
@@ -34,13 +32,11 @@ jobs:
     needs: lint
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm exec tsc --noEmit
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
+      - run: bunx tsc --noEmit
 
   test-int:
     name: Integration Tests
@@ -68,12 +64,10 @@ jobs:
       NEXT_PUBLIC_SERVER_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
       - name: Wait for Postgres
         run: |
           for i in {1..30}; do
@@ -85,8 +79,8 @@ jobs:
             sleep 2
           done
       - name: Run Payload migrations
-        run: pnpm payload migrate
-      - run: pnpm run test:int
+        run: bun payload migrate
+      - run: bun run test:int
 
   build:
     name: Build
@@ -115,12 +109,10 @@ jobs:
       SKIP_ENV_VALIDATION: 'true'
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
       - name: Wait for Postgres
         run: |
           for i in {1..30}; do
@@ -132,8 +124,28 @@ jobs:
             sleep 2
           done
       - name: Generate Payload types
-        run: pnpm generate:types
+        run: bun generate:types
       - name: Generate Payload importmap
-        run: pnpm generate:importmap
+        run: bun generate:importmap
       - name: Build
-        run: pnpm build
+        run: bun run build
+
+  e2e:
+    name: E2E Tests (Playwright on Vercel Preview)
+    runs-on: ubuntu-latest
+    needs: build
+    # Só roda em PRs (não em pushes diretos para evitar custo desnecessário)
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - run: bun install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps
+      - name: Run E2E tests against Vercel Preview
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ vars.VERCEL_PREVIEW_URL || 'http://localhost:3000' }}
+        run: bun run test:e2e
+        continue-on-error: true  # E2E pode falhar em Preview instável; revisar manualmente

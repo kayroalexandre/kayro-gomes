@@ -1,0 +1,14 @@
+# bunfig.toml
+# Configuração do Bun para o projeto
+
+[install]
+# Usar cache agressivo
+cache = true
+
+[test]
+# Configuração de testes (se usar bun test no futuro)
+preload = []
+
+[run]
+# Hot reload nativo do Bun (mais rápido que --watch do Node)
+hot = true

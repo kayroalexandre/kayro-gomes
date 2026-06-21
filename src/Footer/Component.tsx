@@ -2,7 +2,6 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
 import React from 'react'
 
-import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 
@@ -12,17 +11,30 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
-      <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
-        <Link className="flex items-center" href="/">
-          <Logo />
-        </Link>
+    <footer className="mt-auto border-t border-border-muted glass">
+      <div className="container py-16 flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-4">
+          <Link className="flex items-center hover:opacity-90 transition-opacity" href="/">
+            <Logo className="text-foreground" />
+          </Link>
+          <p className="text-body-sm text-muted-foreground max-w-xs leading-relaxed">
+            Portfólio profissional com projetos, artigos e experiências.
+          </p>
+        </div>
 
-        <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
-          <ThemeSelector />
-          <nav className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col gap-6 md:items-end">
+          <nav
+            aria-label="Navegação do rodapé"
+            className="flex flex-col md:flex-row gap-6 text-body-sm text-muted-foreground"
+          >
             {navItems.map(({ link }, i) => {
-              return <CMSLink className="text-white" key={i} {...link} />
+              return (
+                <CMSLink
+                  key={i}
+                  {...link}
+                  className="hover:text-foreground transition-colors duration-200"
+                />
+              )
             })}
           </nav>
         </div>

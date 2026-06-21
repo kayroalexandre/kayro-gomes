@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache.js'
 
 import type { Project } from '../../../payload-types'
 
@@ -18,6 +18,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
       revalidatePath(path)
       revalidatePath('/projetos')
       revalidateTag('projects-sitemap', 'max')
+      revalidateTag(`projects_${doc.id}`, 'max')
     }
 
     if (previousDoc?._status === 'published' && doc._status !== 'published') {
@@ -28,6 +29,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
       revalidatePath(oldPath)
       revalidatePath('/projetos')
       revalidateTag('projects-sitemap', 'max')
+      revalidateTag(`projects_${previousDoc.id}`, 'max')
     }
   }
   return doc
@@ -40,6 +42,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Project> = ({ doc, req:
     revalidatePath(path)
     revalidatePath('/projetos')
     revalidateTag('projects-sitemap', 'max')
+    revalidateTag(`projects_${doc.id}`, 'max')
   }
 
   return doc

@@ -2,7 +2,7 @@
 
 Catálogo dos perrengues que aparecem (ou já apareceram) neste projeto,
 com a causa raiz e a solução. Se você bateu num erro e não acha
-aqui, vale rodar `pnpm db:check` antes de mais nada — ele mostra
+aqui, vale rodar `bun db:check` antes de mais nada — ele mostra
 o estado do banco e já denuncia metade dos problemas comuns.
 
 ---
@@ -19,17 +19,17 @@ If you'd like to run migrations, data loss will occur. Would you like to proceed
 
 O deploy até termina com `● Ready`, mas o prompt polui o log e qualquer mudança estrutural no schema fica bloqueada até alguém responder.
 
-**Causa raiz:** Alguém rodou `pnpm dev` (ou outro comando que não seja `payload migrate`) contra o banco de produção. O dev mode do payload cria um registro com `batch = -1` na tabela `payload_migrations` toda vez que altera o schema. Aí o `payload migrate` em CI detecta isso e exige confirmação.
+**Causa raiz:** Alguém rodou `bun dev` (ou outro comando que não seja `payload migrate`) contra o banco de produção. O dev mode do payload cria um registro com `batch = -1` na tabela `payload_migrations` toda vez que altera o schema. Aí o `payload migrate` em CI detecta isso e exige confirmação.
 
 **Diagnóstico:**
 ```bash
-pnpm db:check
+bun db:check
 ```
 Se aparecer uma linha com `batch: '-1'`, é esse o problema.
 
 **Solução imediata:**
 ```bash
-pnpm db:fix-dev-migration
+bun db:fix-dev-migration
 ```
 
 Isso faz `UPDATE payload_migrations SET batch = 1 WHERE batch = -1` e
@@ -40,9 +40,9 @@ as tabelas in-place), só estamos sincronizando o controle de migrations.
 
 ---
 
-## 2. `pnpm dev` reclama de secret ausente (`missing secret key`)
+## 2. `bun dev` reclama de secret ausente (`missing secret key`)
 
-**Sintoma:** Ao rodar `pnpm tsx scripts/seed.ts` ou qualquer script que faça `getPayload({ config })`:
+**Sintoma:** Ao rodar `bun run scripts/seed.ts` ou qualquer script que faça `getPayload({ config })`:
 ```
 Error: missing secret key. A secret key is needed to secure Payload.
 ```
@@ -60,7 +60,7 @@ O `_load-env.ts` carrega `prod.env` (se existir) e `.env.local`, e seta `PAYLOAD
 
 ## 3. `payload migrate` cria nova migration com nome `dev` toda vez que roda um script
 
-**Sintoma:** Rodou um script com `getPayload({ config })`, e em seguida `pnpm db:check` mostra um registro novo na tabela:
+**Sintoma:** Rodou um script com `getPayload({ config })`, e em seguida `bun db:check` mostra um registro novo na tabela:
 ```
 id │ name │ batch
  4 │ dev  │  -1
@@ -72,24 +72,13 @@ id │ name │ batch
 
 ---
 
-## 4. Warning `[WARN] The "pnpm" field in package.json is no longer read by pnpm`
+## 4. Warnings e conflitos de gerenciador de pacotes (Bun x pnpm)
 
-**Sintoma:**
-```
-[WARN] The "pnpm" field in package.json is no longer read by pnpm.
-The following keys were ignored: "pnpm.onlyBuiltDependencies".
-```
+**Sintoma:** Erros ou avisos ao executar comandos, ou arquivos antigos poluindo a raiz.
 
-**Causa raiz:** A partir do pnpm 10, a chave `pnpm.onlyBuiltDependencies` no `package.json` foi descontinuada. O novo local é `pnpm-workspace.yaml`.
+**Causa raiz:** O projeto foi migrado e padronizado para rodar exclusivamente no **Bun**.
 
-**Solução:** Manter `pnpm-workspace.yaml` no projeto com:
-```yaml
-onlyBuiltDependencies:
-  - sharp
-  - esbuild
-  - unrs-resolver
-```
-E remover a chave `pnpm` do `package.json`. Já está configurado no repositório.
+**Solução:** O pnpm foi removido juntamente com seus arquivos de configuração (`pnpm-lock.yaml`, `pnpm-workspace.yaml` e `.npmrc`). Toda a instalação e execução deve ser feita com `bun install` e comandos `bun`.
 
 ---
 
@@ -133,11 +122,11 @@ export default buildConfig({
 
 ---
 
-## 7. `pnpm dev` contra o Neon de prod cria "dev migration" no banco errado
+## 7. `bun dev` contra o Neon de prod cria "dev migration" no banco errado
 
-**Sintoma:** Tudo funciona, mas o `pnpm db:check` mostra entradas `dev` com `batch = -1` depois de rodar `pnpm dev`.
+**Sintoma:** Tudo funciona, mas o `bun db:check` mostra entradas `dev` com `batch = -1` depois de rodar `bun dev`.
 
-**Causa raiz:** O `pnpm dev` faz auto-push de schema no banco configurado em `POSTGRES_URL`. Se o seu `.env.local` aponta para a `main` do Neon (produção), você está fazendo dev-push em prod.
+**Causa raiz:** O `bun dev` faz auto-push de schema no banco configurado em `POSTGRES_URL`. Se o seu `.env.local` aponta para a `main` do Neon (produção), você está fazendo dev-push em prod.
 
 **Solução:** Criar um branch `dev` no Neon e apontar `.env.local` para ele. Veja [`workflow_guide.md`](../workflow_guide.md#3-branch-dev-do-neon-essencial).
 
@@ -145,7 +134,7 @@ export default buildConfig({
 
 ## 8. Seed via script falha com `blob already exists`
 
-**Sintoma:** Ao rodar `pnpm db:seed`:
+**Sintoma:** Ao rodar `bun db:seed`:
 ```
 Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to overwrite it.
 ```
@@ -155,11 +144,11 @@ Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to
 **Solução mais simples (recomendada):** usar os scripts utilitários novos:
 ```bash
 # Ver o que tem no Vercel Blob (sem deletar nada)
-pnpm blob:list
+bun run blob:list
 
 # Apagar TUDO do Blob store (pede confirmação, exige --force)
-pnpm blob:reset --force
-pnpm db:seed
+bun run blob:reset --force
+bun db:seed
 ```
 > Nota: o plugin `@payloadcms/storage-vercel-blob` (versão 3.85.x) não
 > expõe a opção `allowOverwrite` no TypeScript, mesmo que o SDK do
@@ -168,7 +157,7 @@ pnpm db:seed
 > primeiro, exige `--force` para realmente deletar).
 
 **Alternativas manuais:**
-- Apagar manualmente os blobs no painel do Vercel Blob Storage e rodar `pnpm db:seed` de novo.
+- Apagar manualmente os blobs no painel do Vercel Blob Storage e rodar `bun db:seed` de novo.
 - Usar o botão **"Seed the database"** no admin UI, que tem lógica de overwrite.
 - Configurar `addRandomSuffix: true` no `vercelBlobStorage` (vai gerar URLs únicas a cada seed, mas polui o storage).
 
@@ -178,13 +167,13 @@ pnpm db:seed
 
 ```bash
 # Inspecionar estado do banco
-pnpm db:check
+bun db:check
 
 # Limpar dev migrations deixadas em prod
-pnpm db:fix-dev-migration
+bun db:fix-dev-migration
 
 # Rodar seed via CLI (precisa de blobs limpos ou blob com overwrite)
-pnpm db:seed
+bun db:seed
 
 # Ver o que o Vercel está rodando
 vercel logs <URL-do-deploy>
@@ -202,16 +191,16 @@ vercel env pull --environment=production
 
 ```bash
 # ⚠️  APAGA TODOS OS DADOS do banco que estiver em POSTGRES_URL
-pnpm payload migrate:fresh
+bun payload migrate:fresh
 
 # ⚠️  DROP todas as tabelas e roda todas as migrations de novo
-pnpm payload migrate:reset
+bun payload migrate:reset
 
 # ⚠️  Apaga a branch do Neon (irreversível)
 neonctl branches delete <branch>
 ```
 
-Sempre confirme o banco de destino (rode `pnpm db:check` antes) antes
+Sempre confirme o banco de destino (rode `bun db:check` antes) antes
 de qualquer um desses.
 
 ---
@@ -232,7 +221,7 @@ por padrão.
 **Solução imediata (sem precisar mergear nada):**
 ```bash
 # Roda a migration direto contra prod (assume que já foi comitada)
-PAYLOAD_SECRET=... DATABASE_URL=... pnpm exec payload migrate
+PAYLOAD_SECRET=... DATABASE_URL=... bun payload migrate
 ```
 
 **Solução de longo prazo:** o projeto já tem um `prebuild` hook no
@@ -241,21 +230,16 @@ PAYLOAD_SECRET=... DATABASE_URL=... pnpm exec payload migrate
 "prebuild": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
 "build": "next build"
 ```
-pnpm/npm executa `prebuild` antes de `build` automaticamente. **Cuidado:** se a
+O Bun executa `prebuild` antes de `build` automaticamente. **Cuidado:** se a
 migration for destrutiva, o `payload migrate` pede confirmação interativa — em
-CI/Vercel isso trava o build. Use `pnpm db:fix-dev-migration` antes (muda
+CI/Vercel isso trava o build. Use `bun db:fix-dev-migration` antes (muda
 `batch = -1` para `batch = 1`) para destravar.
-
-> Nota histórica: tentamos usar `buildCommand: "pnpm ci"` no `vercel.json` para
-> forçar `payload migrate && next build`, mas `pnpm ci` é um subcomando
-> reservado do pnpm (`ERR_PNPM_CI_NOT_IMPLEMENTED`). O `prebuild` hook é a
-> forma portable que funciona em Vercel, local e qualquer CI.
 
 ---
 
 ## 12. Seed trava com deadlock `40P01` ao limpar collections
 
-**Sintoma:** Rodar `pnpm db:seed` trava e falha com:
+**Sintoma:** Rodar `bun db:seed` trava e falha com:
 ```
 Error: Process A waits for ShareLock on transaction X; blocked by process B.
 SQL: DELETE FROM ONLY "public"."posts_rels" WHERE $1 = "parent_id"

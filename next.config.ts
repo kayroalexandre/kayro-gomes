@@ -24,7 +24,8 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
-    qualities: [100],
+    formats: ['image/avif', 'image/webp'],
+    qualities: [25, 50, 75, 85, 100],
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
         const url = new URL(item)
@@ -34,6 +35,12 @@ const nextConfig: NextConfig = {
           protocol: url.protocol.replace(':', '') as 'http' | 'https',
         }
       }),
+      {
+        // Vercel Blob storage hostname — permite Next/Image otimizar
+        // imagens servidas diretamente do Blob (uploads, seed).
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
   webpack: (webpackConfig) => {

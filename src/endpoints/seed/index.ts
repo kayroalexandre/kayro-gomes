@@ -13,6 +13,8 @@ import { project1 } from './project-1'
 import { project2 } from './project-2'
 import { project3 } from './project-3'
 import { sobre as sobrePageData } from './sobre-page'
+import { projetos as projetosPageData } from './projetos-page'
+import { postsPage as postsPageData } from './posts-page'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -101,8 +103,8 @@ export const seed = async ({
       await payload.db.deleteMany({ collection, req, where: {} })
     }
   }
-  for (const collection of collections.filter(
-    (collection) => Boolean(payload.collections[collection].config.versions),
+  for (const collection of collections.filter((collection) =>
+    Boolean(payload.collections[collection].config.versions),
   )) {
     await payload.db.deleteVersions({ collection, req, where: {} })
   }
@@ -305,7 +307,7 @@ export const seed = async ({
     req,
   })
 
-  payload.logger.info(`— Seeding pages (home, sobre, contato)...`)
+  payload.logger.info(`— Seeding pages (home, contato, sobre, projetos, posts)...`)
 
   const [homePage, contactPage, sobrePage] = await Promise.all([
     payload.create({
@@ -326,6 +328,18 @@ export const seed = async ({
       data: sobrePageData(),
       req,
     }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: projetosPageData(),
+      req,
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: postsPageData(),
+      req,
+    }),
   ])
 
   payload.logger.info(`— Seeding globals (header nav + footer nav)...`)
@@ -338,8 +352,20 @@ export const seed = async ({
           { link: { type: 'custom', label: 'Início', url: '/' } },
           { link: { type: 'custom', label: 'Blog', url: '/posts' } },
           { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
-          { link: { type: 'reference', label: 'Sobre', reference: { relationTo: 'pages', value: sobrePage.id } } },
-          { link: { type: 'reference', label: 'Contato', reference: { relationTo: 'pages', value: contactPage.id } } },
+          {
+            link: {
+              type: 'reference',
+              label: 'Sobre',
+              reference: { relationTo: 'pages', value: sobrePage.id },
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Contato',
+              reference: { relationTo: 'pages', value: contactPage.id },
+            },
+          },
         ],
       },
       req,
@@ -348,8 +374,38 @@ export const seed = async ({
       slug: 'footer',
       data: {
         navItems: [
-          { link: { type: 'custom', label: 'GitHub', newTab: true, url: 'https://github.com/kayroalexandre' } },
-          { link: { type: 'custom', label: 'LinkedIn', newTab: true, url: 'https://linkedin.com/in/kayroalexandre' } },
+          { link: { type: 'custom', label: 'Blog', url: '/posts' } },
+          { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
+          {
+            link: {
+              type: 'reference',
+              label: 'Sobre',
+              reference: { relationTo: 'pages', value: sobrePage.id },
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Contato',
+              reference: { relationTo: 'pages', value: contactPage.id },
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'GitHub',
+              newTab: true,
+              url: 'https://github.com/kayroalexandre',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'LinkedIn',
+              newTab: true,
+              url: 'https://linkedin.com/in/kayroalexandre',
+            },
+          },
           { link: { type: 'custom', label: 'Admin', url: '/admin' } },
         ],
       },
