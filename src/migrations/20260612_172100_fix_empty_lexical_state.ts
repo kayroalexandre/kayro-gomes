@@ -1,47 +1,28 @@
-import { MigrateUpArgs, MigrateDownArgs } from '@payloadcms/db-vercel-postgres'
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-vercel-postgres'
 
-export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
-  const pages = await payload.find({
-    collection: 'pages',
-    limit: 100,
-    depth: 0,
-    req,
-  })
+// Limpa estados lexical vazios ({ root: { children: [] } }) no campo introContent
+// dos blocos Archive, zerando-os para NULL.
+//
+// IMPORTANTE: usa SQL cru direto na coluna `intro_content` (que existe desde a
+// migration inicial) em vez de `payload.find()`. O `payload.find()` monta um
+// SELECT com TODO o schema atual de `pages` — incluindo colunas (hero_overlay_*,
+// hero_hero_image_fit, etc.) que só são criadas por migrations POSTERIORES a esta.
+// Em um banco limpo (CI, Preview, deploy novo) essas colunas ainda não existem
+// quando esta migration roda, e o SELECT quebrava com "column does not exist".
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
+  await db.execute(sql`
+    UPDATE "pages_blocks_archive"
+    SET "intro_content" = NULL
+    WHERE "intro_content" IS NOT NULL
+      AND jsonb_typeof("intro_content" -> 'root' -> 'children') = 'array'
+      AND jsonb_array_length("intro_content" -> 'root' -> 'children') = 0;
 
-  for (const page of pages.docs) {
-    let updated = false
-    const layout = page.layout?.map((block) => {
-      if (block.blockType === 'archive' && block.introContent) {
-        const introContent = block.introContent as Record<string, unknown>
-        if (
-          introContent.root &&
-          typeof introContent.root === 'object' &&
-          Array.isArray((introContent.root as Record<string, unknown>).children) &&
-          ((introContent.root as Record<string, unknown>).children as unknown[]).length === 0
-        ) {
-          payload.logger.info(`Fixing empty lexical state on page "${page.title}" inside Archive block...`)
-          const updatedBlock = { ...block, introContent: null }
-          updated = true
-          return updatedBlock
-        }
-      }
-      return block
-    })
-
-    if (updated) {
-      await payload.update({
-        collection: 'pages',
-        id: page.id,
-        data: {
-          layout,
-        },
-        context: {
-          disableRevalidate: true,
-        },
-        req,
-      })
-    }
-  }
+    UPDATE "_pages_v_blocks_archive"
+    SET "intro_content" = NULL
+    WHERE "intro_content" IS NOT NULL
+      AND jsonb_typeof("intro_content" -> 'root' -> 'children') = 'array'
+      AND jsonb_array_length("intro_content" -> 'root' -> 'children') = 0;
+  `)
 }
 
 export async function down(_args: MigrateDownArgs): Promise<void> {
