@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
+import { Menu } from './collections/Menu'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
@@ -88,6 +89,7 @@ export default buildConfig({
     Media,
     Categories,
     Users,
+    Menu,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   plugins: [

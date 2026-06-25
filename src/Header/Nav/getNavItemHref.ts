@@ -1,6 +1,13 @@
 import type { Header as HeaderType } from '@/payload-types'
+import type { Menu } from '@/payload-types'
 
-export type NavLink = NonNullable<HeaderType['navItems']>[number]['link']
+/**
+ * Tipo unificado para links de navegação.
+ * Suporta tanto o shape antigo (Header.navItems[].link) quanto o novo (Menu collection).
+ */
+export type NavLink =
+  | NonNullable<HeaderType['navItems']>[number]['link']
+  | Pick<Menu, 'type' | 'reference' | 'url' | 'label' | 'newTab'>
 
 /** Calcula o href de um link de navegação seguindo a mesma lógica do CMSLink. */
 export function getNavItemHref(link: NavLink): string | undefined {

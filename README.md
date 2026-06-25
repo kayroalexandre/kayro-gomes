@@ -19,7 +19,7 @@ Site oficial e portfólio de **Kayro Gomes** (kayroalexandre), construído com *
 ### Pré-requisitos
 
 - Bun 1.3.x
-- Docker Desktop (para Postgres local)
+- Docker Desktop (para Postgres local na porta 54320)
 - Vercel CLI (`npm i -g vercel`)
 
 ### Setup
@@ -31,9 +31,9 @@ cd kayro-gomes
 bun install
 
 # 2. Inicie o Postgres local via Docker
-bun run predev   # ou: docker compose up -d
+docker compose up -d
 
-# 3. Rode o servidor de desenvolvimento
+# 3. Rode o servidor de desenvolvimento (predev roda design:build + ensure-db.sh)
 bun dev
 
 # 4. Acesse http://localhost:3000
@@ -42,27 +42,35 @@ bun dev
 ### Comandos Úteis
 
 ```bash
-bun run lint                 # ESLint
+bun run lint                 # ESLint (--max-warnings 0)
 bunx tsc --noEmit            # Typecheck
-bun run build                # Build de produção
+bun run build                # Build de produção (prebuild: design:build + migrate)
 bun payload migrate          # Aplicar migrations
 bun generate:types           # Regerar tipos Payload
-bun db:seed                  # Popular banco (destrutivo!)
+bun db:seed                  # Popular banco (DESTRUTIVO — nunca em prod)
+bun run design:build         # Compilar tokens DTCG → tokens.css + motion
 ```
 
 ## Workflow de Desenvolvimento
 
 Consulte [`AGENTS.md`](AGENTS.md) para o workflow oficial consolidado:
 
-- Branches permanentes: `main` (produção), `develop` (trabalho), `preview` (testes)
-- Commits diretos permitidos em `develop` e `preview`
-- PRs para `main` exigem aprovação + CI verde
-- Migrations: `bun payload migrate:create` (nunca edite migrations aplicadas)
+- **Branches permanentes:** `main` (produção, protegida), `develop` (trabalho principal), `preview` (testes temporários)
+- **Commits diretos** permitidos em `develop` e `preview`
+- **PRs para `main`** exigem aprovação + CI verde (lint, typecheck, tests, build)
+- **Migrations:** `bun payload migrate:create` (nunca edite migrations aplicadas)
+- **Design tokens:** edite JSON em `src/design-system/tokens/*.json`, rode `bun run design:build`
 
 ## Documentação
 
+- [`AGENTS.md`](AGENTS.md) — Workflow oficial, regras de IA, fluxo de 3 branches, hero geometry
+- [`CLAUDE.md`](CLAUDE.md) — Guia para Claude Code (resumo de comandos e arquitetura)
 - [`docs/MIGRATIONS.md`](docs/MIGRATIONS.md) — Fluxo de migrations e arquitetura de bancos
 - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — Catálogo de erros comuns
+- [`docs/DESIGN-SYSTEM-GOVERNANCE.md`](docs/DESIGN-SYSTEM-GOVERNANCE.md) — Governança do design system
+- [`docs/DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md) — Contrato de consumo (vocabulário canônico)
+- [`docs/DESIGN-SYSTEM-COMPONENTS.md`](docs/DESIGN-SYSTEM-COMPONENTS.md) — Catálogo de componentes + receitas
+- [`docs/DESIGN-SYSTEM-LAYOUT.md`](docs/DESIGN-SYSTEM-LAYOUT.md) — Estrutura, espaçamento e auditoria de layout
 - [`docs/workflow_guide.md`](docs/workflow_guide.md) — Guia legado (consulte AGENTS.md)
 
 ## Segurança
@@ -71,40 +79,11 @@ Consulte [`AGENTS.md`](AGENTS.md) para o workflow oficial consolidado:
 - Use `vercel env pull` para gerar `.env.local` em qualquer máquina
 - Para Postgres local, use **apenas** `.env.docker`
 - O seed (`bun db:seed`) é **destrutivo** — nunca rode em produção sem backup
+- Senha do seed demo: defina `PAYLOAD_DEMO_USER_PASSWORD` em env (nunca hardcode)
 
 ## Licença
 
 MIT
-
-## Quick Start - local setup
-
-To spin up this template locally, follow these steps:
-
-### Clone
-
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
-
-### Development
-
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` from your Vercel project to your `.env` if you want to use Vercel Blob and the Neon database that was created for you.
-
-   > _NOTE: If the connection string value includes `localhost` or `127.0.0.1`, the code will automatically use a normal postgres adapter instead of Vercel._. You can override this functionality by setting `forceUseVercelPostgres: true` if desired.
-
-3. `bun install && bun dev` para instalar dependências e iniciar o servidor de desenvolvimento
-4. open `http://localhost:3000` to open the app in your browser
-
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
-
-#### Docker (Optional)
-
-If you prefer to use Docker for local development instead of a local Postgres instance, the provided docker-compose.yml file can be used.
-
-To do so, follow these steps:
-
-- Modify the `POSTGRES_URL` in your `.env` file to `postgres://postgres@localhost:54320/<dbname>`
-- Modify the `docker-compose.yml` file's `POSTGRES_DB` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
 
 ## How it works
 

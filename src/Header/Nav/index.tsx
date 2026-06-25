@@ -14,16 +14,28 @@ import { SearchIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
-  const navItems = data?.navItems || []
+  const menuItems = data?.menu || []
   const searchEnabled = data?.searchEnabled === true
   const pathname = usePathname()
 
   // Itens com estado ativo resolvido — compartilhados entre o nav desktop e o
   // dropdown mobile, evitando recomputar o href em dois lugares.
-  const items = navItems.map(({ link }) => {
-    const href = getNavItemHref(link)
-    return { link, active: href ? pathname === href : false }
-  })
+  // O campo `menu` é um relationship para a collection `Menu`, que tem
+  // estrutura similar ao `link` anterior (label, type, reference|url, newTab).
+  const items = menuItems
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .map((item) => {
+      // Adaptar o shape da collection Menu para o formato esperado por HeaderNavItem/CMSLink
+      const link = {
+        type: item.type,
+        reference: item.reference,
+        url: item.url,
+        label: item.label,
+        newTab: item.newTab,
+      }
+      const href = getNavItemHref(link as Parameters<typeof getNavItemHref>[0])
+      return { link, active: href ? pathname === href : false }
+    })
 
   return (
     <>

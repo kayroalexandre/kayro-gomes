@@ -1,6 +1,5 @@
 import type { GlobalConfig } from 'payload'
 
-import { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
 
 export const Header: GlobalConfig = {
@@ -10,19 +9,12 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
-      name: 'navItems',
-      type: 'array',
-      fields: [
-        link({
-          appearances: false,
-        }),
-      ],
-      maxRows: 6,
+      name: 'menu',
+      type: 'relationship',
+      relationTo: 'menu',
+      hasMany: true,
       admin: {
-        initCollapsed: true,
-        components: {
-          RowLabel: '@/Header/RowLabel#RowLabel',
-        },
+        description: 'Selecione os itens de navegação a exibir no Header (ordem importa).',
       },
     },
     {
@@ -31,7 +23,8 @@ export const Header: GlobalConfig = {
       defaultValue: false,
       label: 'Enable Site Search',
       admin: {
-        description: 'When enabled, shows the search icon in the header and enables the /search page.',
+        description:
+          'When enabled, shows the search icon in the header and enables the /search page.',
       },
     },
   ],

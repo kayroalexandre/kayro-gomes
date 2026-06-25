@@ -8,7 +8,7 @@ import { Logo } from '@/components/Logo/Logo'
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
 
-  const navItems = footerData?.navItems || []
+  const menuItems = footerData?.menu || []
 
   return (
     <footer className="mt-auto border-t border-border-muted glass">
@@ -27,15 +27,24 @@ export async function Footer() {
             aria-label="Navegação do rodapé"
             className="flex flex-col md:flex-row gap-6 text-body-sm text-muted-foreground"
           >
-            {navItems.map(({ link }, i) => {
-              return (
-                <CMSLink
-                  key={i}
-                  {...link}
-                  className="hover:text-foreground transition-colors duration-200"
-                />
-              )
-            })}
+            {menuItems
+              .filter((item): item is NonNullable<typeof item> => item !== null)
+              .map((item, i) => {
+                const link = {
+                  type: item.type,
+                  reference: item.reference,
+                  url: item.url,
+                  label: item.label,
+                  newTab: item.newTab,
+                }
+                return (
+                  <CMSLink
+                    key={i}
+                    {...link}
+                    className="hover:text-foreground transition-colors duration-200"
+                  />
+                )
+              })}
           </nav>
         </div>
       </div>

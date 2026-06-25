@@ -6,13 +6,12 @@
 > **⚠️ IMPORTANTE:** O projeto migrou exclusivamente para **bun** como gerenciador de pacotes.
 > Todos os comandos que aparecem neste guia com `pnpm` devem ser executados com `bun`
 > (ex: `bun dev`, `bun run build`, `bun run lint`). Este documento é mantido apenas
-> para referência histórica da arquitetura anterior.---
-
-# Guia de Workflow Sincronizado: Local ⇄ GitHub ⇄ Vercel ⇄ Neon (LEGADO)
-
-> **⚠️ Este guia descreve uma arquitetura antiga com Neon branching para dev.
-> A realidade atual usa Docker Postgres local (porta 54320) para desenvolvimento.
-> Consulte [`AGENTS.md`](../AGENTS.md) para o estado consolidado.**
+> para referência histórica da arquitetura anterior.
+>
+> **⚠️ ARQUITETURA ANTIGA:** Este guia descreve Neon branching para dev.
+> A realidade atual usa **Docker Postgres local (porta 54320)** via `docker compose up -d`
+> e `.env.docker`. Consulte [`AGENTS.md`](../AGENTS.md) para o estado consolidado
+> (3 branches permanentes, Docker local, sem Neon branching em dev).
 
 ---
 
@@ -38,7 +37,7 @@ graph TD
     subgraph Local["Ambiente Local (Sua Máquina)"]
         LocalCode["Código Local (branch: feature/...)"]
         LocalDB[("Postgres Local (Docker) OU Branch dev (Neon)")]
-        VercelDev["vercel dev (ou pnpm dev)"]
+        VercelDev["vercel dev (ou bun dev)"]
     end
 
     subgraph GitHub["GitHub (Nuvem)"]
@@ -61,7 +60,7 @@ graph TD
     PreviewDeploy -->|Conecta| PreviewDB
     PR -->|Merge / Aprovado| ProdDeploy
     ProdDeploy -->|Conecta| ProdDB
-    LocalCode -.->|pnpm dev| DevDB
+    LocalCode -.->|bun dev| DevDB
 ```
 
 ---
@@ -72,7 +71,7 @@ A nuvem (Vercel, GitHub e Neon) já está 100% configurada e sincronizada.
 Para rodar local você precisa apenas de:
 
 1.  **Node.js 24.x** — `node -v` deve mostrar `v24.x.x`
-2.  **pnpm 10+** — `npm i -g pnpm` (ou via corepack)
+2.  **bun 1.3.x** — gerenciador de pacotes oficial do projeto
 3.  **Vercel CLI** — `npm i -g vercel`
 4.  **Docker Desktop** *(opcional)* — só se quiser rodar Postgres local sem usar Neon
 5.  **neonctl** *(opcional, recomendado)* — `npm i -g neonctl` para gerenciar branches do Neon pelo terminal
@@ -89,7 +88,7 @@ vercel link   # conecta o clone ao projeto na Vercel
 ## 3. Branch `dev` do Neon (ESSENCIAL)
 
 > **Por que isso é a parte mais importante do workflow:**
-> Se você rodar `pnpm dev` contra o banco de produção, o Payload faz
+> Se você rodar `bun dev` contra o banco de produção, o Payload faz
 > um "dev push" no schema e cria uma migration com `batch = -1`. Isso
 > quebra o `payload migrate` em CI (prompt interativo no build do Vercel)
 > e polui a tabela de controle. Detalhes em
@@ -106,19 +105,19 @@ vercel link   # conecta o clone ao projeto na Vercel
    ```env
    POSTGRES_URL=postgresql://.../neondb?sslmode=require   # ← URL do branch dev
    ```
-5. Pronto. Agora `pnpm dev` só mexe no branch `dev`, nunca em prod.
+5. Pronto. Agora `bun dev` só mexe no branch `dev`, nunca em prod.
 
 ### Quando mexer no schema (criar campo, mudar collection, etc.)
 
 O fluxo correto é:
 
 ```bash
-# 1. Trabalhar no branch dev do Neon
-pnpm dev
-#   ↓ ao adicionar/mudar collection, o dev push acontece só no branch dev
+# 1. Trabalhar no branch dev do Neon (ARQUITETURA LEGADA)
+bun dev
+#   ↓ ao adicionar/mudar collection, o dev push acontece só no branch dev (legado)
 
 # 2. Gerar migration que descreve a mudança
-pnpm payload migrate:create add_awesome_field
+bun payload migrate:create add_awesome_field
 #   ↓ cria src/migrations/<timestamp>_add_awesome_field.{ts,json}
 
 # 3. Conferir o diff do schema (tem que fazer sentido)
@@ -146,14 +145,14 @@ CI, que aplica a nova migration no banco de produção.
    ```bash
    vercel env pull
    ```
-3. **Troque o `POSTGRES_URL` no `.env.local` para apontar ao branch `dev` do Neon.**
+3. **(LEGADO)** Troque o `POSTGRES_URL` no `.env.local` para apontar ao branch `dev` do Neon.
 4. Suba o servidor local:
    ```bash
-   pnpm dev
+   bun dev
    ```
 5. Abra `http://localhost:3000` e `http://localhost:3000/admin`.
 
-> *Qualquer alteração que você fizer no banco vai para o branch `dev`,
+> *Qualquer alteração que você fizer no banco vai para o branch `dev` (legado),
 > nunca em produção. Sem medo de quebrar nada.*
 
 ### Passo 2: Preview Colaborativo (PR)
@@ -171,9 +170,9 @@ CI, que aplica a nova migration no banco de produção.
 ### Passo 3: Produção
 1. Aprove e faça merge do PR na `main`.
 2. Vercel dispara deploy de produção.
-3. O Vercel roda `pnpm run ci` que executa:
+3. O Vercel roda `bun run ci` que executa:
    - `payload migrate` → aplica migrations pendentes no banco prod
-   - `pnpm build` → build do Next.js
+   - `bun run build` → build do Next.js
 4. Em ~2 min, a versão nova está no ar.
 
 ---
@@ -217,15 +216,15 @@ Não commita, não cola em chat, não sobe em PR.
 
 | Comando | O que faz |
 | :--- | :--- |
-| `pnpm dev` | Inicia o Next.js em modo dev (Turbopack) |
-| `pnpm build` | Build de produção |
-| `pnpm ci` | `payload migrate && pnpm build` (usado pela Vercel) |
-| `pnpm db:check` | Mostra estado da tabela `payload_migrations` |
-| `pnpm db:fix-dev-migration` | Limpa dev migrations (`batch=-1`) do banco |
-| `pnpm db:seed` | Roda o seed via CLI (precisa blobs limpos) |
-| `pnpm payload` | Atalho para o CLI do Payload |
-| `pnpm lint` / `pnpm lint:fix` | ESLint |
-| `pnpm test:int` / `pnpm test:e2e` | Testes (Vitest + Playwright) |
+| `bun dev` | Inicia o Next.js em modo dev (Turbopack) |
+| `bun run build` | Build de produção |
+| `bun run ci` | `payload migrate && bun run build` (usado pela Vercel) |
+| `bun db:check` | Mostra estado da tabela `payload_migrations` |
+| `bun db:fix-dev-migration` | Limpa dev migrations (`batch=-1`) do banco |
+| `bun db:seed` | Roda o seed via CLI (precisa blobs limpos) |
+| `bun payload` | Atalho para o CLI do Payload |
+| `bun run lint` / `bun run lint:fix` | ESLint |
+| `bun run test:int` / `bun run test:e2e` | Testes (Vitest + Playwright) |
 
 ---
 
@@ -233,11 +232,11 @@ Não commita, não cola em chat, não sobe em PR.
 
 ```bash
 # Banco de dados
-pnpm db:check                           # estado do banco
-pnpm db:fix-dev-migration               # limpar batch=-1
-pnpm payload migrate:create <nome>      # criar migration
-pnpm payload migrate                    # aplicar migrations pendentes
-pnpm payload migrate:status             # ver status das migrations
+bun db:check                           # estado do banco
+bun db:fix-dev-migration               # limpar batch=-1
+bun payload migrate:create <nome>      # criar migration
+bun payload migrate                    # aplicar migrations pendentes
+bun payload migrate:status             # ver status das migrations
 
 # Vercel
 vercel env pull                         # atualizar .env.local com envs de dev
@@ -247,15 +246,16 @@ vercel inspect <url-do-deploy> --logs   # ver logs de build
 
 # Neon (se tiver neonctl instalado)
 neonctl branches                        # listar branches
-neonctl branches create --name dev      # criar branch dev
-neonctl connection-string dev           # ver connection string do dev
+# (LEGADO — Neon branching não é mais usado em dev)
+# neonctl branches create --name dev      # criar branch dev
+# neonctl connection-string dev           # ver connection string do dev
 ```
 
 ---
 
 ## 9. Quando algo dá errado
 
-1. Rode `pnpm db:check` primeiro — o estado do banco é responsável por 50% dos problemas
+1. Rode `bun db:check` primeiro — o estado do banco é responsável por 50% dos problemas
 2. Veja [`docs/TROUBLESHOOTING.md`](TROUBLESHOOTING.md) — tem a lista de erros mais comuns com a causa e a solução
 3. Se for erro de deploy no Vercel, pegue o ID do deploy e rode `vercel inspect <id> --logs`
 4. Em último caso, force um deploy limpo: `vercel deploy --force`
@@ -264,5 +264,5 @@ neonctl connection-string dev           # ver connection string do dev
 
 ## 10. Histórico de mudanças deste guia
 
-- **2026-06-07** — Adicionada seção 3 (branch `dev` do Neon) e referências a `docs/TROUBLESHOOTING.md` depois de descobrir que `pnpm dev` contra prod cria o problema do "data loss will occur" no Vercel
+- **2026-06-07** — Adicionada seção 3 (branch `dev` do Neon) e referências a `docs/TROUBLESHOOTING.md` depois de descobrir que `bun dev` contra prod cria o problema do "data loss will occur" no Vercel (legado — agora usa Docker local)
 - Versão anterior focava em arquitetura geral mas não alertava sobre o anti-padrão de `.env.local` apontando pra prod
