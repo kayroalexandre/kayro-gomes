@@ -1,12 +1,12 @@
-# Build Docker standalone (auto-contido: não precisa rodar `DOCKER_BUILD=true pnpm build` antes).
+# Build Docker standalone (auto-contido: não precisa rodar `DOCKER_BUILD=true bun run build` antes).
 #
-# Antes: era preciso rodar manualmente `DOCKER_BUILD=true pnpm build` no host
+# Antes: era preciso rodar manualmente `DOCKER_BUILD=true bun run build` no host
 # para gerar `.next/standalone` + `.next/static`, e só então `docker build`.
 # Isso exigia sincronizar o output do host com o contexto do build, e quebrou
 # o build da Vercel no passado (o `output: 'standalone'` vazava).
 #
 # Agora: este Dockerfile seta `DOCKER_BUILD=true` apenas dentro da fase
-# `builder` e roda `pnpm run build` lá mesmo. O `next.config.ts` continua
+# `builder` e roda `bun run build` lá mesmo. O `next.config.ts` continua
 # usando `output: process.env.DOCKER_BUILD === 'true' ? 'standalone' : undefined`,
 # então a Vercel (que NÃO seta DOCKER_BUILD) continua sem output standalone.
 # O único comando necessário é: `docker build -t kayro-gomes .`
@@ -15,31 +15,31 @@
 #   -e PAYLOAD_SECRET=... -e POSTGRES_URL=... -e BLOB_READ_WRITE_TOKEN=... \
 #   kayro-gomes
 #
-# Node 24-alpine: escolhido por performance e suporte LTS recente.
-# Ver: https://nodejs.org/en/about/previous-releases
+# Bun 1.x: alinhado com o package manager do projeto (bun@1.3.x).
+# O standalone output usa Node em runtime, então a imagem final
+# ainda precisa de Node para `CMD ["node", "server.js"]`.
 
-FROM node:24-alpine AS base
-# Dependências só quando necessárias
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# ── Stage 1: deps ──────────────────────────────────────────────
+FROM oven/bun:1 AS deps
 WORKDIR /app
 
 # Copia apenas os manifests para cachear as deps
-COPY package.json pnpm-lock.yaml* .npmrc* ./
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile
 
-# Build com output standalone (isolado do resto do sistema)
-FROM base AS builder
+# ── Stage 2: builder ───────────────────────────────────────────
+FROM oven/bun:1 AS builder
 WORKDIR /app
 ENV DOCKER_BUILD=true
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Gera o build standalone (próximo passo: `output: 'standalone'` em next.config.ts)
-RUN corepack enable pnpm && pnpm run build
+RUN bun run build
 
-# Imagem final enxuta
-FROM base AS runner
+# ── Stage 3: runner ────────────────────────────────────────────
+# Standalone output requer Node em runtime (server.js é Node)
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV HOSTNAME="0.0.0.0"
