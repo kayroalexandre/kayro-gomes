@@ -68,16 +68,6 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            if pg_isready -h localhost -p 5432 -U test; then
-              echo "Postgres ready"
-              break
-            fi
-            echo "Waiting for Postgres... ($i)"
-            sleep 2
-          done
       - name: Run Payload migrations
         run: bun payload migrate
       - run: bun run test:int
@@ -113,16 +103,6 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            if pg_isready -h localhost -p 5432 -U ci; then
-              echo "Postgres ready"
-              break
-            fi
-            echo "Waiting for Postgres... ($i)"
-            sleep 2
-          done
       - name: Generate Payload types
         run: bun generate:types
       - name: Generate Payload importmap
