@@ -29,7 +29,8 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
       admin: {
-        description: 'Texto alternativo para acessibilidade — descreva a imagem para leitores de tela.',
+        description:
+          'Texto alternativo para acessibilidade — descreva a imagem para leitores de tela.',
       },
     },
     {

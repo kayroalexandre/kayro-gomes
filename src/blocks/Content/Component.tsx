@@ -13,11 +13,11 @@ import { easing } from '@/design-system/tokens/motion'
 export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   const { columns } = props
 
-  const colsSpanClasses = {
-    full: '12',
-    half: '6',
-    oneThird: '4',
-    twoThirds: '8',
+  const colsSpanClasses: Record<string, string> = {
+    full: 'col-span-4 lg:col-span-12',
+    half: 'col-span-4 lg:col-span-6',
+    oneThird: 'col-span-4 lg:col-span-4',
+    twoThirds: 'col-span-4 lg:col-span-8',
   }
 
   return (
@@ -30,16 +30,25 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
 
             return (
               <motion.div
-                className={cn(`col-span-4 lg:col-span-${colsSpanClasses[size!]} flex flex-col gap-6`, {
-                  'md:col-span-2': size !== 'full',
-                })}
+                className={cn(
+                  `${colsSpanClasses[size!] ?? 'col-span-4 lg:col-span-12'} flex flex-col gap-6`,
+                  {
+                    'md:col-span-2': size !== 'full',
+                  },
+                )}
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ delay: index * 0.1, duration: 0.6, ease: easing.smooth }}
               >
-                {richText && <RichText data={richText} enableGutter={false} className="prose-p:text-muted-foreground prose-p:leading-relaxed" />}
+                {richText && (
+                  <RichText
+                    data={richText}
+                    enableGutter={false}
+                    className="prose-p:text-muted-foreground prose-p:leading-relaxed"
+                  />
+                )}
 
                 {enableLink && <CMSLink {...link} className="self-start mt-2" />}
               </motion.div>
