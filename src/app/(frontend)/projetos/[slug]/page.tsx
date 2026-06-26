@@ -4,6 +4,8 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import RichText from '@/components/RichText'
+import { draftMode } from 'next/headers'
+import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 import type { Project } from '@/payload-types'
 
@@ -35,7 +37,7 @@ type Args = {
 }
 
 export default async function ProjectPage({ params: paramsPromise }: Args) {
-  const { slug = '' } = await paramsPromise
+  const [{ isEnabled: draft }, { slug = '' }] = await Promise.all([draftMode(), paramsPromise])
   const decodedSlug = decodeURIComponent(slug)
   const url = '/projetos/' + decodedSlug
   const project = (await queryDocBySlug({
@@ -53,6 +55,8 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
       {/* Allows redirects for valid projects too */}
       <PayloadRedirects disableNotFound url={url} />
+
+      {draft && <LivePreviewListener />}
 
       <ProjectHero project={project} />
 
