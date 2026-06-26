@@ -58,16 +58,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(dirname),
   },
-  experimental: {
-    // HMR para Server Components (RSCs) no Turbopack.
-    // Default em Next.js 16 é `true`; declarado explicitamente para:
-    //   1. Documentar a intenção no config
-    //   2. Garantir que permaneça ativo mesmo se o default mudar
-    // Se causar problemas (state inconsistente, crash em RSCs),
-    // desabilite via CLI: `bun dev --no-server-fast-refresh`
-    // ou troque para `false` aqui.
-    turbopackServerFastRefresh: true,
-  },
+  // NOTA: `experimental.turbopackServerFastRefresh` é intencionalmente NÃO
+  // declarado aqui. O `withPayload` (do @payloadcms/next) força esta flag
+  // para `false` em Next.js >= 16.2.2 porque "Server fast refresh breaks
+  // HMR" no Payload Admin. Como o spread do `experimental` no withPayload
+  // vem DEPOIS do nosso, qualquer valor aqui seria sobrescrito.
+  // Referência: node_modules/@payloadcms/next/dist/withPayload/withPayload.js
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })
