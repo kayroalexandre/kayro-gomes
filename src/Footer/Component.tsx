@@ -1,3 +1,5 @@
+import type { Menu } from '@/payload-types'
+
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
 import React from 'react'
@@ -6,7 +8,7 @@ import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 
 export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
+  const footerData = await getCachedGlobal('footer', 2)()
 
   const menuItems = footerData?.menu || []
 
@@ -28,7 +30,7 @@ export async function Footer() {
             className="flex flex-col md:flex-row gap-6 text-body-sm text-muted-foreground"
           >
             {menuItems
-              .filter((item): item is NonNullable<typeof item> => item !== null)
+              .filter((item): item is Menu => typeof item === 'object' && item !== null)
               .map((item, i) => {
                 const link = {
                   type: item.type,
