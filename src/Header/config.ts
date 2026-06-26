@@ -21,10 +21,10 @@ export const Header: GlobalConfig = {
       name: 'searchEnabled',
       type: 'checkbox',
       defaultValue: false,
-      label: 'Enable Site Search',
+      label: 'Ativar busca no site',
       admin: {
         description:
-          'When enabled, shows the search icon in the header and enables the /search page.',
+          'Quando ativado, exibe o ícone de busca no header e habilita a página /search.',
       },
     },
   ],
