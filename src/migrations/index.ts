@@ -6,6 +6,7 @@ import * as migration_20260612_183426_add_hero_overlay_fields from './20260612_1
 import * as migration_20260612_195126_add_hero_image_fit_and_search_enabled from './20260612_195126_add_hero_image_fit_and_search_enabled';
 import * as migration_20260621_143929_add_hero_scroll_indicator_fields from './20260621_143929_add_hero_scroll_indicator_fields';
 import * as migration_20260622_012517 from './20260622_012517';
+import * as migration_20260626_203804 from './20260626_203804';
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20260622_012517.up,
     down: migration_20260622_012517.down,
     name: '20260622_012517',
+  },
+  {
+    up: migration_20260626_203804.up,
+    down: migration_20260626_203804.down,
+    name: '20260626_203804'
   },
 ];

@@ -204,7 +204,10 @@ export interface FolderInterface {
  */
 export interface Media {
   id: number;
-  alt?: string | null;
+  /**
+   * Texto alternativo para acessibilidade — descreva a imagem para leitores de tela.
+   */
+  alt: string;
   caption?: {
     root: {
       type: string;

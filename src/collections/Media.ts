@@ -27,7 +27,10 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      //required: true,
+      required: true,
+      admin: {
+        description: 'Texto alternativo para acessibilidade — descreva a imagem para leitores de tela.',
+      },
     },
     {
       name: 'caption',
