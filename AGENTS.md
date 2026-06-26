@@ -3,13 +3,12 @@
 > **⚠️ CONSOLIDAÇÃO REALIZADA (2026-06-08):** O projeto foi consolidado
 > de volta a uma única fonte de verdade (`main`). Branches antigas
 > (`develop`, `fix/docker-standalone-build`, `feature/turbopack-migration`,
-> worktree `glorious-scribe`) foram removidas. `.env.local` agora aponta
-> para **Postgres via Docker Compose** (porta 54320) para evitar push
-> acidental no Neon de produção. Backup completo salvo em
-> `.env.local.backup-neon-prod`. A branch de backup `backup/docker-standalone-build`
-> também já foi removida (2026-06-20) na limpeza para o fluxo de 3 branches
-> permanentes — consulte o histórico de commits / `git reflog` se precisar
-> recuperar algo.
+> worktree `glorious-scribe`, `backup/docker-standalone-build`) foram removidas.
+> `.env.local` agora aponta para **Postgres via Docker Compose** (porta 54320)
+> para evitar push acidental no Neon de produção. Backup completo salvo em
+> `.env.local.backup-neon-prod`. O fluxo atual usa **3 branches permanentes**:
+> `main` (produção, protegida), `develop` (trabalho diário), `preview` (deploys temporários).
+> Última atualização da documentação: 2026-06-26.
 
 Este arquivo documenta o **workflow oficial** de desenvolvimento, deploy
 e operações do projeto. Toda IA (Kilo, GitHub Copilot, etc.) e todo
@@ -295,4 +294,7 @@ viewport top
   não bloquear merges em Preview instável. Scripts de debug movidos para
   `scripts/debug/`.
 - Neon branching ainda não implementado (DB compartilhado entre Preview/Prod).
-  Recomendação: implementar somente após monitorar tráfego real em produção.
+  **Status atual (2026-06-26):** Docker Postgres local resolve o problema de
+  desenvolvimento seguro (`.env.local` → `localhost:54320`). Neon branching
+  continua como recomendação futura para Preview/Prod, mas não é mais bloqueante
+  para o fluxo diário.

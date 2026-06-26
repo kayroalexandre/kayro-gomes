@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import RichText from '@/components/RichText'
 
 import type { Project } from '@/payload-types'
@@ -39,7 +38,10 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
   const url = '/projetos/' + decodedSlug
-  const project = (await queryDocBySlug({ collection: 'projects', slug: decodedSlug })) as Project | null
+  const project = (await queryDocBySlug({
+    collection: 'projects',
+    slug: decodedSlug,
+  })) as Project | null
 
   if (!project) return <PayloadRedirects url={url} />
 
@@ -72,7 +74,10 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const project = (await queryDocBySlug({ collection: 'projects', slug: decodedSlug })) as Project | null
+  const project = (await queryDocBySlug({
+    collection: 'projects',
+    slug: decodedSlug,
+  })) as Project | null
 
   return generateMeta({ doc: project, pathOverride: `/projetos/${decodedSlug}` })
 }

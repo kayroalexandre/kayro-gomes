@@ -1,20 +1,20 @@
 'use client'
 
-import * as React from 'react'
+import { useState, useEffect, useCallback, type FC } from 'react'
 import { useTheme } from './index'
 import { Button } from '@/components/ui/button'
 import { Icon } from '@/components/ui/icon'
 import { Sun, Moon } from 'lucide-react'
 
-export const ThemeToggle: React.FC = () => {
+export const ThemeToggle: FC = () => {
   const { setTheme, theme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const [mounted, setMounted] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true)
   }, [])
 
-  const toggleTheme = React.useCallback(() => {
+  const toggleTheme = useCallback(() => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }, [theme, setTheme])
 

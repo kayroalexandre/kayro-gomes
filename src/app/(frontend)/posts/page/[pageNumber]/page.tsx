@@ -6,7 +6,6 @@ import { Pagination } from '@/components/Pagination'
 import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 600
@@ -43,9 +42,12 @@ export default async function Page({ params: paramsPromise }: Args) {
     <div className="py-[var(--space-section-y)] md:py-[var(--space-section-y-lg)]">
       <PageHeaderTheme theme="light" />
       <div className="container mb-12">
-        <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-4 text-foreground">Blog</h1>
+        <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-4 text-foreground">
+          Blog
+        </h1>
         <p className="text-body-lg text-muted-foreground max-w-2xl">
-          Compartilhando aprendizados, tutoriais e reflexões sobre engenharia de software e desenvolvimento web.
+          Compartilhando aprendizados, tutoriais e reflexões sobre engenharia de software e
+          desenvolvimento web.
         </p>
       </div>
 

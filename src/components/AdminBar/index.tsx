@@ -5,7 +5,7 @@ import type { PayloadAdminBarProps, PayloadMeUser } from '@payloadcms/admin-bar'
 import { cn } from '@/utilities/ui'
 import { useSelectedLayoutSegments } from 'next/navigation'
 import { PayloadAdminBar } from '@payloadcms/admin-bar'
-import React, { useRef, useState } from 'react'
+import { useRef, useState, useCallback, useEffect, type FC } from 'react'
 import { useRouter } from 'next/navigation'
 
 import './index.scss'
@@ -29,9 +29,9 @@ const collectionLabels = {
   },
 }
 
-const Title: React.FC = () => <span>Dashboard</span>
+const Title: FC = () => <span>Dashboard</span>
 
-export const AdminBar: React.FC<{
+export const AdminBar: FC<{
   adminBarProps?: PayloadAdminBarProps
 }> = (props) => {
   const { adminBarProps } = props || {}
@@ -42,7 +42,7 @@ export const AdminBar: React.FC<{
   ) as keyof typeof collectionLabels
   const router = useRouter()
 
-  const onAuthChange = React.useCallback((user: PayloadMeUser) => {
+  const onAuthChange = useCallback((user: PayloadMeUser) => {
     setShow(Boolean(user?.id))
   }, [])
 
@@ -55,7 +55,7 @@ export const AdminBar: React.FC<{
   // Usamos ResizeObserver (em vez de medir uma vez) porque a altura
   // pode mudar quando o menu do usuário abre/fecha ou em viewports
   // diferentes.
-  React.useEffect(() => {
+  useEffect(() => {
     if (!show) {
       document.documentElement.style.setProperty('--adminbar-h', '0px')
       return

@@ -61,7 +61,11 @@ export function mergeDumpIntoTokens(dump: FigmaDump, trees: TokenTrees): MergeRe
 }
 
 /** Resolve coleção/nome/modo do Figma no arquivo+caminho DTCG da folha. */
-function resolveTarget(collection: string, name: string, mode: string): { file: TokenFile; path: string } | null {
+function resolveTarget(
+  collection: string,
+  name: string,
+  mode: string,
+): { file: TokenFile; path: string } | null {
   const base = reverseLookup(collection, name)
   if (!base) return null
   if (collection === 'Color') {
@@ -75,7 +79,11 @@ function resolveTarget(collection: string, name: string, mode: string): { file: 
  * Calcula o novo $value DTCG a partir do valor Figma, preservando o canônico
  * quando o Figma coincide dentro da tolerância. Retorna null se não-aplicável.
  */
-function reconstructValue(collection: string, current: string | number, value: PlanValue): string | number | null {
+function reconstructValue(
+  _collection: string,
+  current: string | number,
+  value: PlanValue,
+): string | number | null {
   // Aliases (Color/Contrast): a referência é estrutural; reconstruímos {primitive.…}.
   if (value.kind === 'alias') {
     return aliasToRef(value.name)
@@ -86,7 +94,10 @@ function reconstructValue(collection: string, current: string | number, value: P
     const curOk = parseOklch(String(current))
     if (curOk) {
       const expected = oklchToRgb(curOk)
-      if (rgbDistance(expected, { r, g, b }) <= COLOR_TOL && Math.abs((curOk.alpha ?? 1) - a) <= COLOR_TOL) {
+      if (
+        rgbDistance(expected, { r, g, b }) <= COLOR_TOL &&
+        Math.abs((curOk.alpha ?? 1) - a) <= COLOR_TOL
+      ) {
         return current // inalterado
       }
     }
@@ -127,7 +138,9 @@ function reconstructFloat(current: string | number, display: number): string | n
   // em (letter-spacing): "-0.05em" — display em %.
   if (/em$/.test(cur)) {
     const expected = emToPercent(cur)
-    return expected != null && floatUnchanged(expected, display) ? current : `${trim(display / 100)}em`
+    return expected != null && floatUnchanged(expected, display)
+      ? current
+      : `${trim(display / 100)}em`
   }
   // número puro (string ou number): weight, line-height, alpha, z-index.
   const expected = Number(cur)

@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-vercel-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_projects_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__projects_v_version_status" AS ENUM('draft', 'published');
@@ -10,7 +10,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" varchar PRIMARY KEY NOT NULL,
   	"name" varchar
   );
-  
+
   CREATE TABLE "projects" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
@@ -29,7 +29,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"_status" "enum_projects_status" DEFAULT 'draft'
   );
-  
+
   CREATE TABLE "projects_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
@@ -37,7 +37,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"path" varchar NOT NULL,
   	"categories_id" integer
   );
-  
+
   CREATE TABLE "_projects_v_version_tech" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -45,7 +45,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"name" varchar,
   	"_uuid" varchar
   );
-  
+
   CREATE TABLE "_projects_v" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"parent_id" integer,
@@ -69,7 +69,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"latest" boolean,
   	"autosave" boolean
   );
-  
+
   CREATE TABLE "_projects_v_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
@@ -77,7 +77,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"path" varchar NOT NULL,
   	"categories_id" integer
   );
-  
+
   ALTER TABLE "pages_rels" ADD COLUMN "projects_id" integer;
   ALTER TABLE "_pages_v_rels" ADD COLUMN "projects_id" integer;
   ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "projects_id" integer;
@@ -135,7 +135,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "footer_rels_projects_id_idx" ON "footer_rels" USING btree ("projects_id");`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    ALTER TABLE "projects_tech" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "projects" DISABLE ROW LEVEL SECURITY;
@@ -150,15 +150,15 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "_projects_v" CASCADE;
   DROP TABLE "_projects_v_rels" CASCADE;
   ALTER TABLE "pages_rels" DROP CONSTRAINT "pages_rels_projects_fk";
-  
+
   ALTER TABLE "_pages_v_rels" DROP CONSTRAINT "_pages_v_rels_projects_fk";
-  
+
   ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_projects_fk";
-  
+
   ALTER TABLE "header_rels" DROP CONSTRAINT "header_rels_projects_fk";
-  
+
   ALTER TABLE "footer_rels" DROP CONSTRAINT "footer_rels_projects_fk";
-  
+
   DROP INDEX "pages_rels_projects_id_idx";
   DROP INDEX "_pages_v_rels_projects_id_idx";
   DROP INDEX "payload_locked_documents_rels_projects_id_idx";

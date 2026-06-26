@@ -5,7 +5,6 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import React from 'react'
 import RichText from '@/components/RichText'
 
 import type { Post } from '@/payload-types'
@@ -43,10 +42,7 @@ type Args = {
 }
 
 export default async function Post({ params: paramsPromise }: Args) {
-  const [{ isEnabled: draft }, { slug = '' }] = await Promise.all([
-    draftMode(),
-    paramsPromise,
-  ])
+  const [{ isEnabled: draft }, { slug = '' }] = await Promise.all([draftMode(), paramsPromise])
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug

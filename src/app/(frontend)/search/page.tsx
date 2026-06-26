@@ -4,7 +4,6 @@ import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageHeaderTheme } from '@/components/PageHeaderTheme'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import { Search } from '@/search/Component'
 import type { CardPostData } from '@/components/Card'
 
@@ -67,7 +66,9 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       <PageHeaderTheme theme="light" />
       <div className="container mb-12">
         <div className="max-w-none text-center">
-          <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-8 text-foreground">Busca</h1>
+          <h1 className="text-title-sm md:text-title font-extrabold tracking-tight mb-8 text-foreground">
+            Busca
+          </h1>
 
           <div className="max-w-[50rem] mx-auto">
             <Search />
@@ -95,7 +96,9 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   )
 }
 
-export async function generateMetadata({ searchParams: searchParamsPromise }: Args): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams: searchParamsPromise,
+}: Args): Promise<Metadata> {
   const { q } = await searchParamsPromise
   const query = q ? decodeURIComponent(q) : ''
   return {

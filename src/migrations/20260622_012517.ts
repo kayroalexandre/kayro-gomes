@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-vercel-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_menu_type" AS ENUM('reference', 'custom');
   CREATE TABLE "menu" (
@@ -12,7 +12,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
-  
+
   CREATE TABLE "menu_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
@@ -22,23 +22,23 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"posts_id" integer,
   	"projects_id" integer
   );
-  
+
   ALTER TABLE "header_nav_items" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "footer_nav_items" DISABLE ROW LEVEL SECURITY;
   DROP TABLE "header_nav_items" CASCADE;
   DROP TABLE "footer_nav_items" CASCADE;
   ALTER TABLE "header_rels" DROP CONSTRAINT "header_rels_pages_fk";
-  
+
   ALTER TABLE "header_rels" DROP CONSTRAINT "header_rels_posts_fk";
-  
+
   ALTER TABLE "header_rels" DROP CONSTRAINT "header_rels_projects_fk";
-  
+
   ALTER TABLE "footer_rels" DROP CONSTRAINT "footer_rels_pages_fk";
-  
+
   ALTER TABLE "footer_rels" DROP CONSTRAINT "footer_rels_posts_fk";
-  
+
   ALTER TABLE "footer_rels" DROP CONSTRAINT "footer_rels_projects_fk";
-  
+
   DROP INDEX "header_rels_pages_id_idx";
   DROP INDEX "header_rels_posts_id_idx";
   DROP INDEX "header_rels_projects_id_idx";
@@ -76,7 +76,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   DROP TYPE "public"."enum_footer_nav_items_link_type";`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_header_nav_items_link_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_footer_nav_items_link_type" AS ENUM('reference', 'custom');
@@ -89,7 +89,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   	"link_url" varchar,
   	"link_label" varchar NOT NULL
   );
-  
+
   CREATE TABLE "footer_nav_items" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -99,17 +99,17 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   	"link_url" varchar,
   	"link_label" varchar NOT NULL
   );
-  
+
   ALTER TABLE "menu" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "menu_rels" DISABLE ROW LEVEL SECURITY;
   DROP TABLE "menu" CASCADE;
   DROP TABLE "menu_rels" CASCADE;
   ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_menu_fk";
-  
+
   ALTER TABLE "header_rels" DROP CONSTRAINT "header_rels_menu_fk";
-  
+
   ALTER TABLE "footer_rels" DROP CONSTRAINT "footer_rels_menu_fk";
-  
+
   DROP INDEX "payload_locked_documents_rels_menu_id_idx";
   DROP INDEX "header_rels_menu_id_idx";
   DROP INDEX "footer_rels_menu_id_idx";

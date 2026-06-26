@@ -1,5 +1,4 @@
 import { cn } from '@/utilities/ui'
-import React from 'react'
 
 interface Props {
   className?: string

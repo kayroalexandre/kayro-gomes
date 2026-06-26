@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { Fragment, type FC, type RefObject } from 'react'
 
 import { useDynamicTextColor } from '@/utilities/useDynamicTextColor'
 
@@ -17,7 +17,7 @@ interface DynamicPostHeroContentProps {
  * Conteúdo do PostHero com contraste dinâmico automático.
  * Componente client que usa useDynamicTextColor para ajustar cores de texto.
  */
-export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ post }) => {
+export const DynamicPostHeroContent: FC<DynamicPostHeroContentProps> = ({ post }) => {
   const { categories, populatedAuthors, publishedAt, title } = post
 
   const hasAuthors =
@@ -32,7 +32,7 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
   return (
     <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
       <div
-        ref={categoryRef as React.RefObject<HTMLDivElement>}
+        ref={categoryRef as RefObject<HTMLDivElement>}
         className="text-body-sm mb-6"
         style={{ color: categoryColor }}
       >
@@ -43,10 +43,10 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
             const isLast = index === categories.length - 1
 
             return (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 {titleToUse}
-                {!isLast && <React.Fragment>, &nbsp;</React.Fragment>}
-              </React.Fragment>
+                {!isLast && <Fragment>, &nbsp;</Fragment>}
+              </Fragment>
             )
           }
           return null
@@ -55,7 +55,7 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
 
       <div className="">
         <h1
-          ref={titleRef as React.RefObject<HTMLHeadingElement>}
+          ref={titleRef as RefObject<HTMLHeadingElement>}
           className="mb-6 text-heading-lg md:text-title lg:text-title-lg"
           style={{ color: titleColor }}
         >
@@ -68,14 +68,14 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <p
-                ref={labelRef as React.RefObject<HTMLParagraphElement>}
+                ref={labelRef as RefObject<HTMLParagraphElement>}
                 className="text-body-sm"
                 style={{ color: labelColor }}
               >
                 Autor
               </p>
               <p
-                ref={valueRef as React.RefObject<HTMLParagraphElement>}
+                ref={valueRef as RefObject<HTMLParagraphElement>}
                 className="font-medium"
                 style={{ color: valueColor }}
               >
@@ -87,14 +87,14 @@ export const DynamicPostHeroContent: React.FC<DynamicPostHeroContentProps> = ({ 
         {publishedAt && (
           <div className="flex flex-col gap-1">
             <p
-              ref={labelRef as React.RefObject<HTMLParagraphElement>}
+              ref={labelRef as RefObject<HTMLParagraphElement>}
               className="text-body-sm"
               style={{ color: labelColor }}
             >
               Publicado em
             </p>
             <time
-              ref={valueRef as React.RefObject<HTMLTimeElement>}
+              ref={valueRef as RefObject<HTMLTimeElement>}
               className="font-medium"
               dateTime={publishedAt}
               style={{ color: valueColor }}

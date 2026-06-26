@@ -36,7 +36,7 @@ Isso faz `UPDATE payload_migrations SET batch = 1 WHERE batch = -1` e
 limpa o aviso. O schema em si já está aplicado (a dev push alterou
 as tabelas in-place), só estamos sincronizando o controle de migrations.
 
-**Solução de longo prazo:** Usar um **branch `dev` no Neon** para desenvolvimento local, e nunca apontar `.env.local` para a branch `main` (produção). Veja [`workflow_guide.md`](../workflow_guide.md#3-branch-dev-do-neon-essencial) para o setup completo.
+**Solução de longo prazo:** Usar **Docker Postgres local** (via `docker compose up -d` + `.env.docker`). O `.env.local` deve apontar para `localhost:54320` (Docker), nunca para o Neon de produção. Veja [`AGENTS.md`](../AGENTS.md) para o workflow consolidado (Docker local, 3 branches permanentes).
 
 ---
 

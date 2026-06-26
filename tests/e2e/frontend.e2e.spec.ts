@@ -1,13 +1,6 @@
-import { test, expect, Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
 test.describe('Frontend', () => {
-  let page: Page
-
-  test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext()
-    page = await context.newPage()
-  })
-
   test('homepage loads and renders PT-BR content', async ({ page }) => {
     await page.goto('http://localhost:3000')
     await expect(page).toHaveTitle(/Kayro Gomes/)
@@ -98,9 +91,12 @@ test.describe('HighImpactHero Layout (AGENTS.md rules)', () => {
     await page.waitForTimeout(500) // pequena espera para framer-motion
 
     // Captura screenshot da hero (apenas a seção superior)
-    await expect(page.locator('section').first()).toHaveScreenshot('high-impact-hero-homepage.png', {
-      threshold: 0.2, // tolerância para pequenas variações de renderização
-    })
+    await expect(page.locator('section').first()).toHaveScreenshot(
+      'high-impact-hero-homepage.png',
+      {
+        threshold: 0.2, // tolerância para pequenas variações de renderização
+      },
+    )
   })
 
   test('hero visual snapshot - mobile viewport', async ({ page }) => {
