@@ -2,8 +2,9 @@
  * scripts/sync-cms.ts
  *
  * Sincroniza o CMS com o front-end:
- *  1. Popula `header.navItems` com [Posts, Projetos, Contato] (idempotente).
- *  2. Popula `footer.navItems` com os mesmos itens (idempotente).
+ *  1. Garante os itens de navegação na collection `menu` (idempotente por label)
+ *     e liga `header.menu` com [Posts, Projetos, Contato].
+ *  2. Liga `footer.menu` com os mesmos itens (idempotente).
  *  3. Adiciona um bloco "Projetos recentes" (archive de projects) na página
  *     `home`, antes do bloco CTA final. Idempotente: se o bloco já existir,
  *     não duplica.
@@ -13,12 +14,12 @@
  * prod.env) e seta PAYLOAD_MIGRATING=true (via _load-env) para evitar o
  * dev-push que cria entrada `batch=-1` em payload_migrations.
  *
- * Uso: pnpm tsx scripts/sync-cms.ts
+ * Uso: bun tsx scripts/sync-cms.ts
  */
 import './_load-env'
 import { getPayload } from 'payload'
 import config from '../src/payload.config.js'
-import type { Header as HeaderType, Footer as FooterType } from '../src/payload-types.js'
+import type { RequiredDataFromCollectionSlug } from 'payload'
 
 const payload = await getPayload({ config })
 
@@ -42,97 +43,95 @@ if (!contatoId) {
   throw new Error('Página "contato" não encontrada no CMS. Crie-a no admin antes de rodar este script.')
 }
 
-const buildNavItems = (): NonNullable<HeaderType['navItems']> => [
+// --- Itens de navegação desejados (fonte de verdade para header e footer).
+// Ordem do array = ordem de exibição.
+type MenuData = RequiredDataFromCollectionSlug<'menu'>
+
+const desiredItems: MenuData[] = [
+  { type: 'custom', label: 'Posts', url: '/posts', newTab: false },
+  { type: 'custom', label: 'Projetos', url: '/projetos', newTab: false },
   {
-    id: 'nav-posts',
-    link: {
-      type: 'custom',
-      url: '/posts',
-      label: 'Posts',
-      newTab: false,
-    },
-  },
-  {
-    id: 'nav-projetos',
-    link: {
-      type: 'custom',
-      url: '/projetos',
-      label: 'Projetos',
-      newTab: false,
-    },
-  },
-  {
-    id: 'nav-contato',
-    link: {
-      type: 'reference',
-      reference: { relationTo: 'pages', value: contatoId },
-      label: 'Contato',
-      newTab: false,
-    },
+    type: 'reference',
+    label: 'Contato',
+    reference: { relationTo: 'pages', value: contatoId },
+    newTab: false,
   },
 ]
 
-// --- 2. Header
-const normalizeNavItem = (item: any): unknown => {
-  if (!item || typeof item !== 'object') return item
-  const link = item.link
-  if (!link) return item
-  const refValue = link.reference?.value
-  const refId = typeof refValue === 'object' && refValue !== null ? refValue.id : refValue
-  return {
-    id: item.id,
-    link: {
-      type: link.type,
-      newTab: link.newTab ?? false,
-      label: link.label,
-      url: link.type === 'custom' ? link.url : null,
-      reference:
-        link.reference && refId !== undefined
-          ? { relationTo: link.reference.relationTo, value: refId }
-          : undefined,
-    },
+// --- 2. Garantir os itens na collection `menu` (idempotente por label).
+// Busca os existentes por label, atualiza-os para o shape desejado e cria os
+// que faltam. Retorna os IDs na ordem de `desiredItems`.
+const labels = desiredItems.map((i) => i.label!)
+const existing = await payload.find({
+  collection: 'menu',
+  limit: 100,
+  pagination: false,
+  overrideAccess: true,
+  depth: 0,
+  where: { label: { in: labels } },
+})
+
+const menuByLabel = new Map<string, number>()
+for (const doc of existing.docs) {
+  menuByLabel.set(doc.label, doc.id as number)
+}
+
+const menuIds: number[] = []
+for (const item of desiredItems) {
+  const existingId = menuByLabel.get(item.label!)
+  if (existingId !== undefined) {
+    await payload.update({
+      collection: 'menu',
+      id: existingId,
+      data: item,
+      overrideAccess: true,
+      context: { disableRevalidate: true },
+    })
+    menuIds.push(existingId)
+  } else {
+    const created = await payload.create({
+      collection: 'menu',
+      data: item,
+      overrideAccess: true,
+      depth: 0,
+      context: { disableRevalidate: true },
+    })
+    menuIds.push(created.id as number)
   }
+}
+console.log(`✓ Menu sincronizado: ${menuIds.length} itens garantidos na collection.`)
+
+// --- 3. Ligar header.menu e footer.menu aos IDs (idempotente).
+const sameIds = (before: unknown, ids: number[]): boolean => {
+  if (!Array.isArray(before)) return false
+  const beforeIds = before.map((v) => (typeof v === 'object' && v !== null ? (v as { id: number }).id : v))
+  return beforeIds.length === ids.length && beforeIds.every((v, i) => v === ids[i])
 }
 
 const headerBefore = await payload.findGlobal({ slug: 'header', depth: 0 })
-const headerItems = buildNavItems()
-const headerChanged =
-  !Array.isArray(headerBefore.navItems) ||
-  headerBefore.navItems.length !== headerItems.length ||
-  JSON.stringify(headerBefore.navItems.map(normalizeNavItem)) !==
-    JSON.stringify(headerItems.map(normalizeNavItem))
-
-if (headerChanged) {
+if (sameIds(headerBefore.menu, menuIds)) {
+  console.log('= Header já está sincronizado. Nada a fazer.')
+} else {
   await payload.updateGlobal({
     slug: 'header',
-    data: { navItems: headerItems } as Partial<HeaderType>,
+    data: { menu: menuIds },
     overrideAccess: true,
     context: { disableRevalidate: true },
   })
-  console.log('✓ Header atualizado: 3 navItems.')
-} else {
-  console.log('= Header já está sincronizado (3 navItems). Nada a fazer.')
+  console.log(`✓ Header atualizado: ${menuIds.length} itens de menu.`)
 }
 
-// --- 3. Footer
 const footerBefore = await payload.findGlobal({ slug: 'footer', depth: 0 })
-const footerItems = buildNavItems()
-const footerChanged =
-  !Array.isArray(footerBefore.navItems) ||
-  footerBefore.navItems.length !== footerItems.length ||
-  JSON.stringify(footerBefore.navItems.map(normalizeNavItem)) !==
-    JSON.stringify(footerItems.map(normalizeNavItem))
-
-if (footerChanged) {
+if (sameIds(footerBefore.menu, menuIds)) {
+  console.log('= Footer já está sincronizado. Nada a fazer.')
+} else {
   await payload.updateGlobal({
     slug: 'footer',
-    data: { navItems: footerItems } as Partial<FooterType>,
+    data: { menu: menuIds },
     overrideAccess: true,
     context: { disableRevalidate: true },
   })
-  console.log('✓ Footer atualizado: 3 navItems.')
-} else {
-  console.log('= Footer já está sincronizado (3 navItems). Nada a fazer.')
+  console.log(`✓ Footer atualizado: ${menuIds.length} itens de menu.`)
 }
 
 // --- 4. Adicionar bloco "Projetos recentes" na home (se não existir)

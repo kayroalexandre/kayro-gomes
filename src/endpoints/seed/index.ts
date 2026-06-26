@@ -1,4 +1,11 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import type {
+  CollectionSlug,
+  GlobalSlug,
+  Payload,
+  PayloadRequest,
+  File,
+  RequiredDataFromCollectionSlug,
+} from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -25,6 +32,7 @@ const collections: CollectionSlug[] = [
   'forms',
   'form-submissions',
   'search',
+  'menu',
 ]
 
 const globals: GlobalSlug[] = ['header', 'footer']
@@ -66,12 +74,12 @@ export const seed = async ({
 
   payload.logger.info(`— Clearing collections and globals...`)
 
-  // Limpa globals (mantém só `navItems: []` no header/footer)
+  // Limpa globals (mantém só `menu: []` no header/footer)
   await Promise.all(
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: { navItems: [] },
+        data: { menu: [] },
         depth: 0,
         context: { disableRevalidate: true },
         req,
@@ -344,70 +352,50 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding globals (header nav + footer nav)...`)
 
+  // A nav agora vive na collection `menu`. Criamos os documentos e ligamos
+  // os globals header/footer via array de IDs (relationship hasMany).
+  const mkMenu = (data: RequiredDataFromCollectionSlug<'menu'>) =>
+    payload.create({ collection: 'menu', data, depth: 0, req })
+
+  const mInicio = await mkMenu({ type: 'custom', label: 'Início', url: '/' })
+  const mBlog = await mkMenu({ type: 'custom', label: 'Blog', url: '/posts' })
+  const mProjetos = await mkMenu({ type: 'custom', label: 'Projetos', url: '/projetos' })
+  const mSobre = await mkMenu({
+    type: 'reference',
+    label: 'Sobre',
+    reference: { relationTo: 'pages', value: sobrePage.id },
+  })
+  const mContato = await mkMenu({
+    type: 'reference',
+    label: 'Contato',
+    reference: { relationTo: 'pages', value: contactPage.id },
+  })
+  const mGitHub = await mkMenu({
+    type: 'custom',
+    label: 'GitHub',
+    newTab: true,
+    url: 'https://github.com/kayroalexandre',
+  })
+  const mLinkedIn = await mkMenu({
+    type: 'custom',
+    label: 'LinkedIn',
+    newTab: true,
+    url: 'https://linkedin.com/in/kayroalexandre',
+  })
+  const mAdmin = await mkMenu({ type: 'custom', label: 'Admin', url: '/admin' })
+
   await Promise.all([
     payload.updateGlobal({
       slug: 'header',
       data: {
-        navItems: [
-          { link: { type: 'custom', label: 'Início', url: '/' } },
-          { link: { type: 'custom', label: 'Blog', url: '/posts' } },
-          { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
-          {
-            link: {
-              type: 'reference',
-              label: 'Sobre',
-              reference: { relationTo: 'pages', value: sobrePage.id },
-            },
-          },
-          {
-            link: {
-              type: 'reference',
-              label: 'Contato',
-              reference: { relationTo: 'pages', value: contactPage.id },
-            },
-          },
-        ],
+        menu: [mInicio.id, mBlog.id, mProjetos.id, mSobre.id, mContato.id],
       },
       req,
     }),
     payload.updateGlobal({
       slug: 'footer',
       data: {
-        navItems: [
-          { link: { type: 'custom', label: 'Blog', url: '/posts' } },
-          { link: { type: 'custom', label: 'Projetos', url: '/projetos' } },
-          {
-            link: {
-              type: 'reference',
-              label: 'Sobre',
-              reference: { relationTo: 'pages', value: sobrePage.id },
-            },
-          },
-          {
-            link: {
-              type: 'reference',
-              label: 'Contato',
-              reference: { relationTo: 'pages', value: contactPage.id },
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'GitHub',
-              newTab: true,
-              url: 'https://github.com/kayroalexandre',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'LinkedIn',
-              newTab: true,
-              url: 'https://linkedin.com/in/kayroalexandre',
-            },
-          },
-          { link: { type: 'custom', label: 'Admin', url: '/admin' } },
-        ],
+        menu: [mBlog.id, mProjetos.id, mSobre.id, mContato.id, mGitHub.id, mLinkedIn.id, mAdmin.id],
       },
       req,
     }),
