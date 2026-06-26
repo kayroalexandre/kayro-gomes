@@ -16,7 +16,7 @@
     "ci": "bun run design:check && bun run lint:tokens:check && payload migrate && bun run build",
     "predev": "bun run design:build && bash scripts/ensure-db.sh",
     "dev": "next dev",
-    "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation rm -rf .next && bun run build && bun start",
+    "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation bun run build && bun start",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "ii": "cross-env NODE_OPTIONS=--no-deprecation bun install",
