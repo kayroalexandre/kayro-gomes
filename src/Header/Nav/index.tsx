@@ -2,13 +2,14 @@
 
 import React from 'react'
 
-import type { Header as HeaderType } from '@/payload-types'
+import type { Header as HeaderType, Menu } from '@/payload-types'
 
 import { Icon } from '@/components/ui/icon'
 import { ThemeToggle } from '@/providers/Theme/ThemeToggle'
 import { HeaderNavItem } from './NavItem'
 import { MobileMenu } from './MobileMenu'
 import { getNavItemHref } from './getNavItemHref'
+import type { NavLink } from './getNavItemHref'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -23,17 +24,16 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   // O campo `menu` é um relationship para a collection `Menu`, que tem
   // estrutura similar ao `link` anterior (label, type, reference|url, newTab).
   const items = menuItems
-    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .filter((item): item is Menu => typeof item === 'object' && item !== null)
     .map((item) => {
-      // Adaptar o shape da collection Menu para o formato esperado por HeaderNavItem/CMSLink
-      const link = {
+      const link: NavLink = {
         type: item.type,
         reference: item.reference,
         url: item.url,
         label: item.label,
         newTab: item.newTab,
       }
-      const href = getNavItemHref(link as Parameters<typeof getNavItemHref>[0])
+      const href = getNavItemHref(link)
       return { link, active: href ? pathname === href : false }
     })
 
