@@ -58,6 +58,16 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(dirname),
   },
+  experimental: {
+    // HMR para Server Components (RSCs) no Turbopack.
+    // Default em Next.js 16 é `true`; declarado explicitamente para:
+    //   1. Documentar a intenção no config
+    //   2. Garantir que permaneça ativo mesmo se o default mudar
+    // Se causar problemas (state inconsistente, crash em RSCs),
+    // desabilite via CLI: `bun dev --no-server-fast-refresh`
+    // ou troque para `false` aqui.
+    turbopackServerFastRefresh: true,
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })
