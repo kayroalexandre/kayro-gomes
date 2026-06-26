@@ -12,6 +12,26 @@ type Args = {
     q: string
   }>
 }
+
+/** Converte resultados da collection Search para CardPostData,
+ *  evitando cast duplo `as unknown as` que mascara incompatibilidade de tipos.
+ *  Aceita o tipo parcial retornado por payload.find com select.
+ */
+function searchResultsToCardData(
+  docs: {
+    slug?: string | null
+    title?: string | null
+    meta?: CardPostData['meta']
+    categories?: unknown
+  }[],
+): CardPostData[] {
+  return docs.map((doc) => ({
+    slug: doc.slug ?? '',
+    title: doc.title ?? '',
+    meta: doc.meta ?? undefined,
+    categories: undefined,
+  }))
+}
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: rawQuery } = await searchParamsPromise
   // Decodifica o termo buscado (caso venha URL-encoded do componente de Search)
@@ -77,7 +97,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       </div>
 
       {posts.docs.length > 0 ? (
-        <CollectionArchive posts={posts.docs as unknown as CardPostData[]} />
+        <CollectionArchive posts={searchResultsToCardData(posts.docs)} />
       ) : (
         <div className="container">
           <div className="text-center py-16 px-4 border border-dashed rounded-lg bg-card/20 max-w-[50rem] mx-auto">
